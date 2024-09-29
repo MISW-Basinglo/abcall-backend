@@ -27,13 +27,13 @@ backend-abcall/
 Cada microservicio tiene su propio directorio dentro de `microservices/` y sigue la siguiente estructura:
 
 - `src/`: Contiene el código principal del microservicio, como:
-  - `app.py`: Inicializa el microservicio.
   - `routes.py`: Define las rutas o endpoints de la API.
   - `services.py`: Contiene la lógica de negocio.
   - `serializers.py`: Serializadores para validar y transformar datos de las solicitudes y respuestas.
   - `utils.py`: Funciones utilitarias para operaciones comunes.
 - `models/`: Contiene los modelos de base de datos del microservicio.
 - `tests/`: Tests unitarios e integrales específicos del microservicio.
+- `app.py`: Inicializa el microservicio.
 - `Dockerfile`: Configuración Docker para desplegar el microservicio.
 - `requirements.txt`: Dependencias específicas del microservicio.
 

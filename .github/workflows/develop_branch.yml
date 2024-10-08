@@ -1,0 +1,11 @@
+name: Merge to develop
+on:
+  push:
+    branches:
+      - develop
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml

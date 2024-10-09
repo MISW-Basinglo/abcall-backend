@@ -1,6 +1,6 @@
 # =====================================================================================
 #  V A R I A B L E S
-
+DOCKER_COMPOSE_LOCAL=docker-compose.yaml
 # =====================================================================================
 # D E V  E N V I R O N M E N T  C O M M A N D S
 git_hooks:
@@ -12,52 +12,47 @@ git_hooks:
 
 .PHONY: build
 build:
-	docker-compose build --no-cache
-
-.PHONY: build_cache
-build_cache:
-	docker-compose build
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) build --no-cache
 
 .PHONY: run
 run:
-	docker-compose up
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up
 
 .PHONYY: run_recreate
 run_recreate:
-	docker-compose up --force-recreate
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up --force-recreate
 
-.PHONY: down
-down:
-	docker-compose down
+.PHONY: rerun
+rerun:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) down
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up --build
+
+.PHONY: stop
+stop:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) down
 
 .PHONY: restart
 restart:
-	docker-compose down
-	docker-compose up
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) down
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up
 
 .PHONY: clean
 clean:
-	docker-compose down --volumes --rmi all
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) down --volumes --rmi all
 
 .PHONY: run_auth
 run_auth:
-	docker-compose up auth
-
-.PHONY: re_up
-re_up:
-	docker-compose down
-	docker-compose up --build
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up auth
 
 # ====================================================================================
 # T E S T I N G  C O M M A N D S
 
 .PHONY: test_auth
 test_auth:
-	docker-compose run auth pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
 .PHONY: test_all
-test_all:
-	test_auth
+test_all: test_auth
 
 # ====================================================================================
 # D E P L O Y M E N T  C O M M A N D S

@@ -31,7 +31,7 @@ Cada microservicio tiene su propio directorio dentro de `microservices/` y sigue
   - `services.py`: Contiene la lógica de negocio.
   - `serializers.py`: Serializadores para validar y transformar datos de las solicitudes y respuestas.
   - `utils.py`: Funciones utilitarias para operaciones comunes.
-- `models/`: Contiene los modelos de base de datos del microservicio.
+  - `models/`: Contiene los modelos de base de datos del microservicio.
 - `tests/`: Tests unitarios e integrales específicos del microservicio.
 - `app.py`: Inicializa el microservicio.
 - `Dockerfile`: Configuración Docker para desplegar el microservicio.

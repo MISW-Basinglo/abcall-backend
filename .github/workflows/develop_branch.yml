@@ -1,8 +1,10 @@
-name: Merge to develop
+name: Push on Develop
+
 on:
   push:
     branches:
       - develop
+
 permissions:
   contents: read
 

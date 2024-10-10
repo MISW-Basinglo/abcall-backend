@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 import pytest
 from pytest_mock import mocker  # noqa
 from src.common.constants import ExceptionsMessages
@@ -13,7 +11,6 @@ from .conftest import mock_app
 from .conftest import mock_user
 
 
-# Test for authenticate function
 def test_authenticate_success(mock_app, mock_user, login_data, mocker):
     with mock_app.app_context():
         mock_load_with_exception = mocker.patch("src.serializers.UserLoginSerializer.load_with_exception")
@@ -70,7 +67,6 @@ def test_authenticate_invalid_password(mock_app, mock_user, login_data, mocker):
         assert str(excinfo.value) == ExceptionsMessages.INVALID_PASSWORD.value
 
 
-# Test for refresh_access_token function
 def test_refresh_access_token_success(mock_app, mock_user, login_data, mocker):
     with mock_app.app_context():
         mock_get_user_by_id = mocker.patch("src.services.get_user_by_id")

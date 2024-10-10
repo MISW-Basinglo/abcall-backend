@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-import pytest
+import pytest  # noqa
 from src.common.constants import ExceptionsMessages
 from src.common.decorators import handle_exceptions
 from src.common.exceptions import CustomException

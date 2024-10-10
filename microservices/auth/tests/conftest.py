@@ -18,37 +18,31 @@ from src.db import Base
 
 @pytest.fixture(scope="session")
 def create_test_database():
-    # The name of the test database
     test_db_name = f"{DATABASE_NAME}_test"
 
-    # Connect to the default 'postgres' database to create the test database
     connection = psycopg2.connect(
         dbname="postgres",
         user=DATABASE_USER,
         password=DATABASE_PASSWORD,
         host=DATABASE_HOST,
-        port=DATABASE_PORT,  # You need to connect to an existing DB first, like 'postgres'
+        port=DATABASE_PORT,
     )
     connection.autocommit = True
     cursor = connection.cursor()
 
-    # Drop the test database if it exists, and create a new one
     cursor.execute(f"DROP DATABASE IF EXISTS {test_db_name};")
     cursor.execute(f"CREATE DATABASE {test_db_name};")
-    print("Database created!!")
     cursor.close()
     connection.close()
 
-    # Yield to allow tests to run
     yield
 
-    # Cleanup: drop the test database after tests
     connection = psycopg2.connect(
-        dbname="postgres",
+        dbname=DATABASE_NAME,
         user=DATABASE_USER,
         password=DATABASE_PASSWORD,
         host=DATABASE_HOST,
-        port=DATABASE_PORT,  # Connect to 'postgres' again to drop the test DB
+        port=DATABASE_PORT,
     )
     connection.autocommit = True
     cursor = connection.cursor()
@@ -59,11 +53,10 @@ def create_test_database():
 
 @pytest.fixture(scope="session")
 def engine(create_test_database):
-    # Use the test database
     test_db_uri = f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}_test"
 
     engine = create_engine(test_db_uri, echo=True)
-    Base.metadata.create_all(engine)  # Create all tables
+    Base.metadata.create_all(engine)
 
     yield engine
 
@@ -72,21 +65,17 @@ def engine(create_test_database):
 
 @pytest.fixture(scope="function")
 def session(engine):
-    # Create a new connection and transaction
     connection = engine.connect()
     transaction = connection.begin()
 
-    # Create a new session
     Session = sessionmaker(bind=connection)
     session = Session()
 
-    # Yield the session to the test
     yield session
 
-    # Rollback transaction and close session
-    session.close()  # Close the session
-    transaction.rollback()  # Rollback the transaction
-    connection.close()  # Close the connection
+    session.close()
+    transaction.rollback()
+    connection.close()
 
 
 @pytest.fixture

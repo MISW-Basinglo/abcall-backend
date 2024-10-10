@@ -23,7 +23,7 @@ class User(Base):
         self.password = generate_password_hash(password, method="pbkdf2")
 
     def get_permissions(self):
-        """Obtiene todos los permisos asociados a los roles del usuario"""
+        """Get user permissions"""
         permissions = set()
         for role in self.roles:
             for perm in role.permissions:
@@ -31,7 +31,7 @@ class User(Base):
         return list(permissions)
 
     def get_roles(self):
-        """Obtiene los roles del usuario"""
+        """Get user roles"""
         return [role.name for role in self.roles]
 
     def check_password(self, password):

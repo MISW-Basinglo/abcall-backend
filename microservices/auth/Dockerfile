@@ -6,4 +6,4 @@ RUN apt-get update && \
     apt-get install -y libpq-dev
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0", "--log-level", "debug", "--access-logfile", "-", "--error-logfile", "-"]

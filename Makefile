@@ -54,5 +54,9 @@ test_auth:
 .PHONY: test_all
 test_all: test_auth
 
+.PHONY: load_fixtures
+load_fixtures:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth flask load-fixtures
+
 # ====================================================================================
 # D E P L O Y M E N T  C O M M A N D S

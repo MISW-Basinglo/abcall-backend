@@ -28,3 +28,4 @@ class ExceptionsMessages(str, Enum):
     RESOURCE_EXISTS = "Resource already exists."
     INVALID_PARAMETER = "Invalid parameter."
     ERROR = "Something went wrong. Please try again later."
+    ERROR_DECODING_TOKEN = "Error decoding token."

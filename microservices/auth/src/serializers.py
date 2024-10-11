@@ -17,3 +17,9 @@ class UserLoginSerializer(Schema):
 class TokenSerializer(Schema):
     access_token = fields.String()
     refresh_token = fields.String()
+
+
+class AuditAuthUserSerializer(Schema):
+    user_id = fields.Integer()
+    role = fields.String()
+    permissions = fields.List(fields.String())

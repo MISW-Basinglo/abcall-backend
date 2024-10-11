@@ -5,6 +5,7 @@ from flask import request
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from src.common.decorators import handle_exceptions
+from src.services import audit_decode_token
 from src.services import authenticate
 from src.services import refresh_access_token
 
@@ -25,6 +26,13 @@ def refresh():
     current_user = get_jwt_identity()
     response = refresh_access_token(current_user)
     return response, HTTPStatus.OK
+
+
+@blueprint.route("/decode-token", methods=["GET"])
+@jwt_required()
+def decode_token():
+    current_user = get_jwt_identity()
+    return audit_decode_token(current_user), HTTPStatus.OK
 
 
 @blueprint.route("/health", methods=["GET"])

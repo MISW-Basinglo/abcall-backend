@@ -1,11 +1,16 @@
+import os
+import subprocess
+
 from flasgger import Swagger
 from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from src import routes
+from src.commands.load_fixtures import register_commands
 from src.common.constants import JWT_ACCESS_TOKEN_EXPIRES
 from src.common.constants import JWT_REFRESH_TOKEN_EXPIRES
 from src.common.constants import JWT_SECRET_KEY
+from src.common.logger import logger
 from src.db import Base
 from src.db import engine
 
@@ -23,12 +28,19 @@ def create_app(flask_app=None):
     flask_app.config["JWT_REFRESH_TOKEN_EXPIRES"] = JWT_REFRESH_TOKEN_EXPIRES
     flask_app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
     JWTManager(flask_app)
+    register_commands(flask_app)
     return flask_app
 
 
 app = Flask(__name__)
 create_app(app)
 Base.metadata.create_all(engine)
+if os.getenv("FLASK_DEBUG") == "true":
+    try:
+        command = ["flask", "load-fixtures"]
+        subprocess.run(command)
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Error loading fixtures: {e}")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

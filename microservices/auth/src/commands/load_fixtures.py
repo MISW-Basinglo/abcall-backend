@@ -4,7 +4,6 @@ from flask import current_app  # noqa
 from src.common.logger import logger
 from src.db import SessionLocal
 from src.models.auth import UserAuth
-from src.models.auth import UserRoles
 from src.models.permission import Permission
 from src.models.permission import RolePermissions
 from src.models.role import Role
@@ -50,20 +49,14 @@ def register_commands(app):
             roles_map[role.name] = role
 
         for user_data in data["users"]:
-            user_roles = [roles_map[role_name] for role_name in user_data["roles"]]
             user = session.query(UserAuth).filter_by(email=user_data["email"]).first()
             if not user:
                 user = UserAuth(email=user_data["email"])
                 user.set_password(user_data["password"])
+                user.role = roles_map[user_data["role"]]
                 session.add(user)
 
             session.flush()
-
-            for role in user_roles:
-                user_role = session.query(UserRoles).filter_by(user_auth_id=user.id, role_id=role.id).first()
-                if not user_role:
-                    user_role = UserRoles(user_auth_id=user.id, role_id=role.id)
-                    session.add(user_role)
 
         session.commit()
         session.close()

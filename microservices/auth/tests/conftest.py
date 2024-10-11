@@ -127,7 +127,7 @@ def role_user(session, permission_read):
     permissions = [
         permission_read,
     ]
-    role = Role(name="user_auth")
+    role = Role(name="user")
     for perm in permissions:
         role.permissions.append(perm)
     session.add(role)
@@ -143,7 +143,7 @@ def user_with_roles(session, role_admin, role_user):
     )
     password = fake.password()
     user_auth.set_password(password)
-    user_auth.roles = [role_admin, role_user]
+    user_auth.role = role_admin
     session.add(user_auth)
     session.commit()
 

@@ -10,7 +10,7 @@ from src.models.auth import UserAuth
 
 def generate_token(user_auth: UserAuth) -> str:
     permissions: List[str] = user_auth.get_permissions()
-    role: str = user_auth.get_roles()[0]
+    role: str = user_auth.get_role()
 
     additional_claims: Dict = {"role": role, "permissions": permissions}
 

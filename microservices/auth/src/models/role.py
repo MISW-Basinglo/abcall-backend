@@ -12,3 +12,4 @@ class Role(Base):
     id = Column(Integer(), primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     permissions = relationship(Permission, secondary=RolePermissions.__table__, backref="roles", lazy="joined")
+    users = relationship("UserAuth", back_populates="role")

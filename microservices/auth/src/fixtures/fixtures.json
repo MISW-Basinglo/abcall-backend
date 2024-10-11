@@ -17,12 +17,12 @@
     {
       "email": "admin@example.com",
       "password": "adminpass",
-      "roles": ["admin"]
+      "role": "admin"
     },
     {
       "email": "user@example.com",
       "password": "userpass",
-      "roles": ["user"]
+      "role": "user"
     }
   ]
 }

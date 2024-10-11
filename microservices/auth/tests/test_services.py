@@ -17,8 +17,8 @@ def test_authenticate_success(mock_app, mock_user, login_data, mocker):
         mock_get_user_by_email = mocker.patch("src.services.get_user_by_email")
         mock_generate_token = mocker.patch("src.services.generate_token")
         mock_create_refresh_token = mocker.patch("flask_jwt_extended.create_refresh_token")
+        mock_update_auth = mocker.patch("src.services.update_auth")
         mock_dump = mocker.patch("src.serializers.TokenSerializer.dump")
-
         mock_load_with_exception.return_value = login_data
         mock_get_user_by_email.return_value = mock_user
         mock_generate_token.return_value = "access_token"
@@ -36,6 +36,7 @@ def test_authenticate_success(mock_app, mock_user, login_data, mocker):
         mock_user.check_password.assert_called_once_with(login_data["password"])
         mock_generate_token.assert_called_once_with(mock_user)
         # mock_create_refresh_token.assert_called_once_with(mock_user.id, expires_delta=timedelta(days=30))
+        mock_update_auth.assert_called_once_with(mock_user.id, {"last_login": mocker.ANY})
         mock_dump.assert_called_once()
 
 
@@ -75,7 +76,7 @@ def test_refresh_access_token_success(mock_app, mock_user, login_data, mocker):
         mock_get_user_by_id.return_value = mock_user
         mock_generate_token.return_value = "new_access_token"
 
-        result = refresh_access_token(1)  # Assuming 1 is the user identity
+        result = refresh_access_token(1)
 
         assert result == {"access_token": "new_access_token"}
         mock_get_user_by_id.assert_called_once_with(1)
@@ -85,9 +86,9 @@ def test_refresh_access_token_success(mock_app, mock_user, login_data, mocker):
 def test_refresh_access_token_user_not_registered(mock_app, mocker):
     with mock_app.app_context():
         mock_get_user_by_id = mocker.patch("src.services.get_user_by_id")
-        mock_get_user_by_id.return_value = None  # Simulate user not found
+        mock_get_user_by_id.return_value = None
 
         with pytest.raises(UserNotAuthorizedException) as excinfo:
-            refresh_access_token(0)  # Assuming 1 is the user identity
+            refresh_access_token(0)
 
         assert str(excinfo.value) == ExceptionsMessages.USER_NOT_REGISTERED.value

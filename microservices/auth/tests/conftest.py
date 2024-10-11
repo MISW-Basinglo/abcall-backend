@@ -8,9 +8,9 @@ from src.common.constants import DATABASE_NAME
 from src.common.constants import DATABASE_PASSWORD
 from src.common.constants import DATABASE_PORT
 from src.common.constants import DATABASE_USER
+from src.models.auth import UserAuth
 from src.models.permission import Permission
 from src.models.role import Role
-from src.models.user import User
 
 fake = Faker()
 from src.db import Base
@@ -38,7 +38,7 @@ def create_test_database():
     yield
 
     connection = psycopg2.connect(
-        dbname=DATABASE_NAME,
+        dbname="postgres",  # Connect to 'postgres' to drop the test DB
         user=DATABASE_USER,
         password=DATABASE_PASSWORD,
         host=DATABASE_HOST,
@@ -73,8 +73,8 @@ def session(engine):
 
     yield session
 
-    session.close()
     transaction.rollback()
+    session.close()
     connection.close()
 
 
@@ -123,11 +123,11 @@ def role_admin(session, permission_read, permission_write, permission_delete):
 
 @pytest.fixture
 def role_user(session, permission_read):
-    """Fixture to create a user role with some permissions."""
+    """Fixture to create a user_auth role with some permissions."""
     permissions = [
         permission_read,
     ]
-    role = Role(name="user")
+    role = Role(name="user_auth")
     for perm in permissions:
         role.permissions.append(perm)
     session.add(role)
@@ -137,18 +137,19 @@ def role_user(session, permission_read):
 
 @pytest.fixture
 def user_with_roles(session, role_admin, role_user):
-    """Fixture to create a user and associate roles."""
-    user = User(
+    """Fixture to create a user_auth and associate roles."""
+    user_auth = UserAuth(
         email=fake.email(),
-        first_name=fake.first_name(),
-        last_name=fake.last_name(),
     )
     password = fake.password()
-    user.set_password(password)
-    user.roles = [role_admin, role_user]
-    session.add(user)
+    user_auth.set_password(password)
+    user_auth.roles = [role_admin, role_user]
+    session.add(user_auth)
     session.commit()
-    return user, password
+
+    session.refresh(user_auth)
+
+    return user_auth, password
 
 
 @pytest.fixture(scope="module")
@@ -169,12 +170,12 @@ def mock_session(mocker):
 
 @pytest.fixture
 def mock_user(mocker):
-    """Fixture to create a mock user."""
-    user = mocker.MagicMock(spec=User)
-    user.id = 1
-    user.email = "test@example.com"
-    user.check_password = mocker.Mock(return_value=True)
-    return user
+    """Fixture to create a mock user_auth."""
+    user_auth = mocker.MagicMock(spec=UserAuth)
+    user_auth.id = 1
+    user_auth.email = "test@example.com"
+    user_auth.check_password = mocker.Mock(return_value=True)
+    return user_auth
 
 
 @pytest.fixture

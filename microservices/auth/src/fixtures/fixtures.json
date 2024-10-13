@@ -1,0 +1,28 @@
+{
+  "permissions": [
+    { "name": "read" },
+    { "name": "write" }
+  ],
+  "roles": [
+    {
+      "name": "admin",
+      "permissions": ["read", "write"]
+    },
+    {
+      "name": "user",
+      "permissions": ["read"]
+    }
+  ],
+  "users": [
+    {
+      "email": "admin@example.com",
+      "password": "adminpass",
+      "role": "admin"
+    },
+    {
+      "email": "user@example.com",
+      "password": "userpass",
+      "role": "user"
+    }
+  ]
+}

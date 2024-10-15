@@ -27,7 +27,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       # Run Docker Compose Action
-      - name: Unit Tests
       - uses: adambirds/docker-compose-action@v1.5.0
         with:
             compose-file: "docker-compose.yaml"

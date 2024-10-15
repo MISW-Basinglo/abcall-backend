@@ -26,13 +26,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
         # Run Docker Compose Action
-      - uses: adambirds/docker-compose-action@v1.5.0
       - name: Unit Test
-        with:
-            compose-file: "docker-compose.yaml"
-            test-container: "auth"
-            test-command: "pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80"
+        run: |
+          docker-compose -f docker-compose.yaml up -d
+          docker-compose exec auth pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
+          docker-compose down
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -45,9 +47,6 @@ jobs:
           echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} | gcloud auth activate-service-account --key-file=-
           gcloud config set project basingo-abcall
           gcloud auth configure-docker us-central1-docker.pkg.dev
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
 
       - name: Build Docker image
         run: |

@@ -49,13 +49,10 @@ jobs:
 
       - name: Authenticate to GCP
         run: |
-          printf "%s" "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/gcp-key.json
+          sh -c "echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > /tmp/gcp-key.json"
           gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
           gcloud config set project basingo-abcall
           gcloud auth configure-docker us-central1-docker.pkg.dev
-
-      - name: Clean up
-        run: rm /tmp/gcp-key.json
 
       - name: Build Docker image
         run: |
@@ -67,3 +64,6 @@ jobs:
 
       - name: Push Docker image to Artifact Registry
         run: docker push us-central1-docker.pkg.dev/basingo-abcall/basinglo-abcall-misw/auth:latest
+
+      - name: Clean up
+        run: rm /tmp/gcp-key.json

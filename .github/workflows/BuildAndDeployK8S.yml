@@ -26,13 +26,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-        # Run Docker Compose Action
-      - uses: adambirds/docker-compose-action@v1.5.0
       - name: Unit Test
-        with:
-            compose-file: "docker-compose.yaml"
-            test-container: "auth"
-            test-command: "pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80"
+        run: |
+          docker-compose -f docker-compose.yaml up -d
+          docker-compose exec auth pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
+          docker-compose down
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -49,7 +47,3 @@ jobs:
       - name: Build Docker image
         run: |
           cd microservices/auth
-          docker build -t us-central1-docker.pkg.dev/basingo-abcall/basinglo-abcall-misw/auth:latest .
-
-      - name: Push Docker image to Artifact Registry
-        run: docker push us-central1-docker.pkg.dev/basingo-abcall/basinglo-abcall-misw/auth:latest

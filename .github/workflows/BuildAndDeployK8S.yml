@@ -50,8 +50,6 @@ jobs:
       # Authenticate to Google Cloud
       - name: Authenticate to GCP
         run: |
-          echo "${{ secrets.GCP_ACCESS_TOKEN }}" | gcloud auth activate-service-account --key-file=-
-          gcloud config set project basingo-abcall
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Build Docker image

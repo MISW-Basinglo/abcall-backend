@@ -47,11 +47,16 @@ jobs:
           project_id: 'basingo-abcall'
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
+      # Authenticate to Google Cloud
       - name: Authenticate to GCP
         run: |
-          sh -c "echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > /tmp/gcp-key.json"
+          # Create the key file from the secret
+          printf "%s" "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > /tmp/gcp-key.json
+          # Activate service account
           gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
+          # Set the project
           gcloud config set project basingo-abcall
+          # Configure Docker authentication
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Build Docker image

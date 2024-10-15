@@ -41,11 +41,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: 'basingo-abcall'
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
       # Autenticar con Google Cloud usando la cuenta de servicio
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      # Authenticate to Google Cloud
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Build Docker image
         run: |

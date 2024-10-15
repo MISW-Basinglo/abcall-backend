@@ -47,6 +47,12 @@ jobs:
           project_id: 'basingo-abcall'
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
+      # Autenticar con Google Cloud usando la cuenta de servicio
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
       # Authenticate to Google Cloud
       - name: Authenticate to GCP
         run: |

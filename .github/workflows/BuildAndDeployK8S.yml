@@ -1,0 +1,55 @@
+name: Build and Test microservices
+
+on:
+  push:
+    branches:
+      - develop
+    paths-ignore:
+      - 'README.md'
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths-ignore:
+      - 'README.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+        # Run Docker Compose Action
+      - uses: adambirds/docker-compose-action@v1.5.0
+      - name: Unit Test
+        with:
+            compose-file: "docker-compose.yaml"
+            test-container: "auth"
+            test-command: "pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80"
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: 'basingo-abcall'
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Authenticate to GCP
+        run: |
+          echo ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} | gcloud auth activate-service-account --key-file=-
+          gcloud config set project basingo-abcall
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          cd microservices/auth
+          docker build -t us-central1-docker.pkg.dev/basingo-abcall/basinglo-abcall-misw/auth:latest .
+
+      - name: Push Docker image to Artifact Registry
+        run: docker push us-central1-docker.pkg.dev/basingo-abcall/basinglo-abcall-misw/auth:latest

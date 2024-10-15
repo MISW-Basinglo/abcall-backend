@@ -1,0 +1,115 @@
+# Despliegue de la base de datos PostgreSQL
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          env:
+            - name: POSTGRES_DB
+              value: "abcall_db"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+          ports:
+            - containerPort: 5432
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "256Mi"
+              cpu: "1"
+---
+# Despliegue de la aplicación
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  labels:
+    app: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: us-central1-docker.pkg.dev/basingo-abcall/basinglo-abcall-misw/auth:latest
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "270m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8000
+          imagePullPolicy: Always
+          env:
+            - name: DATABASE_HOST
+              value: "abcall_db"  # Nombre del servicio de PostgreSQL
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_USER
+              value: "postgres"
+            - name: DATABASE_PASSWORD
+              value: "postgres"
+            - name: DATABASE_NAME
+              value: "abcall_db"
+            - name: FLASK_DEBUG
+              value: "true"
+
+---
+# Servicio para la base de datos PostgreSQL
+kind: Service
+apiVersion: v1
+metadata:
+  name: abcall_db
+spec:
+  type: LoadBalancer
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+
+---
+# Servicio para la aplicación
+kind: Service
+apiVersion: v1
+metadata:
+  name: servicio-auth
+spec:
+  type: LoadBalancer
+  selector:
+    app: auth
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000

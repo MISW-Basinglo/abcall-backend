@@ -108,7 +108,7 @@ jobs:
       # Authenticate to Google Cloud
       - name: Configure Docker
         run: |
-          gcloud user configure-docker us-central1-docker.pkg.dev
+          gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Build Docker image
         run: |

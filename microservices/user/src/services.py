@@ -9,7 +9,6 @@ from src.common.exceptions import ResourceNotFoundException
 from src.common.logger import logger
 from src.models.company import Company
 from src.models.user import User
-from src.models.entities import CompanyResponseEntity
 from src.serializers import CompanyResponseSerializer, CompanyInputSerializer
 
 
@@ -18,9 +17,9 @@ def insert_company(company_data):
     return insert_company_model(company_input)
 
 
-def get_company_by_id(idCompany: int):
+def get_company_by_id(id_company: int):
     # Obtener el modelo de la base de datos usando alguna función
-    company_model = get_model_company_by_id(idCompany)
+    company_model = get_model_company_by_id(id_company)
 
     # Verificar si la compañía existe
     if not company_model:

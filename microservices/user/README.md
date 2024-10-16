@@ -2,7 +2,7 @@
 Este microservicio se encarga de la gestión de los usuarios.
 
 ## Endpoints
-### GET /user/company/{id_company}
+### GET /company/{id_company}
 Este endpoint se encarga de retornar una compañia en base al Identificador proporcionado
 
 #### Request
@@ -21,7 +21,7 @@ En el header Authorization se debe enviar el token de acceso.
 }
 ```
 
-### GET /user/company/client
+### GET /company/client
 Este endpoint se encarga de retornar la compañia asociada al cliente que se encuentra en sesión
 
 #### Request
@@ -40,7 +40,7 @@ En el header Authorization se debe enviar el token de acceso.
 }
 ```
 
-### GET /user/company
+### GET /company
 Este endpoint se encarga de retornar todas las compañias registradas
 
 #### Request
@@ -61,7 +61,7 @@ En el header Authorization se debe enviar el token de acceso.
 ]
 ```
 
-### POST /user/company
+### POST /company
 Este endpoint se encarga de crear una nueva compañia en ABCall
 
 #### Request

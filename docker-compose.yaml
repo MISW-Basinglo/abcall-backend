@@ -37,3 +37,20 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://auth:8000/health"]
+
+  user:
+    build:
+      context: ./microservices/user
+      dockerfile: Dockerfile
+    container_name: user_abcall
+    networks:
+      - app-network
+    env_file:
+        - "microservices/user/.env"
+    ports:
+      - "3001:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://user:8000/health"]

@@ -93,11 +93,11 @@ En el header Authorization se debe enviar el token de acceso.
 ## Como correr el microservicio
 Para correr el microservicio se debe ejecutar el siguiente comando en la carpeta raíz del proyecto:
 ```bash
-make run_auth
+make run_user
 ```
 **Nota:** Al ejecutar el microservicio en un entorno de desarrollo, automáticamente correrá un comando que pobla la base de datos con registros iniciales para pruebas.
 ## Como correr los tests
 Para correr los tests se debe ejecutar el siguiente comando en la carpeta raíz del proyecto:
 ```bash
-make test_auth
+make test_user
 ```

@@ -11,7 +11,7 @@ git_hooks:
 # D O C K E R  C O M M A N D S
 
 .PHONY: build
-build:
+build_all:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) build --no-cache
 
 .PHONY: run
@@ -44,6 +44,10 @@ clean:
 run_auth:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up auth
 
+.PHONY: run_user
+run_user:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up user
+
 # ====================================================================================
 # T E S T I N G  C O M M A N D S
 
@@ -51,8 +55,12 @@ run_auth:
 test_auth:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
+.PHONY: test_user
+test_auth:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm user pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
+
 .PHONY: test_all
-test_all: test_auth
+test_all: test_auth, test_user
 
 .PHONY: load_fixtures
 load_fixtures:

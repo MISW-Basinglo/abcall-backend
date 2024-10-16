@@ -1,0 +1,29 @@
+{
+  "companies": [
+    { "name": "Movistar",
+      "nit" : "50912312",
+      "plan": "BUSINESS",
+      "status": "Active"
+     }
+  ],
+  "users": [
+    {
+      "name": "Usuario Test",
+      "dni": "123456789",
+      "phone": "3102456789",
+      "channel": "EMAIL",
+      "auth_id": 2,
+      "importance": 1,
+      "company_id": "Movistar"
+    },
+    {
+      "name": "Admin Test",
+      "dni": "9876543",
+      "phone": "312434567",
+      "channel": "EMAIL",
+      "auth_id": 1,
+      "importance": 1,
+      "company_id": ""
+    }
+  ]
+}

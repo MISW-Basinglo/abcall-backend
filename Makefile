@@ -56,11 +56,11 @@ test_auth:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
 .PHONY: test_user
-test_auth:
+test_user:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm user pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
 .PHONY: test_all
-test_all: test_auth, test_user
+test_all: test_auth, test_uer
 
 .PHONY: load_fixtures
 load_fixtures:

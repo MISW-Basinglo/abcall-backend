@@ -7,35 +7,34 @@ from flask_jwt_extended import get_jwt_identity
 from src.common.decorators import handle_exceptions
 from src.services import get_company_by_id, get_all_companies, insert_company, get_company_by_user_session
 
-blueprint = Blueprint("user_api", __name__, url_prefix="/user")
+blueprint = Blueprint("company_api", __name__, url_prefix="/company")
 
-
-@blueprint.route("/company", methods=["POST"])
+@blueprint.route("/", methods=["POST"])
 @handle_exceptions
 @jwt_required()
-def addCompany():
+def add_company():
     data = request.get_json()
     return insert_company(data), HTTPStatus.CREATED
 
 
-@blueprint.route("/company/<int:id>", methods=["GET"])
+@blueprint.route("/<int:id>", methods=["GET"])
 @handle_exceptions
 @jwt_required()
-def getCompany(id):
+def get_company(id):
     response = get_company_by_id(id)
     return response, HTTPStatus.OK
 
-@blueprint.route("/company", methods=["GET"])
+@blueprint.route("", methods=["GET"])
 @handle_exceptions
 @jwt_required()
-def getCompanies():
+def get_companies():
     response = get_all_companies()
     return response, HTTPStatus.OK
 
-@blueprint.route("/company/client", methods=["GET"])
+@blueprint.route("/client", methods=["GET"])
 @handle_exceptions
 @jwt_required()
-def refresh():
+def get_company_user_session():
     current_user = get_jwt_identity()
     response = get_company_by_user_session(current_user)
     return response, HTTPStatus.OK

@@ -26,23 +26,10 @@ def get_company_by_id(idCompany: int):
     if not company_model:
         logger.error(ExceptionsMessages.COMPANY_NOT_REGISTERED.value)
         raise ResourceNotFoundException(ExceptionsMessages.COMPANY_NOT_REGISTERED.value)
-    else:
-        logger.info("Compañía Existe")
-
-    # Mapeo de company_model a CompanyResponseEntity
-    company = CompanyResponseEntity(
-        id=idCompany,
-        name=company_model.name,
-        nit=company_model.nit,
-        plan=company_model.plan,
-        status=company_model.status,
-        created_at=company_model.created_at,
-        update_at=company_model.update_at
-    )
 
     # Serializar la respuesta
     company_serializer = CompanyResponseSerializer()
-    return company_serializer.dump(company)
+    return company_serializer.dump(company_model)
 
 
 def get_company_by_user_session(user_id: int):
@@ -59,23 +46,10 @@ def get_company_by_user_session(user_id: int):
     if not company_model:
         logger.error(ExceptionsMessages.COMPANY_NOT_REGISTERED.value)
         raise ResourceNotFoundException(ExceptionsMessages.COMPANY_NOT_REGISTERED.value)
-    else:
-        logger.info("Compañía Existe")
-
-    # Mapeo de company_model a CompanyResponseEntity
-    company = CompanyResponseEntity(
-        id=company_model.id,
-        name=company_model.name,
-        nit=company_model.nit,
-        plan=company_model.plan,
-        status=company_model.status,
-        created_at=company_model.created_at,
-        update_at=company_model.update_at
-    )
 
     # Serializar la respuesta
     company_serializer = CompanyResponseSerializer()
-    return company_serializer.dump(company)
+    return company_serializer.dump(company_model)
 
 def get_all_companies():
     # Obtener todas las compañías de la base de datos usando alguna función
@@ -88,23 +62,9 @@ def get_all_companies():
     else:
         logger.info(f"Se encontraron {len(companies_model_list)} compañías.")
 
-    # Mapeo de cada company_model a CompanyResponseEntity
-    companies = [
-        CompanyResponseEntity(
-            id=company_model.id,
-            name=company_model.name,
-            nit=company_model.nit,
-            plan=company_model.plan,
-            status=company_model.status,
-            created_at=company_model.created_at,
-            update_at=company_model.update_at
-        )
-        for company_model in companies_model_list
-    ]
-
     # Serializar el listado de respuestas
-    company_serializer = CompanyResponseSerializer(many=True)  # many=True para serializar una lista
-    return company_serializer.dump(companies)
+    company_serializer = CompanyResponseSerializer(many=True)
+    return company_serializer.dump(companies_model_list)
 
 @db_session
 def get_model_company_by_id(session, company_id):

@@ -8,9 +8,9 @@ from src.common.constants import DATABASE_NAME
 from src.common.constants import DATABASE_PASSWORD
 from src.common.constants import DATABASE_PORT
 from src.common.constants import DATABASE_USER
-from src.models.auth import UserAuth
-from src.models.permission import Permission
-from src.models.role import Role
+from src.models.user import User
+from src.models.company import Company
+from datetime import datetime
 
 fake = Faker()
 from src.db import Base
@@ -78,80 +78,6 @@ def session(engine):
     connection.close()
 
 
-@pytest.fixture
-def permission_read(session):
-    """Fixture to create a permission."""
-    permission = Permission(name="read")
-    session.add(permission)
-    session.commit()
-    return permission
-
-
-@pytest.fixture
-def permission_write(session):
-    """Fixture to create a permission."""
-    permission = Permission(name="write")
-    session.add(permission)
-    session.commit()
-    return permission
-
-
-@pytest.fixture
-def permission_delete(session):
-    """Fixture to create a permission."""
-    permission = Permission(name="delete")
-    session.add(permission)
-    session.commit()
-    return permission
-
-
-@pytest.fixture
-def role_admin(session, permission_read, permission_write, permission_delete):
-    """Fixture to create an admin role with some permissions."""
-    permissions = [
-        permission_read,
-        permission_write,
-        permission_delete,
-    ]
-    role = Role(name="admin")
-    for perm in permissions:
-        role.permissions.append(perm)
-    session.add(role)
-    session.commit()
-    return role
-
-
-@pytest.fixture
-def role_user(session, permission_read):
-    """Fixture to create a user_auth role with some permissions."""
-    permissions = [
-        permission_read,
-    ]
-    role = Role(name="user")
-    for perm in permissions:
-        role.permissions.append(perm)
-    session.add(role)
-    session.commit()
-    return role
-
-
-@pytest.fixture
-def user_with_roles(session, role_admin, role_user):
-    """Fixture to create a user_auth and associate roles."""
-    user_auth = UserAuth(
-        email=fake.email(),
-    )
-    password = fake.password()
-    user_auth.set_password(password)
-    user_auth.role = role_admin
-    session.add(user_auth)
-    session.commit()
-
-    session.refresh(user_auth)
-
-    return user_auth, password
-
-
 @pytest.fixture(scope="module")
 def mock_app():
     from app import create_app
@@ -169,16 +95,42 @@ def mock_session(mocker):
 
 
 @pytest.fixture
-def mock_user(mocker):
-    """Fixture to create a mock user_auth."""
-    user_auth = mocker.MagicMock(spec=UserAuth)
-    user_auth.id = 1
-    user_auth.email = "test@example.com"
-    user_auth.check_password = mocker.Mock(return_value=True)
-    return user_auth
+def mock_company(mocker):
+    """Fixture to create a mock company."""
+    company = mocker.MagicMock(spec=Company)
+    company.id = 1
+    company.name = "Movistar"
+    company.nit = "50912312"
+    company.plan = "BUSINESS"
+    company.status = "Active"
+    company.created_at = datetime.now()
+    company.update_at = datetime.now()
+    return company
 
 
 @pytest.fixture
-def login_data():
-    """Fixture to provide login data."""
-    return {"email": "test@example.com", "password": "password123"}
+def mock_company_data():
+    """Fixture to provide mock company data."""
+    return {
+        "name": "Movistar",
+        "nit": "50912312",
+        "plan": "BUSINESS",
+        "status": "Active"
+    }
+
+
+@pytest.fixture
+def mock_user(mocker):
+    """Fixture to create a mock user."""
+    user = mocker.MagicMock(spec=User)
+    user.id = 1
+    user.name = "Test User"
+    user.dni = "123456789"
+    user.phone = "3102456789"
+    user.channel = "EMAIL"
+    user.auth_id = 2
+    user.importance = 1
+    user.company_id = 1  # Link to the mock company
+    user.created_at = datetime.now()
+    user.update_at = datetime.now()
+    return user

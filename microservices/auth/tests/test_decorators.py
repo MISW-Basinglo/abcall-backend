@@ -1,8 +1,8 @@
 from http import HTTPStatus
 
 import pytest  # noqa
-from src.common.constants import ExceptionsMessages
 from src.common.decorators import handle_exceptions
+from src.common.enums import ExceptionsMessages
 from src.common.exceptions import CustomException
 from src.common.exceptions import InvalidParameterException
 from src.common.exceptions import ResourceExistsException

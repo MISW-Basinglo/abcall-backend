@@ -1,6 +1,7 @@
 import logging
+import os
 
-logger = logging.getLogger("auth_app")
+logger = logging.getLogger(os.getenv("LOGGER_NAME"))
 
 logger.setLevel(logging.DEBUG)
 

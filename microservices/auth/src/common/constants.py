@@ -1,5 +1,4 @@
 import os
-from enum import Enum
 
 JWT_ACCESS_TOKEN_EXPIRES = os.getenv("JWT_ACCESS_TOKEN_EXPIRES", 900)
 JWT_REFRESH_TOKEN_EXPIRES = os.getenv("JWT_REFRESH_TOKEN_EXPIRES", 2592000)
@@ -16,16 +15,3 @@ if all([DATABASE_HOST, DATABASE_PORT, DATABASE_NAME, DATABASE_USER]):
     DATABASE_URI = f"postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}"
 else:
     DATABASE_URI = "sqlite:///local.db"
-
-
-class ExceptionsMessages(str, Enum):
-    USER_NOT_REGISTERED = "User not registered."
-    INVALID_PASSWORD = "Invalid password."
-    USER_NOT_AUTHORIZED = "User not authorized."
-    USER_NOT_FOUND = "User not found."
-    TOKEN_NOT_FOUND = "Token not found."
-    RESOURCE_NOT_FOUND = "Resource not found."
-    RESOURCE_EXISTS = "Resource already exists."
-    INVALID_PARAMETER = "Invalid parameter."
-    ERROR = "Something went wrong. Please try again later."
-    ERROR_DECODING_TOKEN = "Error decoding token."

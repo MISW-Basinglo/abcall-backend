@@ -4,25 +4,26 @@ from typing import Dict
 
 from flask_jwt_extended import create_refresh_token
 from flask_jwt_extended import get_jwt
-from src.common.constants import ExceptionsMessages
 from src.common.constants import JWT_REFRESH_DELTA
-from src.common.decorators import db_session
+from src.common.enums import ExceptionsMessages
 from src.common.exceptions import CustomException
 from src.common.exceptions import ResourceNotFoundException
 from src.common.exceptions import UserNotAuthorizedException
 from src.common.logger import logger
 from src.common.utils import generate_token
-from src.models.auth import UserAuth
 from src.models.entities import AuditAuthUser
 from src.models.entities import TokenResponseEntity
-from src.serializers import AuditAuthUserSerializer
-from src.serializers import TokenSerializer
-from src.serializers import UserLoginSerializer
+from src.repositories.auth_repository import UserAuthRepository
+from src.serializers.auth_serializers import AuditAuthUserSerializer
+from src.serializers.auth_serializers import TokenSerializer
+from src.serializers.auth_serializers import UserLoginSerializer
+
+auth_repository = UserAuthRepository()
 
 
 def authenticate(data: Dict):
-    login_data = UserLoginSerializer().load_with_exception(data)
-    user_auth = get_user_by_email(login_data["email"])
+    login_data = UserLoginSerializer().load(data)
+    user_auth = auth_repository.get_by_field("email", login_data["email"])
 
     if not user_auth:
         logger.error(ExceptionsMessages.USER_NOT_REGISTERED.value)
@@ -37,12 +38,12 @@ def authenticate(data: Dict):
 
     tokens = TokenResponseEntity(access_token=access_token, refresh_token=refresh_token)
     token_serializer = TokenSerializer()
-    update_auth(user_auth.id, {"last_login": datetime.now()})
+    auth_repository.update(user_auth.id, {"last_login": datetime.now()})
     return token_serializer.dump(tokens)
 
 
 def refresh_access_token(user_identity):
-    user_auth = get_user_by_id(user_identity)
+    user_auth = auth_repository.get_by_field("id", user_identity)
     if not user_auth:
         logger.error(ExceptionsMessages.USER_NOT_REGISTERED.value)
         raise UserNotAuthorizedException(ExceptionsMessages.USER_NOT_REGISTERED.value)
@@ -60,27 +61,3 @@ def audit_decode_token(user_id):
     audit_auth = AuditAuthUser(user_id=user_id, role=role, permissions=permissions)
     audit_serializer = AuditAuthUserSerializer()
     return audit_serializer.dump(audit_auth)
-
-
-@db_session
-def get_user_by_email(session, email):
-    user_auth = session.query(UserAuth).filter(UserAuth.email == email).first()
-    return user_auth
-
-
-@db_session
-def get_user_by_id(session, user_id):
-    user_auth = session.query(UserAuth).filter(UserAuth.id == user_id).first()
-    return user_auth
-
-
-@db_session
-def update_auth(session, user_id, data):
-    user_auth = session.query(UserAuth).filter(UserAuth.id == user_id).first()
-    if not user_auth:
-        logger.error(ExceptionsMessages.USER_NOT_REGISTERED.value)
-        raise ResourceNotFoundException(ExceptionsMessages.USER_NOT_REGISTERED.value)
-    for key, value in data.items():
-        setattr(user_auth, key, value)
-    session.commit()
-    return user_auth

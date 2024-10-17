@@ -4,7 +4,6 @@ from tests.conftest import mock_app
 from tests.conftest import user_with_roles
 
 
-# Test for `generate_token`
 def test_generate_token(mock_app, user_with_roles):
     with mock_app.app_context():
         user_auth, _ = user_with_roles

@@ -12,7 +12,7 @@ git_hooks:
 
 .PHONY: build
 build:
-	docker-compose -f $(DOCKER_COMPOSE_LOCAL) build --no-cache
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) build
 
 .PHONY: run
 run:
@@ -52,7 +52,7 @@ test_auth:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
 .PHONY: test_all
-test_all: test_auth
+test_all: build test_auth
 
 .PHONY: load_fixtures
 load_fixtures:

@@ -1,13 +1,14 @@
 from functools import wraps
 from http import HTTPStatus
 
+from src.common.enums import ExceptionsMessages
 from src.common.exceptions import CustomException
 from src.common.exceptions import InvalidParameterException
 from src.common.exceptions import ResourceExistsException
 from src.common.exceptions import ResourceNotFoundException
 from src.common.exceptions import TokenNotFoundException
 from src.common.exceptions import UserNotAuthorizedException
-from src.db import SessionLocal
+from src.common.logger import logger
 
 
 def handle_exceptions(func):
@@ -40,34 +41,16 @@ def handle_exceptions(func):
             status_code = e.status_code
             error = str(e)
         except Exception as e:
+            logger.error(f"Error in {func.__name__}: {str(e)}")
             status_code = HTTPStatus.INTERNAL_SERVER_ERROR
-            error = str(e)
+            error = ExceptionsMessages.ERROR.value
         finally:
             if status_code >= HTTPStatus.BAD_REQUEST:
                 response_object = {
                     "status": "error",
                     "msg": error,
                 }
+                logger.error(f"Error in {func.__name__}: {error}")
                 return response_object, status_code
-
-    return wrapper
-
-
-def db_session(func):
-    """
-    Decorator to create a database session
-    """
-
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        session = SessionLocal()
-        try:
-            result = func(session, *args, **kwargs)
-            return result
-        except Exception:
-            session.rollback()
-            raise
-        finally:
-            session.close()
 
     return wrapper

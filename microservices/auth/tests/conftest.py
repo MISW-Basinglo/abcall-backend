@@ -1,7 +1,12 @@
+from unittest.mock import Mock
+
 import psycopg2
 import pytest
 from faker import Faker
+from pytest_mock import mocker
+from sqlalchemy import Column
 from sqlalchemy import create_engine
+from sqlalchemy import String
 from sqlalchemy.orm import sessionmaker
 from src.common.constants import DATABASE_HOST
 from src.common.constants import DATABASE_NAME
@@ -11,6 +16,7 @@ from src.common.constants import DATABASE_USER
 from src.models.auth import UserAuth
 from src.models.permission import Permission
 from src.models.role import Role
+from src.repositories.base import BaseRepository
 
 fake = Faker()
 from src.db import Base
@@ -182,3 +188,13 @@ def mock_user(mocker):
 def login_data():
     """Fixture to provide login data."""
     return {"email": "test@example.com", "password": "password123"}
+
+
+@pytest.fixture
+def mock_repository():
+    class MockRepository(BaseRepository):
+        model = Mock()
+        serializer = Mock()
+        model.__name__ = "MockModel"
+
+    return MockRepository()

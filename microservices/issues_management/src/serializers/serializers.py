@@ -3,12 +3,12 @@ from src.serializers.base import BaseSerializer
 
 
 class IssueCreateSerializer(BaseSerializer):
-    type = fields.String()
-    description = fields.String()
+    type = fields.String(required=True)
+    description = fields.String(required=True)
     status = fields.String()
-    source = fields.String()
+    source = fields.String(required=True)
     created_at = fields.DateTime()
-    updated_at = fields.DateTime(allow_none=True)
+    updated_at = fields.DateTime(allow_none=True, required=False)
     user_id = fields.Integer()
     company_id = fields.Integer()
 

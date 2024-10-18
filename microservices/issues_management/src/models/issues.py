@@ -16,7 +16,7 @@ class Issue(Base):
     id = Column(Integer(), primary_key=True)
     type = Column(SqlEnum(IssueType), nullable=False)
     description = Column(Text(), nullable=False)
-    status = Column(SqlEnum(IssueStatus), nullable=False, default=IssueStatus.OPEN.value)
+    status = Column(SqlEnum(IssueStatus), nullable=False, default=IssueStatus.OPEN)
     source = Column(SqlEnum(IssueSource), nullable=False)
     created_at = Column(DateTime(), nullable=False, default=func.now())
     updated_at = Column(DateTime(), nullable=True)

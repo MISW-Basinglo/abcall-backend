@@ -2,6 +2,7 @@ from functools import wraps
 from http import HTTPStatus
 
 from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended.exceptions import NoAuthorizationError
 from src.common.constants import DISABLE_PERMISSIONS_VALIDATIONS
 from src.common.enums import ExceptionsMessages
 from src.common.exceptions import CustomException
@@ -39,6 +40,9 @@ def handle_exceptions(func):
             error = str(e)
         except TokenNotFoundException as e:
             status_code = HTTPStatus.FORBIDDEN
+            error = str(e)
+        except NoAuthorizationError as e:
+            status_code = HTTPStatus.UNAUTHORIZED
             error = str(e)
         except CustomException as e:
             status_code = e.status_code

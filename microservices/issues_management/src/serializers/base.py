@@ -4,6 +4,7 @@ from marshmallow import Schema
 from marshmallow import types
 from marshmallow import ValidationError
 from src.common.enums import MarshmallowCustomValidationMessages
+from src.common.exceptions import InvalidParameterException
 from src.common.logger import logger
 
 
@@ -37,4 +38,4 @@ class BaseSerializer(Schema):
             return super().load(data, many=many, partial=partial, unknown=unknown)
         except ValidationError as e:
             msg = e.messages[next(iter(e.messages))][0]
-            raise ValidationError(msg)
+            raise InvalidParameterException(msg)

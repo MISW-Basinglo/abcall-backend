@@ -22,3 +22,4 @@ class Issue(Base):
     updated_at = Column(DateTime(), nullable=True)
     user_id = Column(Integer())
     company_id = Column(Integer())
+    solution = Column(Text())

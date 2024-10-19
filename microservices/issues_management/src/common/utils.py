@@ -1,6 +1,5 @@
 # app/utils.py
-import random
-
+import requests
 from flask import request as flask_request
 from flask_jwt_extended import get_jwt
 from src.common.enums import ExceptionsMessages
@@ -37,14 +36,9 @@ def get_auth_header_from_request():
 
 
 def send_request(url, method, data=None, headers=None):
-    h = {"Content-Type": "application/json", **headers}
-
-    # ToDo: Uncomment this code when the user service is ready
-    # response = requests.request(method, url, json=data, headers=h)
-    # response.raise_for_status()
-    # return response.json()
-
-    # ToDo: remove this mock user
-    mock_user = {"user_id": random.randint(1, 5), "company_id": random.randint(1, 5), "name": "John Doe"}
-
-    return mock_user
+    h = {"Content-Type": "application/json"}
+    if headers:
+        h.update(headers)
+    response = requests.request(method, url, json=data, headers=h)
+    response.raise_for_status()
+    return response.json()

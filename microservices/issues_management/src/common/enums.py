@@ -2,11 +2,11 @@ from enum import Enum
 
 
 class BaseEnum(Enum):
-    def __str__(self):
+    def __str__(self) -> str:
         return self.value
 
 
-class ExceptionsMessages(Enum):
+class ExceptionsMessages(BaseEnum):
     # User-related errors
     USER_NOT_REGISTERED = "User not registered."
     USER_NOT_AUTHORIZED = "User not authorized."
@@ -29,36 +29,36 @@ class ExceptionsMessages(Enum):
     ERROR = "Something went wrong. Please try again later."
 
 
-class MarshmallowCustomValidationMessages(Enum):
+class MarshmallowCustomValidationMessages(BaseEnum):
     MISSING_DATA = "Missing {field}."
     INVALID_DATA = "Not a valid {field}."
     GENERIC_ERROR = "Error in {field}."
 
 
 class IssueSource(BaseEnum):
-    CALL = "call"
-    EMAIL = "email"
-    APP_WEB = "web"
-    CHATBOT = "chatbot"
-    APP_MOBILE = "app_mobile"
-    OTHER = "other"
+    CALL = "CALL"
+    EMAIL = "EMAIL"
+    WEB = "WEB"
+    CHATBOT = "CHATBOT"
+    APP_MOBILE = "APP_MOBILE"
+    OTHER = "OTHER"
 
 
 class IssueType(BaseEnum):
-    REQUEST = "request"
-    COMPLAINT = "complaint"
-    CLAIM = "claim"
-    SUGGESTION = "suggestion"
-    PRAISE = "praise"
+    REQUEST = "REQUEST"
+    COMPLAINT = "COMPLAINT"
+    CLAIM = "CLAIM"
+    SUGGESTION = "SUGGESTION"
+    PRAISE = "PRAISE"
 
 
 class IssueStatus(BaseEnum):
-    OPEN = "open"
-    SCALED = "scaled"
-    CLOSED = "closed"
+    OPEN = "OPEN"
+    SCALED = "SCALED"
+    CLOSED = "CLOSED"
 
 
-class Permissions(Enum):
+class Permissions(BaseEnum):
     CREATE_ISSUE = "create_issue"
     VIEW_ISSUE = "view_issue"
     EDIT_ISSUE = "edit_issue"

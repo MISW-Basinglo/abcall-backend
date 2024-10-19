@@ -11,6 +11,7 @@ class IssueCreateSerializer(BaseSerializer):
     updated_at = fields.DateTime(allow_none=True, required=False)
     user_id = fields.Integer()
     company_id = fields.Integer()
+    solution = fields.String(allow_none=True, required=False)
 
 
 class IssueListSerializer(IssueCreateSerializer):

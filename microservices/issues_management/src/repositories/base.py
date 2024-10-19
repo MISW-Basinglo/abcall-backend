@@ -135,10 +135,10 @@ class BaseRepository(ABC):
                     field = getattr(self.model, field_name)
                     operator_func = self.operator_map.get(operator)
                     if not operator_func:
-                        raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
+                        raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER)
                     filters.append(operator_func(field, value))
                 except AttributeError:
-                    raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
+                    raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER)
 
         if filters:
             query = query.filter(and_(*filters))

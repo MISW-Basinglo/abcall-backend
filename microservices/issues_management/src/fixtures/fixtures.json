@@ -5,11 +5,12 @@
       "type": "COMPLAINT",
       "description": "The login page fails to load after the latest update.",
       "status": "OPEN",
-      "source": "APP_WEB",
+      "source": "WEB",
       "created_at": "2024-10-15T08:15:00",
       "updated_at": null,
       "user_id": 1,
-      "company_id": 3
+      "company_id": 3,
+      "solution": null
     },
     {
       "id": 2,
@@ -20,18 +21,20 @@
       "created_at": "2024-10-10T14:30:00",
       "updated_at": "2024-10-12T09:45:00",
       "user_id": 2,
-      "company_id": 1
+      "company_id": 1,
+      "solution": null
     },
     {
       "id": 3,
       "type": "REQUEST",
-      "description": "Need help with resetting the account password.",
+      "description": "Request for assistance in resetting the account password.",
       "status": "CLOSED",
       "source": "CHATBOT",
       "created_at": "2024-09-25T10:20:00",
       "updated_at": "2024-09-25T11:05:00",
       "user_id": 4,
-      "company_id": 2
+      "company_id": 2,
+      "solution": "Password reset instructions were provided, and the account was successfully recovered."
     },
     {
       "id": 4,
@@ -42,7 +45,8 @@
       "created_at": "2024-10-05T13:45:00",
       "updated_at": "2024-10-06T16:00:00",
       "user_id": 3,
-      "company_id": 5
+      "company_id": 5,
+      "solution": null
     },
     {
       "id": 5,
@@ -53,18 +57,20 @@
       "created_at": "2024-08-20T09:30:00",
       "updated_at": "2024-09-15T14:00:00",
       "user_id": 5,
-      "company_id": 1
+      "company_id": 1,
+      "solution": "Acknowledged praise. Minor glitches have been noted for review."
     },
     {
       "id": 6,
       "type": "SUGGESTION",
       "description": "Feature request to add multi-language support.",
       "status": "SCALED",
-      "source": "APP_WEB",
+      "source": "WEB",
       "created_at": "2024-10-08T11:00:00",
       "updated_at": "2024-10-10T14:30:00",
       "user_id": 2,
-      "company_id": 3
+      "company_id": 3,
+      "solution": null
     },
     {
       "id": 7,
@@ -75,7 +81,8 @@
       "created_at": "2024-10-16T10:45:00",
       "updated_at": null,
       "user_id": 4,
-      "company_id": 4
+      "company_id": 4,
+      "solution": null
     },
     {
       "id": 8,
@@ -86,18 +93,20 @@
       "created_at": "2024-09-20T14:10:00",
       "updated_at": "2024-09-22T09:35:00",
       "user_id": 3,
-      "company_id": 2
+      "company_id": 2,
+      "solution": "Push notification service was restarted, and issue was resolved."
     },
     {
       "id": 9,
       "type": "REQUEST",
-      "description": "Need instructions to update profile picture in the app.",
+      "description": "Request for instructions to update the profile picture in the app.",
       "status": "CLOSED",
       "source": "CHATBOT",
       "created_at": "2024-10-03T17:30:00",
       "updated_at": "2024-10-04T09:00:00",
       "user_id": 1,
-      "company_id": 1
+      "company_id": 1,
+      "solution": "Provided user with a step-by-step guide to update profile picture."
     },
     {
       "id": 10,
@@ -108,7 +117,8 @@
       "created_at": "2024-10-16T09:25:00",
       "updated_at": null,
       "user_id": 5,
-      "company_id": 4
+      "company_id": 4,
+      "solution": null
     },
     {
       "id": 11,
@@ -119,18 +129,20 @@
       "created_at": "2024-10-17T10:00:00",
       "updated_at": null,
       "user_id": 3,
-      "company_id": 1
+      "company_id": 1,
+      "solution": null
     },
     {
       "id": 12,
       "type": "REQUEST",
-      "description": "Need help setting up two-factor authentication.",
+      "description": "Request for assistance in setting up two-factor authentication.",
       "status": "SCALED",
       "source": "CALL",
       "created_at": "2024-10-16T12:15:00",
       "updated_at": "2024-10-17T09:00:00",
       "user_id": 4,
-      "company_id": 2
+      "company_id": 2,
+      "solution": null
     },
     {
       "id": 13,
@@ -141,18 +153,20 @@
       "created_at": "2024-09-18T15:30:00",
       "updated_at": "2024-09-19T11:00:00",
       "user_id": 5,
-      "company_id": 3
+      "company_id": 3,
+      "solution": "Suggestion forwarded to the product team for review."
     },
     {
       "id": 14,
       "type": "COMPLAINT",
       "description": "Customer service is unresponsive to my inquiries.",
       "status": "OPEN",
-      "source": "APP_WEB",
+      "source": "WEB",
       "created_at": "2024-10-15T14:00:00",
       "updated_at": null,
       "user_id": 2,
-      "company_id": 4
+      "company_id": 4,
+      "solution": null
     },
     {
       "id": 15,
@@ -163,7 +177,8 @@
       "created_at": "2024-10-10T10:05:00",
       "updated_at": "2024-10-11T08:30:00",
       "user_id": 1,
-      "company_id": 2
+      "company_id": 2,
+      "solution": "Acknowledged positive feedback and forwarded to the product team."
     },
     {
       "id": 16,
@@ -174,7 +189,8 @@
       "created_at": "2024-10-14T09:00:00",
       "updated_at": "2024-10-15T12:45:00",
       "user_id": 3,
-      "company_id": 5
+      "company_id": 5,
+      "solution": null
     },
     {
       "id": 17,
@@ -185,7 +201,8 @@
       "created_at": "2024-10-12T16:20:00",
       "updated_at": null,
       "user_id": 4,
-      "company_id": 1
+      "company_id": 1,
+      "solution": null
     },
     {
       "id": 18,
@@ -196,29 +213,32 @@
       "created_at": "2024-09-22T11:15:00",
       "updated_at": "2024-09-23T13:45:00",
       "user_id": 5,
-      "company_id": 3
+      "company_id": 3,
+      "solution": "Request forwarded to the development team for review."
     },
     {
       "id": 19,
       "type": "COMPLAINT",
       "description": "The app crashes when trying to upload a photo.",
       "status": "OPEN",
-      "source": "APP_WEB",
-      "created_at": "2024-10-16T08:00:00",
+      "source": "APP_MOBILE",
+      "created_at": "2024-10-15T10:25:00",
       "updated_at": null,
       "user_id": 2,
-      "company_id": 4
+      "company_id": 5,
+      "solution": null
     },
     {
       "id": 20,
       "type": "PRAISE",
-      "description": "The customer support team was very helpful and friendly!",
+      "description": "The customer service team was very helpful and resolved my issue quickly.",
       "status": "CLOSED",
-      "source": "EMAIL",
-      "created_at": "2024-10-11T14:30:00",
-      "updated_at": "2024-10-12T15:00:00",
+      "source": "CALL",
+      "created_at": "2024-09-28T13:00:00",
+      "updated_at": "2024-09-29T10:30:00",
       "user_id": 1,
-      "company_id": 2
+      "company_id": 2,
+      "solution": "Positive feedback shared with the customer service team."
     }
   ]
 }

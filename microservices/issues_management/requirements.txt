@@ -16,5 +16,6 @@ pylzma==0.5.0
 pytest==6.2.5
 pytest-cov
 pytest-mock==3.14.0
+requests==2.26.0
 SQLAlchemy==1.4.15
 Werkzeug==2.3.3

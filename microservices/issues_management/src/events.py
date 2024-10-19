@@ -11,7 +11,7 @@ def set_utc_timestamps(mapper, connection, target):
     for attr in target.__mapper__.columns:
         if isinstance(attr.type, DateTime) and attr.name in target.__dict__:
             value = getattr(target, attr.name)
-            if value:
+            if value is not None:
                 if value.tzinfo is None:
                     utc_value = value.replace(tzinfo=timezone.utc)
                 else:

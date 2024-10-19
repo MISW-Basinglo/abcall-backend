@@ -1,11 +1,17 @@
 from enum import Enum
 
 
+class BaseEnum(Enum):
+    def __str__(self):
+        return self.value
+
+
 class ExceptionsMessages(Enum):
     # User-related errors
     USER_NOT_REGISTERED = "User not registered."
     USER_NOT_AUTHORIZED = "User not authorized."
     USER_NOT_FOUND = "User not found."
+    USER_NOT_AUTHENTICATED = "User not authenticated."
     INVALID_PASSWORD = "Invalid password."
 
     # Token-related errors
@@ -29,7 +35,7 @@ class MarshmallowCustomValidationMessages(Enum):
     GENERIC_ERROR = "Error in {field}."
 
 
-class IssueSource(Enum):
+class IssueSource(BaseEnum):
     CALL = "call"
     EMAIL = "email"
     APP_WEB = "web"
@@ -38,7 +44,7 @@ class IssueSource(Enum):
     OTHER = "other"
 
 
-class IssueType(Enum):
+class IssueType(BaseEnum):
     REQUEST = "request"
     COMPLAINT = "complaint"
     CLAIM = "claim"
@@ -46,7 +52,7 @@ class IssueType(Enum):
     PRAISE = "praise"
 
 
-class IssueStatus(Enum):
+class IssueStatus(BaseEnum):
     OPEN = "open"
     SCALED = "scaled"
     CLOSED = "closed"

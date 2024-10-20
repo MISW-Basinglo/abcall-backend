@@ -1,15 +1,52 @@
 {
   "permissions": [
-    { "name": "read" },
-    { "name": "write" }
+    {
+      "name": "read"
+    },
+    {
+      "name": "write"
+    },
+    {
+      "name": "create_issue"
+    },
+    {
+      "name": "view_issue"
+    },
+    {
+      "name": "edit_issue"
+    },
+    {
+      "name": "delete_issue"
+    }
   ],
   "roles": [
     {
       "name": "admin",
-      "permissions": ["read", "write"]
+      "permissions": [
+        "read",
+        "write",
+        "create_issue",
+        "view_issue",
+        "edit_issue",
+        "delete_issue"
+      ]
     },
     {
       "name": "user",
+      "permissions": [
+        "view_issue",
+        "create_issue"
+      ]
+    },
+    {
+      "name": "agent",
+      "permissions": [
+        "view_issue",
+        "edit_issue"
+      ]
+    },
+    {
+      "name": "viewer",
       "permissions": ["read"]
     }
   ],
@@ -23,6 +60,16 @@
       "email": "user@example.com",
       "password": "userpass",
       "role": "user"
+    },
+    {
+      "email": "basic_user@example.com",
+      "password": "basicuserpass",
+      "role": "viewer"
+    },
+    {
+      "email": "agent_user@example.com",
+      "password": "agentpass",
+      "role": "agent"
     }
   ]
 }

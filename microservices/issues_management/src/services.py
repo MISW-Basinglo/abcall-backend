@@ -25,7 +25,7 @@ def get_all_issues_service():
 
 def create_issue_service(data):
     user = get_user_info()
-    data.update({"user_id": user["user_id"], "company_id": user["company_id"]})
+    data.update({"user_id": user["id"], "company_id": user["company_id"]})
     data = IssueCreateSerializer().load(data)
     issue_repository = IssuesManagementRepository()
     issue_repository.set_serializer(serializer_class)
@@ -38,5 +38,5 @@ def create_issue_service(data):
 def get_user_info() -> dict[str, str]:
     auth_header = get_auth_header_from_request()
     url = f"{BACKEND_HOST}{USER_SERVICE_PATH}/me"
-    response = send_request(url, "GET", headers=auth_header)
+    response = send_request(url, "GET", headers=auth_header)["data"]
     return UserEntitySerializer().load(response)

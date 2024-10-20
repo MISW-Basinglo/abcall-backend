@@ -10,6 +10,7 @@ from src.serializers.company_serializers import CompanyListSerializer
 from src.serializers.company_serializers import GenericResponseSerializer
 from src.serializers.user_serializers import ClientCreateSerializer
 from src.serializers.user_serializers import UserCreateSerializer
+from src.serializers.user_serializers import UserEntitySerializer
 from src.serializers.user_serializers import UserListSerializer
 from src.services.company_services import create_company_service
 from src.services.company_services import delete_company_service
@@ -66,7 +67,7 @@ def create_user_service(user_data):
 
 def get_user_session(id_user_auth: int):
     user_repository = UserRepository()
-    user_repository.set_serializer(serializer_user_class)
+    user_repository.set_serializer(UserEntitySerializer)
     user = user_repository.get_by_field("auth_id", id_user_auth)
 
     if not user:

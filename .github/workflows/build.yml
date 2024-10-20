@@ -33,7 +33,9 @@ jobs:
             compose-file: "docker-compose.yaml"
             test-container: "auth"
             test-command: "pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80"
+
       - uses: adambirds/docker-compose-action@v1.5.0
+        name: Testing user
         with:
             compose-file: "docker-compose.yaml"
             test-container: "user"

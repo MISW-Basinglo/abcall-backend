@@ -52,6 +52,21 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  user:
+    build:
+      context: ./microservices/user
+      dockerfile: Dockerfile
+    container_name: user_abcall
+    networks:
+      - app-network
+    env_file:
+      - "microservices/user/.env"
+    labels:
+      - "traefik.http.routers.user.rule=PathPrefix(`/user`) || PathPrefix(`/company`)"
+      - "traefik.http.services.user.loadbalancer.server.port=8000"
+    depends_on:
+      db:
+        condition: service_healthy
 
   issues_management:
     build:

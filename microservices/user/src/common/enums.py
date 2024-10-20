@@ -6,7 +6,7 @@ class BaseEnum(Enum):
         return self.value
 
 
-class ExceptionsMessages(Enum):
+class ExceptionsMessages(BaseEnum):
     # User-related errors
     USER_NOT_REGISTERED = "User not registered."
     USER_NOT_AUTHORIZED = "User not authorized."
@@ -24,6 +24,9 @@ class ExceptionsMessages(Enum):
 
     # Parameter-related errors
     INVALID_PARAMETER = "Invalid parameter."
+
+    # Company-related errors
+    COMPANY_NOT_REGISTERED = "Company not registered."
 
     # General errors
     ERROR = "Something went wrong. Please try again later."

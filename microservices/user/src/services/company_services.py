@@ -1,4 +1,4 @@
-from src.common.constants import ExceptionsMessages
+from src.common.enums import ExceptionsMessages
 from src.common.exceptions import ResourceNotFoundException
 from src.common.logger import logger
 from src.models.entities import GenericResponseEntity

@@ -1,4 +1,4 @@
-from src.common.constants import ExceptionsMessages
+from src.common.enums import ExceptionsMessages
 
 
 class InvalidParameterException(Exception):

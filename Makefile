@@ -48,6 +48,10 @@ run_auth:
 run_user:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up user
 
+.PHONY: run_issues
+run_issues:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up issues_management
+
 # ====================================================================================
 # T E S T I N G  C O M M A N D S
 
@@ -59,13 +63,18 @@ test_auth:
 test_user:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --build --rm user pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
+.PHONY: test_issues
+test_issues:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm issues_management pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
+
 .PHONY: test_all
-test_all: build test_auth test_user
+test_all: build test_auth test_user test_issues
 
 .PHONY: load_fixtures
 load_fixtures:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth flask load-fixtures
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm user flask load-fixtures
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm issues_management flask load-fixtures
 
 # ====================================================================================
 # D E P L O Y M E N T  C O M M A N D S

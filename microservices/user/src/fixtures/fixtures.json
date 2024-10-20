@@ -1,0 +1,54 @@
+{
+  "companies": [
+    {
+      "name": "Movistar",
+      "nit": "12345",
+      "plan": "ENTREPRENEUR",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "Claro",
+      "nit": "23456",
+      "plan": "BUSINESS",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "Tigo",
+      "nit": "34567",
+      "plan": "BUSINESS_PLUS",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "Nueva Empresa",
+      "nit": "45678",
+      "plan": "BUSINESS",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "Empresa Test",
+      "nit": "56789",
+      "plan": "ENTREPRENEUR",
+      "status": "ACTIVE"
+    }
+  ],
+  "users": [
+    {
+      "name": "Usuario Test",
+      "dni": "123456789",
+      "phone": "3102456789",
+      "channel": "EMAIL",
+      "auth_id": 2,
+      "importance": 1,
+      "company_id": "Movistar"
+    },
+    {
+      "name": "Admin Test",
+      "dni": "9876543",
+      "phone": "312434567",
+      "channel": "EMAIL",
+      "auth_id": 1,
+      "importance": 1,
+      "company_id": ""
+    }
+  ]
+}

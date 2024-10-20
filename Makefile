@@ -44,6 +44,10 @@ clean:
 run_auth:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up auth
 
+.PHONY: run_user
+run_user:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up user
+
 # ====================================================================================
 # T E S T I N G  C O M M A N D S
 
@@ -51,12 +55,17 @@ run_auth:
 test_auth:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
+.PHONY: test_user
+test_user:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --build --rm user pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
+
 .PHONY: test_all
-test_all: build test_auth
+test_all: build test_auth test_user
 
 .PHONY: load_fixtures
 load_fixtures:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth flask load-fixtures
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm user flask load-fixtures
 
 # ====================================================================================
 # D E P L O Y M E N T  C O M M A N D S

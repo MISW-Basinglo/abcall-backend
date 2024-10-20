@@ -10,7 +10,7 @@ La estructura del repositorio es la siguiente:
 backend-abcall/
 ├── microservices/                  # Contiene todos los microservicios
 │   ├── auth/                       # Microservicio de Autenticación y Autorización
-│   ├── client_management/          # Microservicio de Gestión de Clientes
+│   ├── user/                       # Microservicio de Gestión de Clientes y Usuarios
 │   └── ...                         # Otros microservicios según sea necesario
 ├── config/                         # Configuraciones globales para diferentes entornos
 ├── docker-compose.yml              # Archivo Docker Compose para ejecutar todos los servicios

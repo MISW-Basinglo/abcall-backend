@@ -15,7 +15,7 @@ serializer_company_class = CompanyListSerializer
 serializer_user_class = UserListSerializer
 
 
-def insert_company(company_data):
+def create_company_service(company_data):
     data = CompanyCreateSerializer().load(company_data)
     company_repository = CompanyRepository()
     company_repository.set_serializer(serializer_company_class)
@@ -63,3 +63,8 @@ def get_all_companies():
     response_entity = GenericResponseListEntity(data=companies, count=len(companies))
     response = GenericResponseListSerializer().dump(response_entity)
     return response
+
+
+def delete_company_service(id_company: int):
+    company_repository = CompanyRepository()
+    company_repository.delete(id_company)

@@ -10,3 +10,19 @@ class GenericResponseListEntity:
 @dataclass
 class GenericResponseEntity:
     data: dict
+
+
+@dataclass
+class AuthUser:
+    user_id: int
+    role: str
+    permissions: list[str]
+
+    def has_permission(self, permission: str) -> bool:
+        return permission in self.permissions
+
+    def has_permissions(self, permissions: list[str]) -> bool:
+        return any(self.has_permission(permission) for permission in permissions)
+
+    def has_role(self, role: str) -> bool:
+        return role == self.role

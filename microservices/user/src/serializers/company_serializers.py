@@ -12,8 +12,6 @@ class CompanyCreateSerializer(BaseSerializer):
     nit = fields.String(required=True, validate=Length(min=1, max=50))
     plan = fields.String(required=True, validate=Length(min=1, max=120))
     status = fields.String(required=True, validate=Length(min=1, max=100))
-    created_at = Column(DateTime(), nullable=True, default=func.now())  # Se crea automáticamente
-    updated_at = Column(DateTime(), nullable=True, default=func.now(), onupdate=func.now())  # Se actualiza automáticamente
 
 
 class CompanyListSerializer(CompanyCreateSerializer):

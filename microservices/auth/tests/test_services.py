@@ -13,12 +13,12 @@ from .conftest import mock_user
 
 def test_authenticate_success(mock_app, mock_user, login_data, mocker):
     with mock_app.app_context():
-        mock_load_with_exception = mocker.patch("src.serializers.auth_serializers.UserLoginSerializer.load")
+        mock_load_with_exception = mocker.patch("src.serializers.serializers.UserLoginSerializer.load")
         mock_get_user_by_email = mocker.patch("src.repositories.base.BaseRepository.get_by_field")
         mock_generate_token = mocker.patch("src.services.generate_token")
         mock_create_refresh_token = mocker.patch("flask_jwt_extended.create_refresh_token")
         mock_update_auth = mocker.patch("src.repositories.base.BaseRepository.update")
-        mock_dump = mocker.patch("src.serializers.auth_serializers.TokenSerializer.dump")
+        mock_dump = mocker.patch("src.serializers.serializers.TokenSerializer.dump")
         mock_load_with_exception.return_value = login_data
         mock_get_user_by_email.return_value = mock_user
         mock_generate_token.return_value = "access_token"
@@ -39,7 +39,7 @@ def test_authenticate_success(mock_app, mock_user, login_data, mocker):
 
 def test_authenticate_user_not_registered(mock_app, login_data, mocker):
     with mock_app.app_context():
-        mock_load_with_exception = mocker.patch("src.serializers.auth_serializers.UserLoginSerializer.load")
+        mock_load_with_exception = mocker.patch("src.serializers.serializers.UserLoginSerializer.load")
         mock_get_user_by_email = mocker.patch("src.repositories.base.BaseRepository.get_by_field")
         mock_load_with_exception.return_value = login_data
         mock_get_user_by_email.return_value = None
@@ -52,7 +52,7 @@ def test_authenticate_user_not_registered(mock_app, login_data, mocker):
 
 def test_authenticate_invalid_password(mock_app, mock_user, login_data, mocker):
     with mock_app.app_context():
-        mock_load_with_exception = mocker.patch("src.serializers.auth_serializers.UserLoginSerializer.load")
+        mock_load_with_exception = mocker.patch("src.serializers.serializers.UserLoginSerializer.load")
         mock_get_user_by_email = mocker.patch("src.repositories.base.BaseRepository.get_by_field")
         mock_load_with_exception.return_value = login_data
         mock_user.check_password.return_value = False  # Simulate incorrect password

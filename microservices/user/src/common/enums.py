@@ -47,3 +47,12 @@ class CompanyPlan(BaseEnum):
     ENTREPRENEUR = "ENTREPRENEUR"
     BUSINESS = "BUSINESS"
     BUSINESS_PLUS = "BUSINESS_PLUS"
+
+
+class UserChannel(BaseEnum):
+    EMAIL = "EMAIL"
+    SMS = "PHONE"
+
+
+class AllowedRoles(BaseEnum):
+    ADMIN = "admin"

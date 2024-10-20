@@ -67,6 +67,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      auth:
+        condition: service_started
 
   issues_management:
     build:
@@ -83,3 +85,5 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      auth:
+        condition: service_started

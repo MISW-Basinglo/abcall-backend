@@ -39,6 +39,8 @@ def send_request(url, method, data=None, headers=None):
     h = {"Content-Type": "application/json"}
     if headers:
         h.update(headers)
+    else:
+        h.update(get_auth_header_from_request())
     response = requests.request(method, url, json=data, headers=h)
     response.raise_for_status()
     return response.json()

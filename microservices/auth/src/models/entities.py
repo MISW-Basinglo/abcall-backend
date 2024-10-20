@@ -12,3 +12,14 @@ class AuditAuthUser:
     user_id: int
     role: str
     permissions: list[str]
+
+
+@dataclass
+class GenericResponseListEntity:
+    count: int
+    data: list[dict]
+
+
+@dataclass
+class GenericResponseEntity:
+    data: dict

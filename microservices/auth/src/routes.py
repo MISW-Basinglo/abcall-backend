@@ -2,14 +2,33 @@ from http import HTTPStatus
 
 from flask import Blueprint
 from flask import request
+from flask import Response
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from src.common.decorators import handle_exceptions
 from src.services import audit_decode_token
 from src.services import authenticate
+from src.services import create_user_auth
+from src.services import delete_auth_user_service
 from src.services import refresh_access_token
 
 blueprint = Blueprint("auth_api", __name__, url_prefix="/auth")
+
+
+@blueprint.route("", methods=["POST"])
+@handle_exceptions
+@jwt_required()
+def register():
+    data = request.get_json()
+    return create_user_auth(data), HTTPStatus.CREATED
+
+
+@blueprint.route("/<int:auth_id>", methods=["DELETE"])
+@handle_exceptions
+@jwt_required()
+def delete(auth_id: int):
+    delete_auth_user_service(auth_id)
+    return Response(status=HTTPStatus.NO_CONTENT)
 
 
 @blueprint.route("/login", methods=["POST"])

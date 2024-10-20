@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytest  # noqa
 from faker import Faker
 from src.serializers.user_serializers import GenericResponseSerializer
@@ -11,20 +9,30 @@ fake = Faker()
 
 def test_user_create_serializer_success():
     serializer = UserCreateSerializer()
-    data = {"name": "John Doe", "nit": "123456789", "plan": "Basic", "status": "active"}
-
-    result = serializer.load(data)
-    assert result["name"] == "John Doe"
-    assert result["nit"] == "123456789"
-    assert result["plan"] == "Basic"
-    assert result["status"] == "active"
+    data = {
+        "name": "Alice",
+        "company_id": 101,
+        "phone": "123456789",
+        "auth_id": 1,
+    }
+    data = serializer.load(data)
+    assert data["name"] == "Alice"
+    assert data["company_id"] == 101
+    assert data["phone"] == "123456789"
+    assert data["auth_id"] == 1
 
 
 def test_user_list_serializer_success():
     serializer = UserListSerializer()
-    now = datetime.utcnow()
-
-    data = {"id": 1, "name": "Alice", "company_id": 101, "nit": "987654321", "plan": "Premium", "status": "active"}
+    data = {
+        "id": 1,
+        "name": "Alice",
+        "company_id": 101,
+        "phone": "123456789",
+        "auth_id": 1,
+        "created_at": "2021-01-01T00:00:00Z",
+        "updated_at": "2021-01-01T00:00:00Z",
+    }
 
     result = serializer.load(data)
     assert result["id"] == 1

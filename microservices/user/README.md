@@ -17,7 +17,7 @@ En el header Authorization se debe enviar el token de acceso.
     "nit": "50912312",
     "plan": "BUSINESS",
     "status": "Active",
-    "update_at": "2024-10-16T20:36:34.364945"
+    "updated_at": "2024-10-16T20:36:34.364945"
 }
 ```
 
@@ -36,7 +36,7 @@ En el header Authorization se debe enviar el token de acceso.
     "nit": "50912312",
     "plan": "BUSINESS",
     "status": "Active",
-    "update_at": "2024-10-16T20:36:34.364945"
+    "updated_at": "2024-10-16T20:36:34.364945"
 }
 ```
 
@@ -56,7 +56,7 @@ En el header Authorization se debe enviar el token de acceso.
         "nit": "50912312",
         "plan": "BUSINESS",
         "status": "Active",
-        "update_at": "2024-10-16T20:36:34.364945"
+        "updated_at": "2024-10-16T20:36:34.364945"
     }
 ]
 ```
@@ -85,7 +85,7 @@ En el header Authorization se debe enviar el token de acceso.
     "nit": "124789",
     "plan": "BUSINESS",
     "status": "INACTIVE",
-    "update_at": "2024-10-16T20:44:26.052981"
+    "updated_at": "2024-10-16T20:44:26.052981"
 }
 ```
 

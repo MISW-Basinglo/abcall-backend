@@ -5,10 +5,10 @@ from flask import request
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from src.common.decorators import handle_exceptions
+from src.services.company_services import create_company_service
 from src.services.company_services import get_all_companies
 from src.services.company_services import get_company_by_id
 from src.services.company_services import get_company_by_user_session
-from src.services.company_services import insert_company
 
 blueprint = Blueprint("company_api", __name__, url_prefix="/company")
 
@@ -18,7 +18,7 @@ blueprint = Blueprint("company_api", __name__, url_prefix="/company")
 @jwt_required()
 def add_company():
     data = request.get_json()
-    return insert_company(data), HTTPStatus.CREATED
+    return create_company_service(data), HTTPStatus.CREATED
 
 
 @blueprint.route("/<int:id>", methods=["GET"])

@@ -6,22 +6,26 @@ from flask_jwt_extended import create_refresh_token
 from flask_jwt_extended import get_jwt
 from src.common.constants import JWT_REFRESH_DELTA
 from src.common.enums import ExceptionsMessages
+from src.common.enums import UserAuthStatus
 from src.common.exceptions import CustomException
 from src.common.exceptions import ResourceNotFoundException
 from src.common.exceptions import UserNotAuthorizedException
 from src.common.logger import logger
 from src.common.utils import generate_token
 from src.models.entities import AuditAuthUser
+from src.models.entities import GenericResponseEntity
 from src.models.entities import TokenResponseEntity
 from src.repositories.auth_repository import UserAuthRepository
-from src.serializers.auth_serializers import AuditAuthUserSerializer
-from src.serializers.auth_serializers import TokenSerializer
-from src.serializers.auth_serializers import UserLoginSerializer
-
-auth_repository = UserAuthRepository()
+from src.serializers.serializers import AuditAuthUserSerializer
+from src.serializers.serializers import GenericResponseSerializer
+from src.serializers.serializers import TokenSerializer
+from src.serializers.serializers import UserCreateSerializer
+from src.serializers.serializers import UserLoginSerializer
+from src.serializers.serializers import UserRetrieveSerializer
 
 
 def authenticate(data: Dict):
+    auth_repository = UserAuthRepository()
     login_data = UserLoginSerializer().load(data)
     user_auth = auth_repository.get_by_field("email", login_data["email"])
 
@@ -43,6 +47,7 @@ def authenticate(data: Dict):
 
 
 def refresh_access_token(user_identity):
+    auth_repository = UserAuthRepository()
     user_auth = auth_repository.get_by_field("id", user_identity)
     if not user_auth:
         logger.error(ExceptionsMessages.USER_NOT_REGISTERED.value)
@@ -61,3 +66,19 @@ def audit_decode_token(user_id):
     audit_auth = AuditAuthUser(user_id=user_id, role=role, permissions=permissions)
     audit_serializer = AuditAuthUserSerializer()
     return audit_serializer.dump(audit_auth)
+
+
+def create_user_auth(data):
+    auth_repository = UserAuthRepository()
+    data["status"] = data.get("status", UserAuthStatus.PENDING.value)
+    data = UserCreateSerializer().load(data)
+    auth_repository.set_serializer(UserRetrieveSerializer)
+    user_auth = auth_repository.create(data)
+    response_entity = GenericResponseEntity(data=user_auth)
+    response = GenericResponseSerializer().dump(response_entity)
+    return response
+
+
+def delete_auth_user_service(auth_id: int):
+    auth_repository = UserAuthRepository()
+    auth_repository.delete(auth_id)

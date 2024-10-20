@@ -1,9 +1,9 @@
 from faker import Faker
 from pytest_mock import mocker  # noqa
+from src.services.company_services import create_company_service
 from src.services.company_services import get_all_companies
 from src.services.company_services import get_company_by_id
 from src.services.company_services import get_company_by_user_session
-from src.services.company_services import insert_company
 from tests.conftest import mock_app
 from tests.conftest import session
 
@@ -62,7 +62,7 @@ def test_insert_company(mock_app, mocker, session):
         }
         mocker.patch("src.repositories.company_repository.CompanyRepository.create", return_value=return_value)
 
-        response = insert_company(company_data)
+        response = create_company_service(company_data)
         assert response["data"]["name"] == company_data["name"]
         assert response["data"]["nit"] == company_data["nit"]
         assert response["data"]["plan"] == company_data["plan"]

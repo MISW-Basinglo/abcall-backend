@@ -1,4 +1,6 @@
 # app/models.py
+from email.policy import default
+
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import Enum as SQLAlchemyEnum
@@ -17,7 +19,7 @@ class Company(Base):
     name = Column(String(120), unique=True, nullable=False)
     nit = Column(String(120), unique=True, nullable=False)
     plan = Column(SQLAlchemyEnum(CompanyPlan), unique=False, nullable=False)
-    status = Column(SQLAlchemyEnum(CompanyStatus), unique=False, nullable=False)
-    created_at = Column(DateTime(), nullable=True, default=func.now())
-    update_at = Column(DateTime(), nullable=True, default=func.now())
+    status = Column(SQLAlchemyEnum(CompanyStatus), unique=False, nullable=False, default=CompanyStatus.ACTIVE)
+    created_at = Column(DateTime(), nullable=False, default=func.now())
+    updated_at = Column(DateTime(), nullable=False, default=func.now())
     users = relationship("User", back_populates="company")

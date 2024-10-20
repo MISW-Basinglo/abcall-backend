@@ -46,8 +46,10 @@
       ]
     },
     {
-      "name": "viewer",
-      "permissions": ["read"]
+      "name": "client",
+      "permissions": [
+        "view_issue"
+      ]
     }
   ],
   "users": [
@@ -62,14 +64,20 @@
       "role": "user"
     },
     {
-      "email": "basic_user@example.com",
-      "password": "basicuserpass",
-      "role": "viewer"
+      "email": "movistarclient@example.com",
+      "password": "movistarclientpass",
+      "role": "client"
+    },
+
+    {
+      "email": "claroclient@example.com",
+      "password": "claroclientpass",
+      "role": "client"
     },
     {
-      "email": "agent_user@example.com",
-      "password": "agentpass",
-      "role": "agent"
+      "email": "tigoclient@example.com",
+      "password": "tigoclientpass",
+      "role": "client"
     }
   ]
 }

@@ -1,7 +1,12 @@
 from enum import Enum
 
 
-class ExceptionsMessages(str, Enum):
+class BaseEnum(Enum):
+    def __str__(self):
+        return self.value
+
+
+class ExceptionsMessages(BaseEnum):
     # User-related errors
     USER_NOT_REGISTERED = "User not registered."
     USER_NOT_AUTHORIZED = "User not authorized."
@@ -23,7 +28,13 @@ class ExceptionsMessages(str, Enum):
     ERROR = "Something went wrong. Please try again later."
 
 
-class MarshmallowCustomValidationMessages(Enum):
+class MarshmallowCustomValidationMessages(BaseEnum):
     MISSING_DATA = "Missing {field}."
     INVALID_DATA = "Not a valid {field}."
     GENERIC_ERROR = "Error in {field}."
+
+
+class UserAuthStatus(BaseEnum):
+    ACTIVE = "ACTIVE"
+    PENDING = "PENDING"
+    INACTIVE = "INACTIVE"

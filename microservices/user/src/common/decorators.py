@@ -1,8 +1,11 @@
 from functools import wraps
 from http import HTTPStatus
 
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended.exceptions import InvalidHeaderError
 from flask_jwt_extended.exceptions import NoAuthorizationError
 from jwt import ExpiredSignatureError
+from src.common.constants import DISABLE_PERMISSIONS_VALIDATIONS
 from src.common.enums import ExceptionsMessages
 from src.common.exceptions import CustomException
 from src.common.exceptions import InvalidParameterException
@@ -11,6 +14,7 @@ from src.common.exceptions import ResourceNotFoundException
 from src.common.exceptions import TokenNotFoundException
 from src.common.exceptions import UserNotAuthorizedException
 from src.common.logger import logger
+from src.common.utils import decode_token
 
 
 def handle_exceptions(func):
@@ -39,7 +43,7 @@ def handle_exceptions(func):
         except TokenNotFoundException as e:
             status_code = HTTPStatus.FORBIDDEN
             error = str(e)
-        except ExpiredSignatureError as e:
+        except (ExpiredSignatureError, InvalidHeaderError) as e:
             status_code = HTTPStatus.UNAUTHORIZED
             error = ExceptionsMessages.USER_NOT_AUTHENTICATED.value
         except CustomException as e:
@@ -59,3 +63,30 @@ def handle_exceptions(func):
                 return response_object, status_code
 
     return wrapper
+
+
+def validate_permissions(permissions=None, role=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user_id = get_jwt_identity()
+            user = decode_token(user_id)
+            validations = []
+            if role:
+                validations = [
+                    bool(user),
+                    user.has_role(role),
+                ]
+            elif permissions:
+                validations = [
+                    bool(user),
+                    user.has_permissions(permissions),
+                ]
+
+            if not validations or not all(validations) and not DISABLE_PERMISSIONS_VALIDATIONS:
+                raise UserNotAuthorizedException(ExceptionsMessages.USER_NOT_AUTHORIZED.value)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator

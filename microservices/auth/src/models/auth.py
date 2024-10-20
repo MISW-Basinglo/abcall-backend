@@ -1,10 +1,14 @@
 # app/models.py
+from email.policy import default
+
 from sqlalchemy import Column
 from sqlalchemy import DateTime
+from sqlalchemy import Enum as SQLAlchemyEnum
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
+from src.common.enums import UserAuthStatus
 from src.db import Base
 from src.models.role import Role
 from werkzeug.security import check_password_hash
@@ -16,7 +20,8 @@ class UserAuth(Base):
     id = Column(Integer(), primary_key=True)
     email = Column(String(120), unique=True, nullable=False)
     last_login = Column(DateTime(), nullable=True)
-    password = Column(String(120), nullable=False)
+    status = Column(SQLAlchemyEnum(UserAuthStatus), nullable=False, default=UserAuthStatus.ACTIVE.value)
+    password = Column(String(120), nullable=True)
     role_id = Column(Integer(), ForeignKey("roles.id"))
 
     role = relationship(Role, back_populates="users", lazy="joined")

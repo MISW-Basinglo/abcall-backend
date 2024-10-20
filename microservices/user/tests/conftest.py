@@ -105,7 +105,7 @@ def mock_company(mocker):
     company.plan = "BUSINESS"
     company.status = "Active"
     company.created_at = datetime.now()
-    company.update_at = datetime.now()
+    company.updated_at = datetime.now()
     return company
 
 
@@ -128,5 +128,5 @@ def mock_user(mocker):
     user.importance = 1
     user.company_id = 1  # Link to the mock company
     user.created_at = datetime.now()
-    user.update_at = datetime.now()
+    user.updated_at = datetime.now()
     return user

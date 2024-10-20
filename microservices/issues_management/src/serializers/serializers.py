@@ -29,7 +29,6 @@ class GenericResponseSerializer(BaseSerializer):
     data = fields.Dict()
 
 
-# ToDo: Add more fields as User microservice evolves
 class UserEntitySerializer(BaseSerializer):
     user_id = fields.Integer()
     name = fields.String()

@@ -1,8 +1,10 @@
 from functools import wraps
 from http import HTTPStatus
 
+from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended.exceptions import NoAuthorizationError
 from jwt import ExpiredSignatureError
+from src.common.constants import DISABLE_PERMISSIONS_VALIDATIONS
 from src.common.enums import ExceptionsMessages
 from src.common.exceptions import CustomException
 from src.common.exceptions import InvalidParameterException
@@ -11,6 +13,7 @@ from src.common.exceptions import ResourceNotFoundException
 from src.common.exceptions import TokenNotFoundException
 from src.common.exceptions import UserNotAuthorizedException
 from src.common.logger import logger
+from src.common.utils import decode_token
 
 
 def handle_exceptions(func):
@@ -59,3 +62,22 @@ def handle_exceptions(func):
                 return response_object, status_code
 
     return wrapper
+
+
+def validate_permissions(permissions):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user_id = get_jwt_identity()
+            user = decode_token(user_id)
+            validations = [
+                bool(user),
+                user.has_permissions(permissions),
+            ]
+            if not all(validations) and not DISABLE_PERMISSIONS_VALIDATIONS:
+                raise UserNotAuthorizedException(ExceptionsMessages.USER_NOT_AUTHORIZED.value)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator

@@ -1,7 +1,7 @@
 import pytest
 from faker import Faker
 from pytest_mock import mocker  # noqa
-from src.common.constants import ExceptionsMessages
+from src.common.enums import ExceptionsMessages
 from src.common.exceptions import ResourceNotFoundException
 from src.services.user_services import get_user_session
 

@@ -2,13 +2,23 @@ from http import HTTPStatus
 
 import pytest  # noqa
 from src.common.decorators import handle_exceptions
+from src.common.decorators import validate_permissions
 from src.common.enums import ExceptionsMessages
+from src.common.enums import Permissions
 from src.common.exceptions import CustomException
 from src.common.exceptions import InvalidParameterException
 from src.common.exceptions import ResourceExistsException
 from src.common.exceptions import ResourceNotFoundException
 from src.common.exceptions import TokenNotFoundException
 from src.common.exceptions import UserNotAuthorizedException
+from src.models.entities import AuthUser
+
+auth_user = AuthUser
+
+
+@validate_permissions([Permissions.CREATE_ISSUE, Permissions.VIEW_ISSUE])
+def function():
+    return "Success!"
 
 
 def test_handle_resource_not_found_exception():

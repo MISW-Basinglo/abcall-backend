@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class BaseEnum(Enum):
-    def __str__(self):
+    def __str__(self) -> str:
         return self.value
 
 
@@ -25,25 +25,41 @@ class ExceptionsMessages(BaseEnum):
     # Parameter-related errors
     INVALID_PARAMETER = "Invalid parameter."
 
-    # Company-related errors
-    COMPANY_NOT_REGISTERED = "Company not registered."
-
     # General errors
     ERROR = "Something went wrong. Please try again later."
 
 
-class MarshmallowCustomValidationMessages(Enum):
+class MarshmallowCustomValidationMessages(BaseEnum):
     MISSING_DATA = "Missing {field}."
     INVALID_DATA = "Not a valid {field}."
     GENERIC_ERROR = "Error in {field}."
 
 
-class CompanyStatus(BaseEnum):
-    ACTIVE = "ACTIVE"
-    INACTIVE = "INACTIVE"
+class IssueSource(BaseEnum):
+    CALL = "CALL"
+    EMAIL = "EMAIL"
+    WEB = "WEB"
+    CHATBOT = "CHATBOT"
+    APP_MOBILE = "APP_MOBILE"
+    OTHER = "OTHER"
 
 
-class CompanyPlan(BaseEnum):
-    ENTREPRENEUR = "ENTREPRENEUR"
-    BUSINESS = "BUSINESS"
-    BUSINESS_PLUS = "BUSINESS_PLUS"
+class IssueType(BaseEnum):
+    REQUEST = "REQUEST"
+    COMPLAINT = "COMPLAINT"
+    CLAIM = "CLAIM"
+    SUGGESTION = "SUGGESTION"
+    PRAISE = "PRAISE"
+
+
+class IssueStatus(BaseEnum):
+    OPEN = "OPEN"
+    SCALED = "SCALED"
+    CLOSED = "CLOSED"
+
+
+class Permissions(BaseEnum):
+    CREATE_ISSUE = "create_issue"
+    VIEW_ISSUE = "view_issue"
+    EDIT_ISSUE = "edit_issue"
+    DELETE_ISSUE = "delete_issue"

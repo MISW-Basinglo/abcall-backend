@@ -28,12 +28,22 @@ jobs:
 
         # Run Docker Compose Action
       - uses: adambirds/docker-compose-action@v1.5.0
+        name: Testing auth
         with:
             compose-file: "docker-compose.yaml"
             test-container: "auth"
             test-command: "pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80"
+
       - uses: adambirds/docker-compose-action@v1.5.0
+        name: Testing user
         with:
             compose-file: "docker-compose.yaml"
             test-container: "user"
+            test-command: "pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80"
+
+      - uses: adambirds/docker-compose-action@v1.5.0
+        name: Testing issues_management
+        with:
+            compose-file: "docker-compose.yaml"
+            test-container: "issues_management"
             test-command: "pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80"

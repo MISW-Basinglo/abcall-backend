@@ -4,6 +4,22 @@ networks:
   app-network:
 
 services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    networks:
+      - app-network
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--log.level=INFO"
+
   db:
     image: postgres:14-alpine
     container_name: abcall_db
@@ -29,15 +45,13 @@ services:
     networks:
       - app-network
     env_file:
-        - "microservices/auth/.env"
-    ports:
-      - "3000:8000"
+      - "microservices/auth/.env"
+    labels:
+      - "traefik.http.routers.auth.rule=PathPrefix(`/auth`)"
+      - "traefik.http.services.auth.loadbalancer.server.port=8000"
     depends_on:
       db:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://auth:8000/health"]
-
   user:
     build:
       context: ./microservices/user
@@ -46,11 +60,26 @@ services:
     networks:
       - app-network
     env_file:
-        - "microservices/user/.env"
-    ports:
-      - "3001:8000"
+      - "microservices/user/.env"
+    labels:
+      - "traefik.http.routers.user.rule=PathPrefix(`/user`) || PathPrefix(`/company`)"
+      - "traefik.http.services.user.loadbalancer.server.port=8000"
     depends_on:
       db:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://user:8000/health"]
+
+  issues_management:
+    build:
+      context: ./microservices/issues_management
+      dockerfile: Dockerfile
+    container_name: issues_management_abcall
+    networks:
+      - app-network
+    env_file:
+      - "microservices/issues_management/.env"
+    labels:
+      - "traefik.http.routers.issues_management.rule=PathPrefix(`/issues_management`)"
+      - "traefik.http.services.issues_management.loadbalancer.server.port=8000"
+    depends_on:
+      db:
+        condition: service_healthy

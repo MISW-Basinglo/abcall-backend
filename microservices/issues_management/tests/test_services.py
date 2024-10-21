@@ -47,7 +47,7 @@ def test_get_all_issues(mock_app, mocker):
 def test_create_issue_service(mock_app, mocker, session):
     with mock_app.app_context(), mock_app.test_request_context():
         mocker.patch("src.db.SessionLocal", return_value=session)
-        mocker.patch("src.services.get_user_info", return_value={"user_id": 1, "name": fake.name(), "company_id": 1})
+        mocker.patch("src.services.get_user_info", return_value={"id": 1, "name": fake.name(), "company_id": 1})
         issue_data = {
             "description": fake.text(),
             "source": choice([enum.value for enum in IssueSource]),
@@ -77,11 +77,13 @@ def test_create_issue_service(mock_app, mocker, session):
 def test_get_user_info(mock_app, mocker):
     with mock_app.app_context(), mock_app.test_request_context():
         fake_user_data = {
-            "user_id": 1,
-            "name": fake.name(),
-            "company_id": 1,
+            "data": {
+                "id": 1,
+                "name": fake.name(),
+                "company_id": 1,
+            },
         }
         mocker.patch("src.common.utils.get_auth_header_from_request", return_value={"Authorization": "Bearer token"})
         mocker.patch("src.services.send_request", return_value=fake_user_data)
         user_info = get_user_info()
-        assert user_info == fake_user_data
+        assert user_info == fake_user_data["data"]

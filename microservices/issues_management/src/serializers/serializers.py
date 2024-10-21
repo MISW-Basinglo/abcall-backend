@@ -30,6 +30,6 @@ class GenericResponseSerializer(BaseSerializer):
 
 
 class UserEntitySerializer(BaseSerializer):
-    user_id = fields.Integer()
+    id = fields.Integer()
     name = fields.String()
     company_id = fields.Integer()

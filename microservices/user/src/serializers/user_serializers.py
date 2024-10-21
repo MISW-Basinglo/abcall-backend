@@ -34,3 +34,9 @@ class GenericResponseListSerializer(BaseSerializer):
 
 class GenericResponseSerializer(BaseSerializer):
     data = fields.Dict()
+
+
+class UserEntitySerializer(BaseSerializer):
+    id = fields.Integer()
+    name = fields.String()
+    company_id = fields.Integer()

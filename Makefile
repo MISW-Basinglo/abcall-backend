@@ -1,6 +1,7 @@
 # =====================================================================================
 #  V A R I A B L E S
 DOCKER_COMPOSE_LOCAL=docker-compose.yaml
+INGRESS_FILE=k8s-ingress-deloyment.yaml
 # =====================================================================================
 # D E V  E N V I R O N M E N T  C O M M A N D S
 git_hooks:
@@ -78,3 +79,7 @@ load_fixtures:
 
 # ====================================================================================
 # D E P L O Y M E N T  C O M M A N D S
+
+.PHONY: deploy_ingress
+deploy_ingress:
+	kubectl apply -f deployment/${INGRESS_FILE}

@@ -11,6 +11,7 @@ from src.common.constants import DATABASE_NAME
 from src.common.constants import DATABASE_PASSWORD
 from src.common.constants import DATABASE_PORT
 from src.common.constants import DATABASE_USER
+from src.common.constants import JWT_SECRET_KEY
 from src.repositories.base import BaseRepository
 
 fake = Faker()
@@ -84,7 +85,7 @@ def mock_app():
     from app import create_app
 
     app = create_app()
-    app.config["JWT_SECRET_KEY"] = "your_secret_key"
+    app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(seconds=30)
     app.config["TESTING"] = True
     with app.app_context():

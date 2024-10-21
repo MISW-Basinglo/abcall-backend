@@ -84,7 +84,7 @@ spec:
             - name: FLASK_DEBUG
               value: "true"
             - name: JWT_SECRET_KEY
-              value: "secret"
+              value: "jwt-secret-key"
           livenessProbe:
             httpGet:
               path: /auth/health
@@ -147,7 +147,7 @@ spec:
             - name: FLASK_DEBUG
               value: "true"
             - name: JWT_SECRET_KEY
-              value: "secret"
+              value: "jwt-secret-key"
             - name: BACKEND_HOST
               value: "http://34.49.98.208"
             - name: USER_SERVICE_PATH
@@ -217,6 +217,8 @@ spec:
               value: "http://34.49.98.208"
             - name: USER_SERVICE_PATH
               value: "/user"
+            - name: JWT_SECRET_KEY
+              value: "jwt-secret-key"
           livenessProbe:
             httpGet:
               path: /issues_management/health

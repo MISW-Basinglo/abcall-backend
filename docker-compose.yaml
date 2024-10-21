@@ -1,0 +1,89 @@
+version: '3.8'
+
+networks:
+  app-network:
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    networks:
+      - app-network
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--log.level=INFO"
+
+  db:
+    image: postgres:14-alpine
+    container_name: abcall_db
+    networks:
+      - app-network
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: abcall_db
+    ports:
+        - "5442:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+
+  auth:
+    build:
+      context: ./microservices/auth
+      dockerfile: Dockerfile
+    container_name: auth_abcall
+    networks:
+      - app-network
+    env_file:
+      - "microservices/auth/.env"
+    labels:
+      - "traefik.http.routers.auth.rule=PathPrefix(`/auth`)"
+      - "traefik.http.services.auth.loadbalancer.server.port=8000"
+    depends_on:
+      db:
+        condition: service_healthy
+  user:
+    build:
+      context: ./microservices/user
+      dockerfile: Dockerfile
+    container_name: user_abcall
+    networks:
+      - app-network
+    env_file:
+      - "microservices/user/.env"
+    labels:
+      - "traefik.http.routers.user.rule=PathPrefix(`/user`) || PathPrefix(`/company`)"
+      - "traefik.http.services.user.loadbalancer.server.port=8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_started
+
+  issues_management:
+    build:
+      context: ./microservices/issues_management
+      dockerfile: Dockerfile
+    container_name: issues_management_abcall
+    networks:
+      - app-network
+    env_file:
+      - "microservices/issues_management/.env"
+    labels:
+      - "traefik.http.routers.issues_management.rule=PathPrefix(`/issues_management`)"
+      - "traefik.http.services.issues_management.loadbalancer.server.port=8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_started

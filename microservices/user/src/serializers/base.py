@@ -3,6 +3,7 @@ import typing
 from marshmallow import Schema
 from marshmallow import types
 from marshmallow import ValidationError
+from src.common.enums import ExceptionsMessages
 from src.common.enums import MarshmallowCustomValidationMessages
 from src.common.exceptions import InvalidParameterException
 from src.common.logger import logger

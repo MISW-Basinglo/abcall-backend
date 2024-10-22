@@ -1,8 +1,5 @@
 from marshmallow import fields
 from marshmallow.validate import Length
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import func
 
 from .base import BaseSerializer
 
@@ -27,3 +24,10 @@ class GenericResponseListSerializer(BaseSerializer):
 
 class GenericResponseSerializer(BaseSerializer):
     data = fields.Dict()
+
+
+class CompanyUpdateSerializer(CompanyCreateSerializer):
+    name = fields.String(validate=Length(min=1, max=500))
+    nit = fields.String(validate=Length(min=1, max=50))
+    plan = fields.String(validate=Length(min=1, max=120))
+    status = fields.String(validate=Length(min=1, max=100))

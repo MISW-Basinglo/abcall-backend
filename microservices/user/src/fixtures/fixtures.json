@@ -1,0 +1,60 @@
+{
+  "companies": [
+    {
+      "name": "Movistar",
+      "nit": "12345",
+      "plan": "ENTREPRENEUR",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "Claro",
+      "nit": "23456",
+      "plan": "BUSINESS",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "Tigo",
+      "nit": "34567",
+      "plan": "BUSINESS_PLUS",
+      "status": "ACTIVE"
+    }
+  ],
+  "users": [
+    {
+      "name": "Test End User",
+      "dni": "0000000000",
+      "phone": "3000000000",
+      "channel": "EMAIL",
+      "auth_id": 2,
+      "importance": 1,
+      "company_id": "Claro"
+    },
+    {
+      "name": "User Movistar",
+      "dni": "11111111111",
+      "phone": "3102456789",
+      "channel": "EMAIL",
+      "auth_id": 3,
+      "importance": null,
+      "company_id": "Movistar"
+    },
+    {
+      "name": "User Claro",
+      "dni": "222222222",
+      "phone": "312434567",
+      "channel": "EMAIL",
+      "auth_id": 4,
+      "importance": null,
+      "company_id": "Claro"
+    },
+    {
+      "name": "User Tigo",
+      "dni": "333333333",
+      "phone": "30002456789",
+      "channel": "EMAIL",
+      "auth_id": 5,
+      "importance": null,
+      "company_id": "Tigo"
+    }
+  ]
+}

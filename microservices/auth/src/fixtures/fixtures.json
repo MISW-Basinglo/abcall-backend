@@ -1,0 +1,83 @@
+{
+  "permissions": [
+    {
+      "name": "read"
+    },
+    {
+      "name": "write"
+    },
+    {
+      "name": "create_issue"
+    },
+    {
+      "name": "view_issue"
+    },
+    {
+      "name": "edit_issue"
+    },
+    {
+      "name": "delete_issue"
+    }
+  ],
+  "roles": [
+    {
+      "name": "admin",
+      "permissions": [
+        "read",
+        "write",
+        "create_issue",
+        "view_issue",
+        "edit_issue",
+        "delete_issue"
+      ]
+    },
+    {
+      "name": "user",
+      "permissions": [
+        "view_issue",
+        "create_issue"
+      ]
+    },
+    {
+      "name": "agent",
+      "permissions": [
+        "view_issue",
+        "edit_issue"
+      ]
+    },
+    {
+      "name": "client",
+      "permissions": [
+        "view_issue"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "email": "admin@example.com",
+      "password": "adminpass",
+      "role": "admin"
+    },
+    {
+      "email": "user@example.com",
+      "password": "userpass",
+      "role": "user"
+    },
+    {
+      "email": "movistarclient@example.com",
+      "password": "movistarclientpass",
+      "role": "client"
+    },
+
+    {
+      "email": "claroclient@example.com",
+      "password": "claroclientpass",
+      "role": "client"
+    },
+    {
+      "email": "tigoclient@example.com",
+      "password": "tigoclientpass",
+      "role": "client"
+    }
+  ]
+}

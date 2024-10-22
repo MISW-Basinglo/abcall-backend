@@ -21,5 +21,5 @@ class Company(Base):
     plan = Column(SQLAlchemyEnum(CompanyPlan), unique=False, nullable=False)
     status = Column(SQLAlchemyEnum(CompanyStatus), unique=False, nullable=False, default=CompanyStatus.ACTIVE)
     created_at = Column(DateTime(), nullable=False, default=func.now())
-    updated_at = Column(DateTime(), nullable=False, default=func.now())
+    updated_at = Column(DateTime(), nullable=False, default=func.now(), onupdate=func.now())
     users = relationship("User", back_populates="company")

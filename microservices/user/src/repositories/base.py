@@ -51,7 +51,7 @@ class BaseRepository(ABC):
         except exc.SQLAlchemyError as e:
             exception_cause = format_exception_message(e)
             logger.error(f"Error during transaction: {exception_cause}")
-            raise
+            raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
         except Exception as e:
             logger.error(f"Error during transaction: {e}")
             raise

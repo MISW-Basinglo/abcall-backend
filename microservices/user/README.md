@@ -89,6 +89,40 @@ En el header Authorization se debe enviar el token de acceso.
 }
 ```
 
+### PUT-PATCH /company/{id_company}
+Este endpoint se encarga de actualizar la información de una compañia en ABCall. Los usuarios "admin" son los únicos que pueden usar este endpoint.
+
+Solo se puede actualizar los campos:
+- name
+- nit
+- plan
+- status
+
+#### Request
+En el header Authorization se debe enviar el token de acceso.
+
+```json
+{
+    "name": "Claro Movil",
+    "nit": "124789",
+    "plan": "BUSINESS",
+    "status": "ACTIVE"
+}
+```
+
+#### Response
+```json
+{
+    "created_at": "2024-10-16T20:44:26.052981",
+    "id": 2,
+    "name": "Claro Movil",
+    "nit": "124789",
+    "plan": "BUSINESS",
+    "status": "ACTIVE",
+    "updated_at": "2024-10-16T20:44:26.052981"
+}
+```
+
 
 ## Como correr el microservicio
 Para correr el microservicio se debe ejecutar el siguiente comando en la carpeta raíz del proyecto:

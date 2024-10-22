@@ -25,6 +25,10 @@ class UserListSerializer(UserCreateSerializer):
     company_id = fields.Integer()
     created_at = fields.DateTime(format="%Y-%m-%dT%H:%M:%SZ")
     updated_at = fields.DateTime(format="%Y-%m-%dT%H:%M:%SZ")
+    email = fields.String(required=False, allow_none=True)
+    channel = fields.String(required=False, allow_none=True)
+    importance = fields.Integer(required=False, allow_none=True)
+    dni = fields.String(required=False, allow_none=True)
 
 
 class GenericResponseListSerializer(BaseSerializer):

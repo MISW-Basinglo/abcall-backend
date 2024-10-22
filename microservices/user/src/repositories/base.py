@@ -66,7 +66,10 @@ class BaseRepository(ABC):
     def _get_by_field(self, field_name, value):
         if not hasattr(self.model, field_name):
             raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
-        return self.session.query(self.model).filter(getattr(self.model, field_name) == value).first()
+        instance = self.session.query(self.model).filter(getattr(self.model, field_name) == value).first()
+        if not instance:
+            raise ResourceNotFoundException(ExceptionsMessages.RESOURCE_NOT_FOUND.value)
+        return instance
 
     def get_all(self):
         return self._transaction(self._get_all)

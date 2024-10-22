@@ -2,13 +2,16 @@ from unittest.mock import MagicMock
 
 import pytest
 from faker import Faker
+from src.common.constants import BACKEND_HOST
 from src.common.exceptions import CustomException
 from src.common.utils import decode_token
 from src.common.utils import format_exception_message
+from src.common.utils import get_request_url
 from src.common.utils import RequestRaiseForException
 from src.models.entities import AuthUser
 
 auth_user = AuthUser
+
 faker = Faker()
 
 
@@ -49,3 +52,9 @@ def test_decode_token(mocker):
     assert result.role == claims["role"]
     assert result.permissions == claims["permissions"]
     assert result.email == claims["email"]
+
+
+def test_get_request_url():
+    service = "auth"
+    result = get_request_url(service)
+    assert result == f"{BACKEND_HOST}/auth"

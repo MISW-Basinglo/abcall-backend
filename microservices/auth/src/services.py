@@ -60,10 +60,11 @@ def audit_decode_token(user_id):
     claims = get_jwt()
     role = claims.get("role")
     permissions = claims.get("permissions")
-    if not role or not permissions:
+    email = claims.get("email")
+    if not any([role, permissions, email]):
         logger.error(ExceptionsMessages.ERROR_DECODING_TOKEN.value)
         raise CustomException(ExceptionsMessages.ERROR_DECODING_TOKEN.value)
-    audit_auth = AuditAuthUser(user_id=user_id, role=role, permissions=permissions)
+    audit_auth = AuditAuthUser(user_id=user_id, role=role, permissions=permissions, email=email)
     audit_serializer = AuditAuthUserSerializer()
     return audit_serializer.dump(audit_auth)
 

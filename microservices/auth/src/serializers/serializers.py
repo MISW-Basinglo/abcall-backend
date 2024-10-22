@@ -29,6 +29,7 @@ class AuditAuthUserSerializer(BaseSerializer):
     user_id = fields.Integer()
     role = fields.String()
     permissions = fields.List(fields.String())
+    email = fields.Email()
 
 
 class GenericResponseSerializer(BaseSerializer):

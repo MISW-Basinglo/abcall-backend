@@ -12,7 +12,7 @@ def generate_token(user_auth: UserAuth) -> str:
     permissions: List[str] = user_auth.get_permissions()
     role: str = user_auth.get_role()
 
-    additional_claims: Dict = {"role": role, "permissions": permissions}
+    additional_claims: Dict = {"role": role, "permissions": permissions, "email": user_auth.email}
 
     access_token: str = create_access_token(identity=user_auth.id, additional_claims=additional_claims, expires_delta=timedelta(hours=JWT_ACCESS_DELTA))
 

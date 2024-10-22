@@ -17,6 +17,7 @@ class AuthUser:
     user_id: int
     role: str
     permissions: list[str]
+    email: str
 
     def has_permission(self, permission: str) -> bool:
         return permission in self.permissions

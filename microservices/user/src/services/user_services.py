@@ -1,7 +1,8 @@
+from typing import Dict
+
 from src.common.enums import CompanyStatus
-from src.common.enums import ExceptionsMessages
-from src.common.exceptions import ResourceNotFoundException
 from src.common.logger import logger
+from src.common.utils import decode_token
 from src.common.utils import get_request_url
 from src.common.utils import send_request
 from src.models.entities import GenericResponseEntity
@@ -10,7 +11,6 @@ from src.serializers.company_serializers import CompanyListSerializer
 from src.serializers.company_serializers import GenericResponseSerializer
 from src.serializers.user_serializers import ClientCreateSerializer
 from src.serializers.user_serializers import UserCreateSerializer
-from src.serializers.user_serializers import UserEntitySerializer
 from src.serializers.user_serializers import UserListSerializer
 from src.services.company_services import create_company_service
 from src.services.company_services import delete_company_service
@@ -57,7 +57,7 @@ def create_client_service(client_data):
         raise
 
 
-def create_user_service(user_data):
+def create_user_service(user_data) -> Dict:
     data = UserCreateSerializer().load(user_data)
     user_repository = UserRepository()
     user_repository.set_serializer(serializer_user_class)
@@ -65,15 +65,11 @@ def create_user_service(user_data):
     return user
 
 
-def get_user_session(id_user_auth: int):
+def get_user_by_field_service(params: list):
     user_repository = UserRepository()
-    user_repository.set_serializer(UserEntitySerializer)
-    user = user_repository.get_by_field("auth_id", id_user_auth)
-
-    if not user:
-        logger.error(f"{ExceptionsMessages.USER_NOT_REGISTERED.value}: {id_user_auth}")
-        raise ResourceNotFoundException(ExceptionsMessages.USER_NOT_REGISTERED.value)
-
+    user_repository.set_serializer(UserListSerializer)
+    user = user_repository.get_by_field(*params)
+    user["email"] = decode_token(user["auth_id"]).email
     response_entity = GenericResponseEntity(data=user)
     response = GenericResponseSerializer().dump(response_entity)
     return response

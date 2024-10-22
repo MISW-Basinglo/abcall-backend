@@ -53,25 +53,13 @@ def test_create_issue_service(mock_app, mocker, session):
             "source": choice([enum.value for enum in IssueSource]),
             "type": choice([enum.value for enum in IssueType]),
         }
-        return_value = {
-            "id": 1,
-            "description": issue_data["description"],
-            "source": issue_data["source"],
-            "type": issue_data["type"],
-            "user_id": 1,
-            "company_id": 1,
-            "status": "open",
-            "created_at": fake.date_time(),
-            "updated_at": fake.date_time(),
-            "solution": None,
-        }
-        mocker.patch("src.repositories.issues_repository.IssuesManagementRepository.create", return_value=return_value)
 
-        response = create_issue_service(issue_data)
-        assert response["data"]["description"] == issue_data["description"]
-        assert response["data"]["source"] == issue_data["source"]
-        assert response["data"]["type"] == issue_data["type"]
-        assert response["data"]["id"]
+        response = create_issue_service(issue_data)["data"]
+
+        assert response["description"] == issue_data["description"]
+        assert response["source"] == issue_data["source"]
+        assert response["type"] == issue_data["type"]
+        assert response["id"] is not None
 
 
 def test_get_user_info(mock_app, mocker):
@@ -85,5 +73,5 @@ def test_get_user_info(mock_app, mocker):
         }
         mocker.patch("src.common.utils.get_auth_header_from_request", return_value={"Authorization": "Bearer token"})
         mocker.patch("src.services.send_request", return_value=fake_user_data)
-        user_info = get_user_info()
+        user_info = get_user_info("1234567890")
         assert user_info == fake_user_data["data"]

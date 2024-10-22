@@ -12,6 +12,7 @@ class AuditAuthUser:
     user_id: int
     role: str
     permissions: list[str]
+    email: str
 
 
 @dataclass

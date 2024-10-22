@@ -1,6 +1,5 @@
 from src.common.constants import BACKEND_HOST
 from src.common.constants import USER_SERVICE_PATH
-from src.common.utils import get_auth_header_from_request
 from src.common.utils import send_request
 from src.models.entities import GenericResponseEntity
 from src.models.entities import GenericResponseListEntity
@@ -24,7 +23,8 @@ def get_all_issues_service():
 
 
 def create_issue_service(data):
-    user = get_user_info()
+    dni = data.pop("dni", None)
+    user = get_user_info(dni=dni)
     data.update({"user_id": user["id"], "company_id": user["company_id"]})
     data = IssueCreateSerializer().load(data)
     issue_repository = IssuesManagementRepository()
@@ -35,8 +35,13 @@ def create_issue_service(data):
     return response
 
 
-def get_user_info() -> dict[str, str]:
-    auth_header = get_auth_header_from_request()
-    url = f"{BACKEND_HOST}{USER_SERVICE_PATH}/me"
-    response = send_request(url, "GET", headers=auth_header)["data"]
-    return UserEntitySerializer().load(response)
+def get_user_info(dni) -> dict[str, str]:
+    if dni:
+        params = f"?dni={dni}"
+    else:
+        params = "?scope=me"
+    url = f"{BACKEND_HOST}{USER_SERVICE_PATH}" + params
+    response = send_request("GET", url)["data"]
+    required_fields = ["id", "name", "company_id"]
+    user_data = {field: response[field] for field in required_fields}
+    return UserEntitySerializer().load(user_data)

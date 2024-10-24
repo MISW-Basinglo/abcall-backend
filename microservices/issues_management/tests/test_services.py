@@ -53,7 +53,14 @@ def test_create_issue_service(mock_app, mocker, session):
             "source": choice([enum.value for enum in IssueSource]),
             "type": choice([enum.value for enum in IssueType]),
         }
-
+        fake_user_data = {
+            "id": 1,
+            "name": fake.name(),
+            "company_id": 1,
+            "email": fake.email(),
+            "role": "user",
+        }
+        mocker.patch("src.services.get_user_info", return_value=fake_user_data)
         response = create_issue_service(issue_data)["data"]
 
         assert response["description"] == issue_data["description"]
@@ -69,6 +76,8 @@ def test_get_user_info(mock_app, mocker):
                 "id": 1,
                 "name": fake.name(),
                 "company_id": 1,
+                "email": fake.email(),
+                "role": "user",
             },
         }
         mocker.patch("src.common.utils.get_auth_header_from_request", return_value={"Authorization": "Bearer token"})

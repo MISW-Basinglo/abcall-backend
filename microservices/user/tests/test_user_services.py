@@ -24,23 +24,31 @@ def test_get_user_session_success(mock_app, mocker):
             "name": fake.name(),
             "auth_id": 123,
             "company_id": 1,
+            "phone": fake.phone_number(),
+            "dni": 123456789,
+        }
+
+        auth_data = {
+            "id": 123,
+            "email": fake.email(),
+            "role": "admin",
+            "status": "ACTIVE",
         }
 
         # Mock del repositorio de usuarios
         mock_user_repo = mocker.patch("src.repositories.user_repository.UserRepository.get_by_field", return_value=user_data)
-        mock_user = AuthUser(user_id=user_data["id"], role="admin", permissions=["admin"], email=fake.email())
-        mocker.patch("src.services.user_services.decode_token", return_value=mock_user)
+        mock_user_data = mocker.patch("src.services.user_services.get_auth_user_data_service", return_value=auth_data)
 
         # Llamada al servicio para obtener la sesión de usuario
-        response = get_user_by_field_service(["dni", 123])["data"]
-
+        response = get_user_by_field_service(["dni", 123456789])["data"]
+        print("response", response)
         # Aserciones para validar los datos retornados
         assert response["id"] == user_data["id"]
-        assert response["auth_id"] == user_data["auth_id"]
         assert response["name"] == user_data["name"]
 
         # Verificar que el método del repositorio fue llamado correctamente
-        mock_user_repo.assert_called_once_with("dni", 123)
+        mock_user_repo.assert_called_once_with("dni", 123456789)
+        mock_user_data.assert_called_once_with(123)
 
 
 def test_get_user_session_not_found(mock_app, mocker):

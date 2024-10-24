@@ -44,3 +44,11 @@ class UserEntitySerializer(BaseSerializer):
     id = fields.Integer()
     name = fields.String()
     company_id = fields.Integer()
+    email = fields.String(required=False, allow_none=True)
+
+
+class UserRetrieveSerializer(BaseSerializer):
+    id = fields.Integer()
+    email = fields.Email(required=True)
+    status = fields.String(required=True)
+    role = fields.String(required=False, allow_none=True)

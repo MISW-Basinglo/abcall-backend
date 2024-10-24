@@ -83,3 +83,12 @@ def create_user_auth(data):
 def delete_auth_user_service(auth_id: int):
     auth_repository = UserAuthRepository()
     auth_repository.delete(auth_id)
+
+
+def get_auth_user_by_field_service(params: list):
+    auth_repository = UserAuthRepository()
+    auth_repository.set_serializer(UserRetrieveSerializer)
+    user = auth_repository.get_by_field(*params)
+    response_entity = GenericResponseEntity(data=user)
+    response = GenericResponseSerializer().dump(response_entity)
+    return response

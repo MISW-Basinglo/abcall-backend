@@ -55,7 +55,6 @@ def send_request(method, url, data=None, headers=None):
         h.update(headers)
     else:
         h.update(get_auth_header_from_request())
-    print("URL: ", url, "METHOD: ", method, "DATA: ", data, "HEADERS: ", h)
     response = requests.request(method, url, json=data, headers=h)
     RequestRaiseForException(response).raise_for_status()
     return response.json()

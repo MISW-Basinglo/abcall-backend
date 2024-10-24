@@ -12,6 +12,7 @@ from src.serializers.company_serializers import GenericResponseSerializer
 from src.serializers.user_serializers import ClientCreateSerializer
 from src.serializers.user_serializers import UserCreateSerializer
 from src.serializers.user_serializers import UserListSerializer
+from src.serializers.user_serializers import UserRetrieveSerializer
 from src.services.company_services import create_company_service
 from src.services.company_services import delete_company_service
 
@@ -67,12 +68,21 @@ def create_user_service(user_data) -> Dict:
 
 def get_user_by_field_service(params: list):
     user_repository = UserRepository()
-    user_repository.set_serializer(UserListSerializer)
+    user_repository.set_serializer(serializer_user_class)
     user = user_repository.get_by_field(*params)
-    user["email"] = decode_token(user["auth_id"]).email
+    auth_data = get_auth_user_data_service(user["auth_id"])
+    auth_data.pop("id", None)
+    user.pop("auth_id", None)
+    user.update(auth_data)
     response_entity = GenericResponseEntity(data=user)
     response = GenericResponseSerializer().dump(response_entity)
     return response
+
+
+def get_auth_user_data_service(auth_id: int):
+    url = get_request_url("auth")
+    auth_data = send_request("GET", f"{url}/{auth_id}")["data"]
+    return UserRetrieveSerializer().load(auth_data)
 
 
 def delete_user_service(id_user: int):

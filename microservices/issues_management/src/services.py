@@ -1,5 +1,8 @@
 from src.common.constants import BACKEND_HOST
 from src.common.constants import USER_SERVICE_PATH
+from src.common.enums import BasicRoles
+from src.common.enums import ExceptionsMessages
+from src.common.exceptions import InvalidParameterException
 from src.common.utils import send_request
 from src.models.entities import GenericResponseEntity
 from src.models.entities import GenericResponseListEntity
@@ -25,14 +28,17 @@ def get_all_issues_service():
 def create_issue_service(data):
     dni = data.pop("dni", None)
     user = get_user_info(dni=dni)
-    data.update({"user_id": user["id"], "company_id": user["company_id"]})
-    data = IssueCreateSerializer().load(data)
-    issue_repository = IssuesManagementRepository()
-    issue_repository.set_serializer(serializer_class)
-    issue = issue_repository.create(data)
-    response_entity = GenericResponseEntity(data=issue)
-    response = GenericResponseSerializer().dump(response_entity)
-    return response
+    if user["role"] == BasicRoles.USER.value:
+        data.update({"user_id": user["id"], "company_id": user["company_id"]})
+        data = IssueCreateSerializer().load(data)
+        issue_repository = IssuesManagementRepository()
+        issue_repository.set_serializer(serializer_class)
+        issue = issue_repository.create(data)
+        response_entity = GenericResponseEntity(data=issue)
+        response = GenericResponseSerializer().dump(response_entity)
+        return response
+    else:
+        raise InvalidParameterException(ExceptionsMessages.USER_NOT_AUTHORIZED.value)
 
 
 def get_user_info(dni) -> dict[str, str]:
@@ -42,6 +48,6 @@ def get_user_info(dni) -> dict[str, str]:
         params = "?scope=me"
     url = f"{BACKEND_HOST}{USER_SERVICE_PATH}" + params
     response = send_request("GET", url)["data"]
-    required_fields = ["id", "name", "company_id"]
+    required_fields = ["id", "name", "company_id", "email", "role"]
     user_data = {field: response[field] for field in required_fields}
     return UserEntitySerializer().load(user_data)

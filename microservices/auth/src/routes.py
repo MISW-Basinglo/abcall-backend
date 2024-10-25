@@ -12,6 +12,7 @@ from src.services import create_user_auth
 from src.services import delete_auth_user_service
 from src.services import get_auth_user_by_field_service
 from src.services import refresh_access_token
+from src.services import update_user_auth
 
 blueprint = Blueprint("auth_api", __name__, url_prefix="/auth")
 
@@ -37,6 +38,14 @@ def delete(auth_id: int):
 @jwt_required()
 def get(auth_id: int):
     return get_auth_user_by_field_service(["id", auth_id]), HTTPStatus.OK
+
+
+@blueprint.route("/<int:auth_id>", methods=["PUT", "PATCH"])
+@handle_exceptions
+@jwt_required()
+def update(auth_id: int):
+    data = request.get_json()
+    return update_user_auth(auth_id, data), HTTPStatus.OK
 
 
 @blueprint.route("/login", methods=["POST"])

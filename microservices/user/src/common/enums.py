@@ -51,7 +51,7 @@ class CompanyPlan(BaseEnum):
 
 class UserChannel(BaseEnum):
     EMAIL = "EMAIL"
-    SMS = "PHONE"
+    SMS = "SMS"
 
 
 class AllowedRoles(BaseEnum):

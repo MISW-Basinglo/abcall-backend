@@ -25,6 +25,15 @@ def get_all_issues_service():
     return response
 
 
+def get_issue_service(issue_id):
+    issue_repository = IssuesManagementRepository()
+    issue_repository.set_serializer(serializer_class)
+    issue = issue_repository.get_by_field("id", issue_id)
+    response_entity = GenericResponseEntity(data=issue)
+    response = GenericResponseSerializer().dump(response_entity)
+    return response
+
+
 def create_issue_service(data):
     dni = data.pop("dni", None)
     user = get_user_info(dni=dni)

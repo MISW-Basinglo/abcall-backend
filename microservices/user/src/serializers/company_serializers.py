@@ -17,6 +17,12 @@ class CompanyListSerializer(CompanyCreateSerializer):
     updated_at = fields.DateTime(format="%Y-%m-%dT%H:%M:%SZ")
 
 
+class PopulatedCompanySerializer(CompanyListSerializer):
+    responsible_name = fields.String()
+    responsible_email = fields.Email()
+    responsible_phone = fields.String()
+
+
 class GenericResponseListSerializer(BaseSerializer):
     count = fields.Integer()
     data = fields.List(fields.Dict())

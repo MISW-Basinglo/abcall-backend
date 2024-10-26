@@ -56,3 +56,4 @@ class UserChannel(BaseEnum):
 
 class AllowedRoles(BaseEnum):
     ADMIN = "admin"
+    CLIENT = "client"

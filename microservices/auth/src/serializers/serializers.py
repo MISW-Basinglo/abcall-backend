@@ -14,13 +14,14 @@ class UserRetrieveSerializer(BaseSerializer):
     role = fields.Method("get_role")
 
     def get_role(self, obj):
-        return obj.role.name
+        return obj.role.name if obj.role else None
 
 
 class UserCreateSerializer(BaseSerializer):
     email = fields.Email(required=True)
     password = fields.String(required=False, allow_none=True)
     status = fields.String(required=True)
+    role = fields.String(required=False, allow_none=True)
 
 
 class UserAuthUpdateSerializer(BaseSerializer):

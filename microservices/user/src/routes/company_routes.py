@@ -5,8 +5,6 @@ from flask import request
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from src.common.decorators import handle_exceptions
-from src.common.decorators import validate_permissions
-from src.common.enums import AllowedRoles
 from src.services.company_services import create_company_service
 from src.services.company_services import get_all_companies
 from src.services.company_services import get_company_by_id
@@ -35,7 +33,7 @@ def get_company(company_id):
 @blueprint.route("", methods=["GET"])
 @handle_exceptions
 @jwt_required()
-@validate_permissions(role=[AllowedRoles.CLIENT.value, AllowedRoles.ADMIN.value])
+# @validate_permissions(role=[AllowedRoles.CLIENT.value, AllowedRoles.ADMIN.value])
 def get_companies():
     response = get_all_companies()
     return response, HTTPStatus.OK
@@ -53,7 +51,7 @@ def get_company_user_session():
 @blueprint.route("/<int:company_id>", methods=["PUT", "PATCH"])
 @handle_exceptions
 @jwt_required()
-@validate_permissions(role=AllowedRoles.ADMIN.value)
+# @validate_permissions(role=AllowedRoles.ADMIN.value)
 def update_company(company_id: int):
     data = request.get_json()
     response = update_company_service(company_id, data)

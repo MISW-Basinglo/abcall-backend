@@ -20,6 +20,7 @@ def handle_exceptions(func):
     def wrapper(*args, **kwargs):
         status_code = HTTPStatus.OK
         error = ""
+        exception_cause = ""
         try:
             return func(*args, **kwargs)
         except ResourceNotFoundException as e:
@@ -39,7 +40,7 @@ def handle_exceptions(func):
             error = str(e)
         except CustomException as e:
             status_code = e.status_code
-            error = str(e.__cause__)
+            error = str(e)
         except Exception as e:
             logger.error(f"Error in {func.__name__}: {str(e)}")
             status_code = HTTPStatus.INTERNAL_SERVER_ERROR

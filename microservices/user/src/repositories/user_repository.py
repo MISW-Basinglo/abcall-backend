@@ -18,7 +18,6 @@ class UserRepository(BaseRepository):
             "importance": ("eq", None),
         }
         users = self.get_by_query(query_dict)
-        print("users", users)
         responsible = None
         for user in users:
             auth_data = self.get_auth_user_data_service(user["auth_id"])

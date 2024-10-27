@@ -3,7 +3,6 @@ from typing import Dict
 from flask_jwt_extended import get_jwt_identity
 from src.common.enums import CompanyStatus
 from src.common.logger import logger
-from src.common.utils import decode_token
 from src.common.utils import get_request_url
 from src.common.utils import send_request
 from src.models.entities import GenericResponseEntity
@@ -17,7 +16,6 @@ from src.serializers.user_serializers import UserRetrieveSerializer
 from src.serializers.user_serializers import UserUpdateSerializer
 from src.services.company_services import create_company_service
 from src.services.company_services import delete_company_service
-from tests.test_utils import auth_user
 
 serializer_company_class = CompanyListSerializer
 serializer_user_class = UserListSerializer

@@ -67,12 +67,9 @@ def test_handle_token_not_found_exception():
 
 
 def test_handle_custom_exception():
-    class CustomExceptionWithStatus(CustomException):
-        status_code = HTTPStatus.PAYMENT_REQUIRED
-
     @handle_exceptions
     def func():
-        raise CustomExceptionWithStatus("Custom error", status_code=HTTPStatus.PAYMENT_REQUIRED)
+        raise CustomException("Custom error", status_code=HTTPStatus.PAYMENT_REQUIRED)
 
     response, status_code = func()
     response_obj = {"status": "error", "msg": "Custom error"}

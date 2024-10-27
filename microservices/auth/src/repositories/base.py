@@ -27,6 +27,8 @@ class BaseRepository(ABC):
             result = func(*args, **kwargs)
             if write:
                 self.session.commit()
+                if result:
+                    self.session.refresh(result)
             return self.get_serializer().dump(result) if self.serializer else result
         except exc.SQLAlchemyError as e:
             exception_cause = format_exception_message(e)

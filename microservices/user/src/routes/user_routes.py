@@ -9,6 +9,7 @@ from src.common.decorators import validate_permissions
 from src.common.enums import AllowedRoles
 from src.services.user_services import create_client_service
 from src.services.user_services import get_user_by_field_service
+from src.services.user_services import update_user_service
 
 blueprint = Blueprint("user_api", __name__, url_prefix="/user")
 
@@ -22,17 +23,29 @@ def create_client():
     return create_client_service(data), HTTPStatus.CREATED
 
 
+@blueprint.route("/<int:user_id>", methods=["PUT", "PATCH"])
+@handle_exceptions
+@jwt_required()
+def update_user(user_id: int):
+    data = request.get_json()
+    response = update_user_service(user_id, data)
+    return response, HTTPStatus.OK
+
+
 @blueprint.route("", methods=["GET"])
 @handle_exceptions
 @jwt_required()
 def get_user():
     query_params = request.args.to_dict()
-    params = ["missing", "missing"]
-    if query_params.pop("scope", None) == "me":
-        current_user = get_jwt_identity()
-        params = ["auth_id", current_user]
-    elif query_params.get("dni"):
-        params = ["dni", query_params["dni"]]
+    params = [None, None]
+    valid_scopes = ["scope", "dni", "id"]
+    for key, value in query_params.items():
+        if key in valid_scopes:
+            if key == "scope" and value == "me":
+                params = ["auth_id", get_jwt_identity()]
+            else:
+                params = [key, value]
+            break
     response = get_user_by_field_service(params)
     return response, HTTPStatus.OK
 

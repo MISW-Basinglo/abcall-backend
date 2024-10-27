@@ -21,7 +21,7 @@ class User(Base):
     phone = Column(String(120), unique=False, nullable=False)
     channel = Column(SQLAlchemyEnum(UserChannel), nullable=True, default=UserChannel.EMAIL)
     auth_id = Column(Integer(), nullable=False)
-    importance = Column(Integer(), nullable=False, default=1)
+    importance = Column(Integer(), nullable=True)
     company_id = Column(Integer(), ForeignKey("companies.id"), nullable=True)
     created_at = Column(DateTime(), nullable=True, default=func.now())
     updated_at = Column(DateTime(), nullable=True, default=func.now(), onupdate=func.now())

@@ -79,8 +79,20 @@ def test_get_company_by_id(mock_app, mocker):
             "plan": "premium",
             "status": "active",
         }
+        user_data = {"email": fake.email(), "role": "client"}
+        users = [
+            {
+                "id": 1,
+                "name": fake.name(),
+                "auth_id": 123,
+                "company_id": 1,
+                "phone": fake.phone_number(),
+                "dni": fake.ean(length=13),
+            },
+        ]
         mock_repo = mocker.patch("src.repositories.company_repository.CompanyRepository.get_by_field", return_value=company_data)
-
+        mocker.patch("src.repositories.user_repository.UserRepository.get_auth_user_data_service", return_value=user_data)
+        mocker.patch("src.repositories.user_repository.UserRepository.get_by_query", return_value=users)
         company = get_company_by_id(1)["data"]
 
         assert company["name"] == company_data["name"]

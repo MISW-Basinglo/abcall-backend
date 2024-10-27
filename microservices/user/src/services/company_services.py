@@ -27,9 +27,21 @@ def get_company_by_id(id_company: int):
     company_repository = CompanyRepository()
     company_repository.set_serializer(serializer_company_class)
     company = company_repository.get_by_field("id", id_company)
+    company = populate_company(company)
     response_entity = GenericResponseEntity(data=company)
     response = GenericResponseSerializer().dump(response_entity)
     return response
+
+
+def populate_company(company) -> dict:
+    user_repository = UserRepository()
+    user_repository.set_serializer(serializer_user_class)
+    responsible = user_repository.get_responsible_by_company(company["id"])
+    company["responsible_name"] = responsible["name"]
+    company["responsible_email"] = responsible["email"]
+    company["responsible_phone"] = responsible["phone"]
+    company["responsible_dni"] = responsible["dni"]
+    return company
 
 
 def get_company_by_user_session(user_id: int):

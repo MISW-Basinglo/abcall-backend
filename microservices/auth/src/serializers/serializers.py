@@ -23,6 +23,11 @@ class UserCreateSerializer(BaseSerializer):
     status = fields.String(required=True)
 
 
+class UserAuthUpdateSerializer(BaseSerializer):
+    email = fields.Email(required=False)
+    status = fields.String(required=False)
+
+
 class TokenSerializer(BaseSerializer):
     access_token = fields.String()
     refresh_token = fields.String()

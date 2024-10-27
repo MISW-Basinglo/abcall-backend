@@ -30,7 +30,7 @@
       "company_id": "Claro"
     },
     {
-      "name": "User Movistar",
+      "name": "Client Movistar",
       "dni": "11111111111",
       "phone": "3102456789",
       "channel": "EMAIL",
@@ -39,7 +39,7 @@
       "company_id": "Movistar"
     },
     {
-      "name": "User Claro",
+      "name": "Client Claro",
       "dni": "222222222",
       "phone": "312434567",
       "channel": "EMAIL",
@@ -48,7 +48,7 @@
       "company_id": "Claro"
     },
     {
-      "name": "User Tigo",
+      "name": "Client Tigo",
       "dni": "333333333",
       "phone": "30002456789",
       "channel": "EMAIL",

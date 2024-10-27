@@ -8,6 +8,7 @@ from src.common.decorators import validate_permissions
 from src.common.enums import Permissions
 from src.services import create_issue_service
 from src.services import get_all_issues_service
+from src.services import get_issue_service
 
 blueprint = Blueprint("issues_management_api", __name__, url_prefix="/issues_management")
 
@@ -18,6 +19,13 @@ blueprint = Blueprint("issues_management_api", __name__, url_prefix="/issues_man
 @validate_permissions([Permissions.VIEW_ISSUE.value])
 def get_issues():
     return get_all_issues_service(), HTTPStatus.OK
+
+
+@blueprint.route("/<int:issue_id>", methods=["GET"])
+@handle_exceptions
+@jwt_required()
+def get_issue(issue_id: int):
+    return get_issue_service(issue_id), HTTPStatus.OK
 
 
 @blueprint.route("", methods=["POST"])

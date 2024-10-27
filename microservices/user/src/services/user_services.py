@@ -25,7 +25,7 @@ def create_client_service(client_data):
     company, auth_user, user = None, None, None
     try:
         data = ClientCreateSerializer().load(client_data)
-        auth_data = {"email": data["email"]}
+        auth_data = {"email": data["email"], "role": "client"}
         company_data = {
             "name": data["company_name"],
             "nit": data["nit"],

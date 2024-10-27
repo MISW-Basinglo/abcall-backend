@@ -51,6 +51,7 @@ def test_get_by_field_not_found(mock_app, mock_repository, mocker):
 def test_update_success(mock_app, session, mocker):
     with mock_app.app_context():
         mocker.patch("src.serializers.serializers.UserRetrieveSerializer.get_role", return_value="admin")
+        mocker.patch("src.repositories.auth_repository.UserAuthRepository.get_role", return_value=1)
         serializer_class = UserRetrieveSerializer
         auth_repository = UserAuthRepository()
         auth_repository.set_serializer(serializer_class)
@@ -58,6 +59,7 @@ def test_update_success(mock_app, session, mocker):
         test_data = {
             "email": faker.email(),
             "password": faker.password(),
+            "role": "admin",
         }
 
         instance = auth_repository.create(test_data)
@@ -98,6 +100,7 @@ def test_update_transaction_failure(mock_app, mock_repository, mocker):
 def test_create_success(mock_app, mocker, session):
     with mock_app.app_context():
         mocker.patch("src.serializers.serializers.UserRetrieveSerializer.get_role", return_value="admin")
+        mocker.patch("src.repositories.auth_repository.UserAuthRepository.get_role", return_value=1)
         serializer_class = UserRetrieveSerializer
         auth_repository = UserAuthRepository()
         auth_repository.set_serializer(serializer_class)
@@ -105,6 +108,7 @@ def test_create_success(mock_app, mocker, session):
         test_data = {
             "email": faker.email(),
             "password": faker.password(),
+            "role": "admin",
         }
 
         instance = auth_repository.create(test_data)

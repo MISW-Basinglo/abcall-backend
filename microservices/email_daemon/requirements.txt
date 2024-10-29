@@ -1,6 +1,8 @@
+beautifulsoup4==4.12.2
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
+lxml==4.9.3
 marshmallow==3.12.1
 marshmallow-sqlalchemy==0.25.0
 requests==2.26.0

@@ -22,3 +22,12 @@ class User:
     auth_id: int
     name: str
     phone: str
+
+
+@dataclass
+class IssueEntity:
+    type: str
+    description: str
+    source: str
+    user_id: int
+    company_id: int

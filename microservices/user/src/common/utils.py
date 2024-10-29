@@ -5,6 +5,7 @@ import requests
 from flask import request as flask_request
 from flask_jwt_extended import get_jwt
 from src.common.constants import BACKEND_HOST
+from src.common.constants import DAEMON_REQUEST_HEADER_VALUE
 from src.common.enums import ExceptionsMessages
 from src.common.exceptions import CustomException
 from src.common.logger import logger
@@ -50,12 +51,20 @@ def get_auth_header_from_request():
     return {}
 
 
+def get_from_header_request():
+    from_header = flask_request.headers.get("X-Request-From")
+    if from_header == DAEMON_REQUEST_HEADER_VALUE:
+        return {"X-Request-From": from_header}
+    return {}
+
+
 def send_request(method, url, data=None, headers=None):
     h = {"Content-Type": "application/json"}
     if headers:
         h.update(headers)
     else:
         h.update(get_auth_header_from_request())
+        h.update(get_from_header_request())
     response = requests.request(method, url, json=data, headers=h)
     RequestRaiseForException(response).raise_for_status()
     return response.json()

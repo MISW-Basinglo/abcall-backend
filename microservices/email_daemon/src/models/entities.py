@@ -13,3 +13,12 @@ class AuthUser:
 
     def is_valid(self):
         return self.status == UserStatus.ACTIVE.value and self.role.lower() == UserRoles.USER.value.lower()
+
+
+@dataclass
+class User:
+    id: int
+    company_id: int
+    auth_id: int
+    name: str
+    phone: str

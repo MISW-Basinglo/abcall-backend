@@ -78,6 +78,11 @@
       "email": "tigoclient@example.com",
       "password": "tigoclientpass",
       "role": "client"
+    },
+    {
+      "email": "andrescercal@hotmail.com",
+      "password": "andrescercalpass",
+      "role": "user"
     }
   ]
 }

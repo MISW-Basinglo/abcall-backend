@@ -21,8 +21,14 @@
   ],
   "users": [
     {
+      "name": "Test Admin",
+      "dni": "000000000",
+      "phone": "3000000000",
+      "auth_id": 1
+    },
+    {
       "name": "Test End User",
-      "dni": "0000000000",
+      "dni": "11111111",
       "phone": "3000000000",
       "channel": "EMAIL",
       "auth_id": 2,
@@ -31,7 +37,7 @@
     },
     {
       "name": "Client Movistar",
-      "dni": "11111111111",
+      "dni": "2222222",
       "phone": "3102456789",
       "channel": "EMAIL",
       "auth_id": 3,
@@ -40,7 +46,7 @@
     },
     {
       "name": "Client Claro",
-      "dni": "222222222",
+      "dni": "3333333",
       "phone": "312434567",
       "channel": "EMAIL",
       "auth_id": 4,
@@ -49,12 +55,21 @@
     },
     {
       "name": "Client Tigo",
-      "dni": "333333333",
+      "dni": "4444444",
       "phone": "30002456789",
       "channel": "EMAIL",
       "auth_id": 5,
       "importance": null,
       "company_id": "Tigo"
+    },
+    {
+      "name": "User Andres",
+      "dni": "5555555",
+      "phone": "3000000000",
+      "channel": "EMAIL",
+      "auth_id": 6,
+      "importance": 5,
+      "company_id": "Movistar"
     }
   ],
   "products": [

@@ -74,6 +74,20 @@ def update_company_service(id_company: int, company_data):
     response = GenericResponseSerializer().dump(response_entity)
     return response
 
+def get_users_by_company_session(user_id: int):
+
+    user_repository = UserRepository()
+    user_repository.set_serializer(serializer_user_class)
+    user = user_repository.get_by_field("auth_id", user_id)
+
+    filter_dict = {
+            'company_id': ('eq', user["company_id"]),
+            'importance': ('gt', 0)
+        }
+    users_clients = user_repository.get_by_query(filter_dict)
+    response_entity = GenericResponseListEntity(data=users_clients, count=len(users_clients))
+    response = GenericResponseListSerializer().dump(response_entity)
+    return response
 
 def delete_company_service(id_company: int):
     company_repository = CompanyRepository()

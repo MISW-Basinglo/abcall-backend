@@ -10,6 +10,7 @@ from src.services.company_services import get_all_companies
 from src.services.company_services import get_company_by_id
 from src.services.company_services import get_company_by_user_session
 from src.services.company_services import update_company_service
+from src.services.company_services import get_users_by_company_session
 
 blueprint = Blueprint("company_api", __name__, url_prefix="/company")
 
@@ -45,6 +46,14 @@ def get_companies():
 def get_company_user_session():
     current_user = get_jwt_identity()
     response = get_company_by_user_session(current_user)
+    return response, HTTPStatus.OK
+
+@blueprint.route("/users", methods=["GET"])
+@handle_exceptions
+@jwt_required()
+def get_users_company_session():
+    current_user = get_jwt_identity()
+    response = get_users_by_company_session(current_user)
     return response, HTTPStatus.OK
 
 

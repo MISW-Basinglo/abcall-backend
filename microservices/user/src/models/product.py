@@ -22,4 +22,3 @@ class Product(Base):
     company_id = Column(Integer(), ForeignKey("companies.id"), nullable=True)
     created_at = Column(DateTime(), nullable=True, default=func.now())
     updated_at = Column(DateTime(), nullable=True, default=func.now(), onupdate=func.now())
-    #company = relationship("Company", back_populates="products")

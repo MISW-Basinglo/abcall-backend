@@ -60,15 +60,45 @@
   "products": [
     {
       "type": "PRODUCT",
-      "description": "Plan Prepago 10k",
+      "description": "Reposición Iphone X",
       "status": "ACTIVE",
       "company_id": "Movistar"
+    },
+    {
+      "type": "SERVICE",
+      "description": "Plan Postpago 100Gb",
+      "status": "ACTIVE",
+      "company_id": "Movistar"
+    },
+    {
+      "type": "PRODUCT",
+      "description": "Reposición Iphone 11",
+      "status": "ACTIVE",
+      "company_id": "Claro"
+    },
+    {
+      "type": "SERVICE",
+      "description": "Plan Postpago 200Gb",
+      "status": "ACTIVE",
+      "company_id": "Claro"
     }
   ],
   "product_user": [
     {
       "id_user": "333333333",
       "product_id": 1
+    },
+    {
+      "id_user": "333333333",
+      "product_id": 2
+    },
+    {
+      "id_user": "222222222",
+      "product_id": 3
+    },
+    {
+      "id_user": "222222222",
+      "product_id": 4
     }
   ]
 }

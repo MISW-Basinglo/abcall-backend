@@ -62,7 +62,7 @@ services:
     env_file:
       - "microservices/user/.env"
     labels:
-      - "traefik.http.routers.user.rule=PathPrefix(`/user`) || PathPrefix(`/company`)"
+      - "traefik.http.routers.user.rule=PathPrefix(`/user`) || PathPrefix(`/company`) || PathPrefix(`/product`)"
       - "traefik.http.services.user.loadbalancer.server.port=8000"
     depends_on:
       db:

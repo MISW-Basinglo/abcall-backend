@@ -5,8 +5,10 @@ from src.common.enums import CompanyStatus
 from src.common.logger import logger
 from src.common.utils import get_request_url
 from src.common.utils import send_request
-from src.models.entities import GenericResponseEntity
+from src.models.entities import GenericResponseEntity, GenericResponseListEntity
 from src.repositories.user_repository import UserRepository
+from src.repositories.product_user_repository import ProductUserRepository
+from src.repositories.product_repository import ProductRepository
 from src.serializers.company_serializers import CompanyListSerializer
 from src.serializers.company_serializers import GenericResponseSerializer
 from src.serializers.user_serializers import ClientCreateSerializer
@@ -14,11 +16,17 @@ from src.serializers.user_serializers import UserCreateSerializer
 from src.serializers.user_serializers import UserListSerializer
 from src.serializers.user_serializers import UserRetrieveSerializer
 from src.serializers.user_serializers import UserUpdateSerializer
+from src.serializers.product_serializers import ProductUserListSerializer
+from src.serializers.product_serializers import ProductListSerializer
+from src.serializers.product_serializers import GenericResponseListSerializer
+from src.serializers.product_serializers import GenericResponseSerializer
 from src.services.company_services import create_company_service
 from src.services.company_services import delete_company_service
 
 serializer_company_class = CompanyListSerializer
 serializer_user_class = UserListSerializer
+serializer_product_user_class = ProductUserListSerializer
+serializer_product_class = ProductListSerializer
 
 
 def create_client_service(client_data):
@@ -107,3 +115,23 @@ def delete_user_service(id_user: int):
 def delete_auth_user_service(id_auth_user: int):
     url = get_request_url("auth")
     send_request("DELETE", f"{url}/{id_auth_user}")
+
+def get_products_by_user_service(id_user: int):
+    product_user_repository = ProductUserRepository()
+    product_user_repository.set_serializer(serializer_product_user_class)
+    filter_dict = {
+            'id_user': ('eq', id_user)
+        }
+    product_user = product_user_repository.get_by_query(filter_dict)
+    product_ids = list({pu['product_id'] for pu in product_user})
+    filter_dict = {
+            'id': ('in', product_ids)
+        }
+
+    product_repository = ProductRepository()
+    product_repository.set_serializer(serializer_product_class)
+    product = product_repository.get_by_query(filter_dict)
+    response_entity = GenericResponseListEntity(data=product, count=len(product))
+    response = GenericResponseListSerializer().dump(response_entity)
+    return response
+    

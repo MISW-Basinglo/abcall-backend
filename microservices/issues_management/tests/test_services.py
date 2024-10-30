@@ -7,12 +7,12 @@ from src.common.enums import IssueSource
 from src.common.enums import IssueType
 from src.services import create_issue_service
 from src.services import get_all_issues_service
+from src.services import get_issue_open_service, get_issue_call_service
 from src.services import get_user_info
 from tests.conftest import mock_app
 from tests.conftest import session
 
 fake = Faker()
-
 
 def test_get_all_issues(mock_app, mocker):
     with mock_app.app_context(), mock_app.test_request_context():
@@ -84,3 +84,63 @@ def test_get_user_info(mock_app, mocker):
         mocker.patch("src.services.send_request", return_value=fake_user_data)
         user_info = get_user_info("1234567890")
         assert user_info == fake_user_data["data"]
+
+
+def test_get_issue_open_service(mock_app, mocker):
+    with mock_app.app_context(), mock_app.test_request_context():
+        user_id = 1
+        open_issues = [
+            {
+                "id": i,
+                "description": fake.text(),
+                "source": choice([enum.value for enum in IssueSource]),
+                "type": choice([enum.value for enum in IssueType]),
+                "user_id": user_id,
+                "company_id": randint(1, 100),
+                "status": "OPEN",
+                "created_at": fake.date_time(),
+                "updated_at": fake.date_time(),
+                "solution": None,
+            } for i in range(5)
+        ]
+
+        mock_repo = mocker.patch("src.repositories.issues_repository.IssuesManagementRepository.get_by_query", return_value=open_issues)
+
+        response = get_issue_open_service(user_id)["data"]
+
+        assert len(response) == len(open_issues)
+        mock_repo.assert_called_once_with({'user_id': ('eq', user_id), 'status': ('eq', 'OPEN')})
+
+        for expected, fetched in zip(open_issues, response):
+            assert expected["description"] == fetched["description"]
+            assert expected["source"] == fetched["source"]
+            assert expected["type"] == fetched["type"]
+
+def test_get_issue_call_service(mock_app, mocker):
+    with mock_app.app_context(), mock_app.test_request_context():
+        user_id = 1
+        call_issues = [
+            {
+                "id": i,
+                "description": fake.text(),
+                "source": "CALL",
+                "type": choice([enum.value for enum in IssueType]),
+                "user_id": user_id,
+                "company_id": randint(1, 100),
+                "status": "OPEN",
+                "created_at": fake.date_time(),
+                "updated_at": fake.date_time(),
+                "solution": None,
+            } for i in range(3)
+        ]
+        mock_repo = mocker.patch("src.repositories.issues_repository.IssuesManagementRepository.get_by_query", return_value=call_issues)
+
+        response = get_issue_call_service(user_id)["data"]
+
+        assert len(response) == len(call_issues)
+        mock_repo.assert_called_once_with({'user_id': ('eq', user_id), 'source': ('eq', 'CALL')})
+
+        for expected, fetched in zip(call_issues, response):
+            assert expected["description"] == fetched["description"]
+            assert expected["source"] == fetched["source"]
+            assert expected["type"] == fetched["type"]

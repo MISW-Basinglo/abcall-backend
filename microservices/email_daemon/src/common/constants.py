@@ -1,6 +1,6 @@
 import os
 
-PUBSUB_PROJECT_ID = os.getenv("PUBSUB_PROJECT_ID")
+GOOGLE_CLOUD_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT")
 PUBSUB_TOPIC = os.getenv("PUBSUB_TOPIC")
 GMAIL_CREDENTIALS_PATH = os.getenv("GMAIL_CREDENTIALS_PATH", "src/credentials/mail_client.json")
 GMAIL_TOKEN_PATH = os.getenv("GMAIL_TOKEN_PATH", "src/credentials/mail_client_credentials.json")

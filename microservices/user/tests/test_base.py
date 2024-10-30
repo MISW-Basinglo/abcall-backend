@@ -47,3 +47,30 @@ def test_delete_not_found(repository, mocker):
 
     with pytest.raises(ResourceNotFoundException):
         repository.delete(1)
+
+
+def test_create(repository, mocker):
+    mock_session = MagicMock()
+    mocker.patch("src.db.SessionLocal", return_value=mock_session)
+    mocker.patch.object(repository, "_create", return_value=TestModel)
+
+    result = repository.create({"name": "Test Name", "status": "active"})
+    assert result == TestModel
+
+
+def test_get_all(repository, mocker):
+    mock_session = MagicMock()
+    mocker.patch("src.db.SessionLocal", return_value=mock_session)
+    mocker.patch.object(repository, "_get_all", return_value=[TestModel])
+
+    result = repository.get_all()
+    assert result == [TestModel]
+
+
+def test_update(repository, mocker):
+    mock_session = MagicMock()
+    mocker.patch("src.db.SessionLocal", return_value=mock_session)
+    mocker.patch.object(repository, "_update", return_value=TestModel)
+
+    result = repository.update(1, {"name": "Updated Test"})
+    assert result == TestModel

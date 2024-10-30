@@ -31,3 +31,4 @@ class IssueEntity:
     source: str
     user_id: int
     company_id: int
+    email: int = None

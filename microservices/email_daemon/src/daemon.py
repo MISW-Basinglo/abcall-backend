@@ -1,7 +1,6 @@
 import re
 import time
 from email.utils import parseaddr
-from typing import Dict
 
 from bs4 import BeautifulSoup
 from src.common.enums import IssueType
@@ -12,11 +11,13 @@ from src.models.entities import AuthUser
 from src.models.entities import IssueEntity
 from src.serializers import IssueCreateSerializer
 from src.services.gmail_service import GmailService as MailService
+from src.services.pubsub_service import PubSubService
 
 
 class EmailDaemon:
     def __init__(self, poll_interval=5):
         self.mail_service = MailService()
+        self.pubsub_service = PubSubService()
         self.poll_interval = poll_interval
 
     def is_valid_email(self, email_data):
@@ -38,7 +39,7 @@ class EmailDaemon:
         :return: The cleaned email body as a string.
         """
         if not isinstance(body, str):
-            raise ValueError("El contenido del correo debe ser una cadena de texto.")
+            raise ValueError("Mail body must be a string.")
 
         # Parse HTML if present and extract text
         body = BeautifulSoup(body, "html.parser").get_text(separator=" ")
@@ -54,39 +55,27 @@ class EmailDaemon:
         body = re.sub(r"Get\s+Outlook\s+for\s+\w+|Sent\s+from\s+my\s+\w+", "", body, flags=re.IGNORECASE)
         body = re.sub(r"(Forwarded message|Mensaje reenviado):", "", body, flags=re.IGNORECASE)
 
-        # Remove URLs, email addresses, and clean up multiple spaces or newlines
-        body = re.sub(r"https?://\S+|www\.\S+", "", body)
-        body = re.sub(r"\S+@\S+", "", body)
-        body = re.sub(r"\n\s*\n", "\n", body)
-        body = re.sub(r"[ \t]+", " ", body)
-
         return body.strip()
 
     @staticmethod
     def get_issue_type(description):
         description = description.lower()
         keywords = IssueType.get_keywords()
-        issue_type = IssueType.REQUEST
+        issue_type = IssueType.REQUEST.value
 
         for t, words in keywords.items():
             for word in words:
                 if re.search(word, description):
-                    issue_type = t
+                    issue_type = t.value
                     break
         return issue_type
 
-    def format_issue(self, user, email_data) -> Dict:
+    def format_issue(self, user, email_data) -> dict:
         user_data = get_user_data(user.id)
-        description = email_data["body"]
+        description = f"{email_data.get('subject')} - {email_data.get('body')}"
         issue_type = self.get_issue_type(description)
         source = "EMAIL"
-        issue_entity = IssueEntity(
-            type=issue_type,
-            description=description,
-            source=source,
-            user_id=user_data.id,
-            company_id=user_data.company_id,
-        )
+        issue_entity = IssueEntity(type=issue_type, description=description, source=source, user_id=user_data.id, company_id=user_data.company_id, email=user.email)
         return IssueCreateSerializer().dump(issue_entity)
 
     def run(self):
@@ -100,14 +89,15 @@ class EmailDaemon:
                     is_valid, user = self.is_valid_email(email)
                     if is_valid:
                         issue_body = self.format_issue(user, email)
-                        # TODO: Publish the issue_body to a Pub/Sub topic
-                        logger.info("Correo publicado en Pub/Sub.", issue_body)
+                        message_id = self.pubsub_service.publish_message(issue_body)
+                        logger.info("Email published into Google Pub/Sub:" + message_id)
                     else:
-                        logger.info(f"Correo descartado: {email.get('subject')}")
-                        self.mail_service.mark_as_read(email.get("id"))
+                        logger.info(f"Email discarded: {email.get('subject')}")
                 except Exception as e:
-                    logger.error(f"Error processing emails: {e}")
-                    pass
+                    logger.error(f"Error processing email: {e}")
+                finally:
+                    self.mail_service.mark_as_read(email.get("id"))
+
             else:
-                logger.info("No new emails found.")
+                logger.info("No emails to process.")
             time.sleep(self.poll_interval)  # Wait for the next polling cycle

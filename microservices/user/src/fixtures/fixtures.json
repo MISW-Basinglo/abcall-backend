@@ -24,7 +24,10 @@
       "name": "Test Admin",
       "dni": "000000000",
       "phone": "3000000000",
-      "auth_id": 1
+      "channel": "EMAIL",
+      "auth_id": 1,
+      "importance": null,
+      "company_id": ""
     },
     {
       "name": "Test End User",

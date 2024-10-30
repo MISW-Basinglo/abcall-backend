@@ -8,3 +8,4 @@ class IssueCreateSerializer(Schema):
     source = fields.String(required=True)
     user_id = fields.Integer()
     company_id = fields.Integer()
+    email = fields.Email()

@@ -7,6 +7,8 @@ from src.common.decorators import handle_exceptions
 from src.services import create_issue_service
 from src.services import get_all_issues_service
 from src.services import get_issue_service
+from src.services import get_issue_open_service
+from src.services import get_issue_call_service
 
 blueprint = Blueprint("issues_management_api", __name__, url_prefix="/issues_management")
 
@@ -25,6 +27,17 @@ def get_issues():
 def get_issue(issue_id: int):
     return get_issue_service(issue_id), HTTPStatus.OK
 
+@blueprint.route("/open/<int:user_id>", methods=["GET"])
+@handle_exceptions
+@jwt_required()
+def get_issue_open_by_user(user_id: int):
+    return get_issue_open_service(user_id), HTTPStatus.OK
+
+@blueprint.route("/call/<int:user_id>", methods=["GET"])
+@handle_exceptions
+@jwt_required()
+def get_issue_call_by_user(user_id: int):
+    return get_issue_call_service(user_id), HTTPStatus.OK
 
 @blueprint.route("", methods=["POST"])
 @handle_exceptions

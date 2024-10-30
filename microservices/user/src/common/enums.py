@@ -57,3 +57,11 @@ class UserChannel(BaseEnum):
 class AllowedRoles(BaseEnum):
     ADMIN = "admin"
     CLIENT = "client"
+
+class ProductStatus(BaseEnum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+
+class TypeProduct(BaseEnum):
+    PRODUCT = "product"
+    SERVICE = "service"

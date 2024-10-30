@@ -33,6 +33,29 @@ def get_issue_service(issue_id):
     response = GenericResponseSerializer().dump(response_entity)
     return response
 
+def get_issue_open_service(user_id):
+    issue_repository = IssuesManagementRepository()
+    issue_repository.set_serializer(serializer_class)
+    filter_dict = {
+            'user_id': ('eq', user_id),
+            'status': ('eq', 'OPEN')
+        }
+    issues = issue_repository.get_by_query(filter_dict)
+    response_entity = GenericResponseListEntity(data=issues, count=len(issues))
+    response = GenericResponseListSerializer().dump(response_entity)
+    return response
+
+def get_issue_call_service(user_id):
+    issue_repository = IssuesManagementRepository()
+    issue_repository.set_serializer(serializer_class)
+    filter_dict = {
+            'user_id': ('eq', user_id),
+            'source': ('eq', 'CALL')
+        }
+    issues = issue_repository.get_by_query(filter_dict)
+    response_entity = GenericResponseListEntity(data=issues, count=len(issues))
+    response = GenericResponseListSerializer().dump(response_entity)
+    return response
 
 def create_issue_service(data):
     dni = data.pop("dni", None)
@@ -48,7 +71,6 @@ def create_issue_service(data):
         return response
     else:
         raise InvalidParameterException(ExceptionsMessages.USER_NOT_AUTHORIZED.value)
-
 
 def get_user_info(dni) -> dict[str, str]:
     if dni:

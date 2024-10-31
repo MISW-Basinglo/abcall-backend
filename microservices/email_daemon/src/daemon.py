@@ -81,7 +81,6 @@ class EmailDaemon:
     def run(self):
         logger.info("Email daemon started.")
         while True:
-            logger.info("Pulling unread emails...")
             emails = self.mail_service.fetch_unread_emails()
             for email in emails:
                 try:

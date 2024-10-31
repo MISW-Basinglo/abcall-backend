@@ -78,7 +78,7 @@
   "products": [
     {
       "type": "PRODUCT",
-      "description": "Reposición Iphone X",
+      "description": "Iphone X",
       "status": "ACTIVE",
       "company_id": "Movistar"
     },
@@ -90,7 +90,7 @@
     },
     {
       "type": "PRODUCT",
-      "description": "Reposición Iphone 11",
+      "description": "Samsung Galaxy S24",
       "status": "ACTIVE",
       "company_id": "Claro"
     },
@@ -99,23 +99,35 @@
       "description": "Plan Postpago 200Gb",
       "status": "ACTIVE",
       "company_id": "Claro"
+    },
+    {
+      "type": "PRODUCT",
+      "description": "Huawei P40",
+      "status": "ACTIVE",
+      "company_id": "Tigo"
+    },
+    {
+      "type": "SERVICE",
+      "description": "Plan Postpago 300Gb",
+      "status": "ACTIVE",
+      "company_id": "Tigo"
     }
   ],
   "product_user": [
     {
-      "id_user": "333333333",
+      "id_user": "11111111",
       "product_id": 1
     },
     {
-      "id_user": "333333333",
+      "id_user": "11111111",
       "product_id": 2
     },
     {
-      "id_user": "222222222",
+      "id_user": "5555555",
       "product_id": 3
     },
     {
-      "id_user": "222222222",
+      "id_user": "5555555",
       "product_id": 4
     }
   ]

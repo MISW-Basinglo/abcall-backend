@@ -8,6 +8,10 @@ class ProductUserListSerializer(BaseSerializer):
     id_user = fields.Integer()
     product_id = fields.Integer()
 
+class ProductUserCreateSerializer(BaseSerializer):
+    id_user = fields.Integer()
+    product_id = fields.Integer()
+
 class ProductListSerializer(BaseSerializer):
     id = fields.Integer()
     company_id = fields.Integer()

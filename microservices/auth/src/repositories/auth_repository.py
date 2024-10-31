@@ -3,6 +3,7 @@ from src.common.exceptions import ResourceNotFoundException
 from src.models.auth import UserAuth
 from src.models.role import Role
 from src.repositories.base import BaseRepository
+from src.common.enums import UserAuthStatus
 
 
 class UserAuthRepository(BaseRepository):
@@ -17,6 +18,15 @@ class UserAuthRepository(BaseRepository):
             raise ResourceNotFoundException(ExceptionsMessages.RESOURCE_NOT_FOUND.value)
         data["role_id"] = role
         return super().create(data)
+
+    def _create(self, data):
+        password = data.pop("password", None)
+        instance = self.model(**data)
+        if password:
+            instance.set_password(password)
+            instance.status = UserAuthStatus.ACTIVE.value
+        self.session.add(instance)
+        return instance
 
     def get_role(self, role):
         role = self.session.query(Role).filter(Role.name == role).first()

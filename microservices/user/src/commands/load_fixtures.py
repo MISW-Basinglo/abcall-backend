@@ -55,6 +55,7 @@ def register_commands(app):
         # Cargar Productos
         for product_data in data["products"]:
             product = session.query(Product).filter_by(description=product_data["description"]).first()
+            company = session.query(Company).filter_by(name=product_data["company_id"]).first()
             if not product:
                 product = Product(
                     type=product_data["type"],

@@ -1,5 +1,9 @@
 from http import HTTPStatus
 
+import base64
+import io
+import csv
+
 from flask import Blueprint
 from flask import request
 from flask_jwt_extended import get_jwt_identity
@@ -8,6 +12,7 @@ from src.common.decorators import handle_exceptions
 from src.services.user_services import create_client_service
 from src.services.user_services import get_user_by_field_service
 from src.services.user_services import update_user_service
+from src.services.user_services import imports_users_service
 
 blueprint = Blueprint("user_api", __name__, url_prefix="/user")
 
@@ -19,6 +24,26 @@ blueprint = Blueprint("user_api", __name__, url_prefix="/user")
 def create_client():
     data = request.get_json()
     return create_client_service(data), HTTPStatus.CREATED
+
+
+@blueprint.route("/import", methods=["POST"])
+@handle_exceptions
+@jwt_required()
+def import_users_session():
+    current_user = get_jwt_identity()
+
+   # Obtener la cadena codificada en Base64
+    data = request.json.get("users")
+    
+    # Decodificar la cadena de Base64
+    csv_decoded = base64.b64decode(data).decode('utf-8')
+    
+    # Convertir la cadena en un archivo CSV
+    csv_file = io.StringIO(csv_decoded)
+    csv_reader = csv.reader(csv_file)
+
+    response = imports_users_service(current_user, csv_reader)
+    return response, HTTPStatus.OK
 
 
 @blueprint.route("/<int:user_id>", methods=["PUT", "PATCH"])

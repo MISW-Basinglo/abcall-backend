@@ -66,6 +66,20 @@ def create_client_service(client_data):
             delete_auth_user_service(auth_user["id"])
         raise
 
+def imports_users_service(user_id, data):
+    for row in data:
+        if data.line_num == 1:
+            # Omitir la cabecera si existe
+            continue
+        
+        logger.info("data: " + str(row))
+    
+    # logger.info("data: " + str(data))
+    data = UserCreateSerializer().load(data)
+    user_repository = UserRepository()
+    user_repository.set_serializer(serializer_user_class)
+    user = user_repository.create(data)
+    return user
 
 def create_user_service(user_data) -> Dict:
     data = UserCreateSerializer().load(user_data)

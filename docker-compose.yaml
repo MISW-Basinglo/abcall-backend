@@ -102,6 +102,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      traefik:
+        condition: service_started
       auth:
         condition: service_started
       user:

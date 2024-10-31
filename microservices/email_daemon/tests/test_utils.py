@@ -1,10 +1,7 @@
 from unittest.mock import Mock
-from unittest.mock import patch
 
-import pytest
 from pytest_mock import mocker  # noqa
 from src.common.constants import BACKEND_HOST
-from src.common.constants import DAEMON_REQUEST_HEADER_VALUE
 from src.common.utils import get_auth_user_data
 from src.common.utils import get_url
 from src.common.utils import get_user_data
@@ -50,17 +47,6 @@ def test_get_user_data(mocker):
 
 
 def test_get_auth_user_data(mocker):
-    """
-    class AuthUser:
-    id: int
-    email: str
-    status: str
-    role: str
-
-
-    :param mocker:
-    :return:
-    """
     user_data = {
         "id": 1,
         "email": "test@example.com",

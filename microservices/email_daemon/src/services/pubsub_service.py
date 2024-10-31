@@ -10,9 +10,9 @@ from src.common.logger import logger
 class PubSubService:
     project_id = GOOGLE_CLOUD_PROJECT
     topic_id = PUBSUB_TOPIC
-    publisher = pubsub_v1.PublisherClient()
 
-    def __init__(self):
+    def __init__(self, publisher=None):
+        self.publisher = publisher or pubsub_v1.PublisherClient()
         self.topic_path = self.publisher.topic_path(self.project_id, self.topic_id)
         self._create_topic_if_not_exists()
 

@@ -47,6 +47,14 @@ class UserListSerializer(UserCreateSerializer):
     dni = fields.String(required=False, allow_none=True)
 
 
+class UserMinimalSerializer(BaseSerializer):
+    id = fields.Integer()
+    name = fields.String()
+    phone = fields.String()
+    company_id = fields.Integer()
+    auth_id = fields.Integer()
+
+
 class GenericResponseListSerializer(BaseSerializer):
     count = fields.Integer()
     data = fields.List(fields.Dict())

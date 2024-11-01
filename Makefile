@@ -53,23 +53,31 @@ run_user:
 run_issues:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up issues_management
 
+.PHONY: run_email_daemon
+run_email_daemon:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up email_daemon
+
 # ====================================================================================
 # T E S T I N G  C O M M A N D S
 
 .PHONY: test_auth
 test_auth:
-	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm auth pytest --cov-report=term-missing --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
 .PHONY: test_user
 test_user:
-	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --build --rm user pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --build --rm user pytest --cov-report=term-missing --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
 .PHONY: test_issues
 test_issues:
-	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm issues_management pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm issues_management pytest --cov-report=term-missing --cov=src tests/ -c pytest.ini --cov-fail-under=80
+
+.PHONY: test_email_daemon
+test_email_daemon:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm email_daemon pytest --cov-report=term-missing --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
 .PHONY: test_all
-test_all: build test_auth test_user test_issues
+test_all: build test_auth test_user test_issues test_email_daemon
 
 .PHONY: load_fixtures
 load_fixtures:

@@ -121,3 +121,12 @@ def test_set_serializer(mock_app, mock_repository):
 def test_get_serializer(mock_app, mock_repository):
     with mock_app.app_context():
         assert mock_repository.get_serializer() is not None
+
+
+def test_get_by_query(mock_app, mock_repository, mocker):
+    with mock_app.app_context():
+        mock_get_by_query = mocker.patch("src.repositories.base.BaseRepository._build_dynamic_query", return_value=MagicMock())
+        filter_dict = {"field": ("eq", "value")}
+        result = mock_repository.get_by_query(filter_dict)
+        mock_get_by_query.assert_called_once_with(filter_dict)
+        assert result is not None

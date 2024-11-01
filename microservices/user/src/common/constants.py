@@ -18,3 +18,4 @@ else:
 
 DISABLE_PERMISSIONS_VALIDATIONS = os.getenv("DISABLE_PERMISSIONS", "false").lower() == "true"
 BACKEND_HOST = os.getenv("BACKEND_HOST", "localhost")
+DAEMON_REQUEST_HEADER_VALUE = os.getenv("DAEMON_REQUEST_HEADER_VALUE")

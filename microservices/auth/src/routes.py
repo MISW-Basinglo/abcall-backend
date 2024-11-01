@@ -5,7 +5,9 @@ from flask import request
 from flask import Response
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+from src.common.constants import DAEMON_REQUEST_HEADER_VALUE
 from src.common.decorators import handle_exceptions
+from src.common.enums import ExceptionsMessages
 from src.services import audit_decode_token
 from src.services import authenticate
 from src.services import create_user_auth
@@ -38,6 +40,16 @@ def delete(auth_id: int):
 @jwt_required()
 def get(auth_id: int):
     return get_auth_user_by_field_service(["id", auth_id]), HTTPStatus.OK
+
+
+@blueprint.route("/email", methods=["GET"])
+@handle_exceptions
+def get_by_email():
+    if request.headers.get("X-Request-From") != DAEMON_REQUEST_HEADER_VALUE:
+        return {"status": "error", "msg": ExceptionsMessages.USER_NOT_AUTHORIZED.value}, HTTPStatus.UNAUTHORIZED
+    query_params = request.args.to_dict()
+    email = query_params.get("email")
+    return get_auth_user_by_field_service(["email", email]), HTTPStatus.OK
 
 
 @blueprint.route("/<int:auth_id>", methods=["PUT", "PATCH"])

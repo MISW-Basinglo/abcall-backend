@@ -14,6 +14,15 @@ class IssueCreateSerializer(BaseSerializer):
     solution = fields.String(allow_none=True, required=False)
 
 
+class IssueWebhookCreateSerializer(BaseSerializer):
+    type = fields.String(required=True)
+    description = fields.String(required=True)
+    company_id = fields.Integer(required=True)
+    email = fields.String(required=True)
+    user_id = fields.Integer(required=True)
+    source = fields.String(required=True)
+
+
 class IssueListSerializer(IssueCreateSerializer):
     id = fields.Integer()
     created_at = fields.DateTime(format="%Y-%m-%dT%H:%M:%SZ")

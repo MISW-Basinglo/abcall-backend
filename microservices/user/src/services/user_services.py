@@ -15,6 +15,7 @@ from src.serializers.user_serializers import ClientCreateSerializer
 from src.serializers.user_serializers import UserCreateSerializer
 from src.serializers.user_serializers import UserClientCreateSerializer
 from src.serializers.user_serializers import UserListSerializer
+from src.serializers.user_serializers import UserMinimalSerializer
 from src.serializers.user_serializers import UserRetrieveSerializer
 from src.serializers.user_serializers import UserUpdateSerializer
 from src.serializers.product_serializers import ProductUserListSerializer
@@ -162,6 +163,15 @@ def get_user_by_field_service(params: list):
     auth_data.pop("id", None)
     user.pop("auth_id", None)
     user.update(auth_data)
+    response_entity = GenericResponseEntity(data=user)
+    response = GenericResponseSerializer().dump(response_entity)
+    return response
+
+
+def get_minimal_user_by_field(params: list):
+    user_repository = UserRepository()
+    user_repository.set_serializer(UserMinimalSerializer)
+    user = user_repository.get_by_field(*params)
     response_entity = GenericResponseEntity(data=user)
     response = GenericResponseSerializer().dump(response_entity)
     return response

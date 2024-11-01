@@ -1,0 +1,12 @@
+beautifulsoup4==4.12.2
+faker==30.1.0
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+google-cloud-pubsub
+lxml==4.9.3
+marshmallow==3.12.1
+pytest==6.2.5
+pytest-cov
+pytest-mock==3.14.0
+requests==2.26.0

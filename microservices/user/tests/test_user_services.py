@@ -1,9 +1,14 @@
 from random import choice
 from random import randint
 
+import base64
+import io
+import csv
+
 import pytest
 from faker import Faker
 from pytest_mock import mocker  # noqa
+from unittest.mock import MagicMock
 from src.common.enums import CompanyPlan
 from src.common.enums import ExceptionsMessages
 from src.common.exceptions import ResourceNotFoundException
@@ -12,10 +17,35 @@ from src.services.user_services import create_user_service
 from src.services.user_services import delete_user_service
 from src.services.user_services import get_user_by_field_service
 from src.services.user_services import update_user_service
+from src.services.user_services import imports_users_service, create_user_client_service
+from src.services.user_services import get_products_by_user_service
+from src.common.exceptions import CustomException
+from src.common.enums import ExceptionsMessages
 from tests.conftest import session
 
 fake = Faker()
 
+# Mock de datos esperado
+expected_products = [
+    {
+        "id": 1,
+        "company_id": 1,
+        "created_at": "2024-10-31T21:31:58Z",
+        "description": "Reposición Iphone X",
+        "status": "active",
+        "type": "product",
+        "updated_at": "2024-10-31T21:31:58Z"
+    },
+    {
+        "id": 2,
+        "company_id": 1,
+        "created_at": "2024-10-31T21:31:58Z",
+        "description": "Plan Postpago 100Gb",
+        "status": "active",
+        "type": "service",
+        "updated_at": "2024-10-31T21:31:58Z"
+    }
+]
 
 def test_get_user_session_success(mock_app, mocker):
     with mock_app.app_context(), mock_app.test_request_context():
@@ -141,3 +171,57 @@ def test_delete_user_service(mock_app, session):
         with pytest.raises(ResourceNotFoundException) as exc_info:
             get_user_by_field_service(["id", user["id"]])
         assert str(exc_info.value) == ExceptionsMessages.RESOURCE_NOT_FOUND.value
+
+def test_imports_users_service_existing_user_exception(mocker):
+    
+    csv_data = "bm9tYnJlLHRlbGVmb25vLGVtYWlsLGRuaSxpbXBvcnRhbmNpYQpKdWFuIFBlcmV6LDU1NTEyMzQ1NjcsanVhbi5wZXJlekBleGFtcGxlLmNvbSwxMjM0NTY3OCwyCg=="
+    user_id = 1
+
+    csv_decoded = base64.b64decode(csv_data).decode('utf-8')
+    
+    csv_file = io.StringIO(csv_decoded)
+    csv_reader = csv.reader(csv_file)
+
+    mocker.patch("src.repositories.user_repository.UserRepository.get_by_field", return_value={"company_id": 1})
+    mocker.patch("src.services.user_services.send_request", side_effect=CustomException(ExceptionsMessages.RESOURCE_EXISTS.value))
+
+    with pytest.raises(CustomException) as exc_info:
+        imports_users_service(user_id, csv_reader)
+
+    assert str(exc_info.value) == ExceptionsMessages.RESOURCE_EXISTS.value + " : juan.perez@example.com"
+
+
+def test_create_user_client_service_success(mocker):
+    user_data = {
+        "name": fake.name(),
+        "phone": fake.phone_number(),
+        "company_id": 1,
+        "auth_id": 1,
+        "importance": 2,
+        "dni": "123456789",
+        "channel": "EMAIL"
+    }
+    
+    mock_user_repo = mocker.patch("src.repositories.user_repository.UserRepository.create", 
+                                  return_value=user_data)
+    
+    result = create_user_client_service(user_data)
+    
+    assert result == user_data
+    mock_user_repo.assert_called_once_with(user_data)
+
+def test_get_products_by_user_service(mocker):
+    mock_product_user_repository = mocker.patch('src.repositories.product_user_repository.ProductUserRepository')
+    mock_product_user_repository_instance = MagicMock()
+    mock_product_user_repository.return_value = mock_product_user_repository_instance
+    mock_product_user_repository_instance.get_by_query.return_value = [
+        {"product_id": 1}, 
+        {"product_id": 2}
+    ]
+    mock_product_repository = mocker.patch('src.repositories.product_repository.ProductRepository')
+    mock_product_repository_instance = MagicMock()
+    mock_product_repository.return_value = mock_product_repository_instance
+    mock_product_repository_instance.get_by_query.return_value = expected_products
+
+    # Llamada al servicio
+    response = get_products_by_user_service(1)

@@ -194,7 +194,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-    needs: [build-user, build-auth, build-issues-management]
+    needs: [build-user, build-auth, build-issues-management, build-email-daemon]
     steps:
 
       - uses: actions/checkout@v4
@@ -231,7 +231,12 @@ jobs:
           gcloud config set project basingo-abcall
           gcloud container clusters get-credentials basinglo-abcall-k8s --zone us-central1
 
+      # Eliminar el despliegue anterior
+      - name: Delete previous deployment
+        run: |
+          kubectl delete -f deployment/services --ignore-not-found=true
+
       # Aplicar el archivo de configuración de Kubernetes
       - name: Apply Kubernetes configuration
         run: |
-          kubectl apply -f deployment/
+          kubectl apply -f deployment/services

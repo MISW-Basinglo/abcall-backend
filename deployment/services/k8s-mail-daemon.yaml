@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: mail-daemon
+spec:
+  selector:
+    matchLabels:
+      app: mail-daemon
+  template:
+    metadata:
+      labels:
+        app: mail-daemon
+    spec:
+      serviceAccountName: mail-daemon-sa
+      containers:
+      - name: mail-daemon-container
+        image: us-central1-docker.pkg.dev/basingo-abcall/basinglo-abcall-misw/email-daemon:latest
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        volumeMounts:
+          - name: gcp-key
+            mountPath: /etc/gcp-key
+            readOnly: true
+        env:
+          - name: GMAIL_CREDENTIALS
+            valueFrom:
+              secretKeyRef:
+                name: gmail-credentials
+                key: GMAIL_CREDENTIALS
+          - name: GOOGLE_CLOUD_PROJECT
+            value: "basingo-abcall"
+          - name: PUBSUB_TOPIC
+            value: "email-issues"
+          - name: DAEMON_REQUEST_HEADER_VALUE
+            value: "email-daemon"
+          - name: BACKEND_HOST
+            value: "http://api.abcall.lat"
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/gcp-key/key.json
+      volumes:
+        - name: gcp-key
+          secret:
+            secretName: gcp-key

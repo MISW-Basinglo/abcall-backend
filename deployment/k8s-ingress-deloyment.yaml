@@ -8,10 +8,14 @@ metadata:
   labels:
     name: gateway-ingress
   annotations:
-    kube.io/ingress.class: "gce"
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "abcall-cert"
+    networking.gke.io/https-forwarding-rule: "true"
+    networking.gke.io/redirect-http-to-https: "true"
 spec:
   rules:
-  - http:
+  - host: api.abcall.lat
+    http:
       paths:
       - pathType: Prefix
         path: /auth
@@ -37,7 +41,18 @@ spec:
       - pathType: Prefix
         path: /issues_management
         backend:
+          service:
+            name: issues-management-service
+            port:
+              number: 80
+    # Nueva regla para el frontend en abcall.lat
+  - host: abcall.lat
+    http:
+      paths:
+        - pathType: Prefix
+          path: /
+          backend:
             service:
-                name: issues-management-service
-                port:
-                  number: 80
+              name: angular-service
+              port:
+                number: 80

@@ -21,8 +21,17 @@
   ],
   "users": [
     {
+      "name": "Test Admin",
+      "dni": "000000000",
+      "phone": "3000000000",
+      "channel": "EMAIL",
+      "auth_id": 1,
+      "importance": null,
+      "company_id": ""
+    },
+    {
       "name": "Test End User",
-      "dni": "0000000000",
+      "dni": "11111111",
       "phone": "3000000000",
       "channel": "EMAIL",
       "auth_id": 2,
@@ -30,8 +39,8 @@
       "company_id": "Claro"
     },
     {
-      "name": "User Movistar",
-      "dni": "11111111111",
+      "name": "Client Movistar",
+      "dni": "2222222",
       "phone": "3102456789",
       "channel": "EMAIL",
       "auth_id": 3,
@@ -39,8 +48,8 @@
       "company_id": "Movistar"
     },
     {
-      "name": "User Claro",
-      "dni": "222222222",
+      "name": "Client Claro",
+      "dni": "3333333",
       "phone": "312434567",
       "channel": "EMAIL",
       "auth_id": 4,
@@ -48,13 +57,78 @@
       "company_id": "Claro"
     },
     {
-      "name": "User Tigo",
-      "dni": "333333333",
+      "name": "Client Tigo",
+      "dni": "4444444",
       "phone": "30002456789",
       "channel": "EMAIL",
       "auth_id": 5,
       "importance": null,
       "company_id": "Tigo"
+    },
+    {
+      "name": "User Andres",
+      "dni": "5555555",
+      "phone": "3000000000",
+      "channel": "EMAIL",
+      "auth_id": 6,
+      "importance": 5,
+      "company_id": "Movistar"
+    }
+  ],
+  "products": [
+    {
+      "type": "PRODUCT",
+      "description": "Iphone X",
+      "status": "ACTIVE",
+      "company_id": "Movistar"
+    },
+    {
+      "type": "SERVICE",
+      "description": "Plan Postpago 100Gb",
+      "status": "ACTIVE",
+      "company_id": "Movistar"
+    },
+    {
+      "type": "PRODUCT",
+      "description": "Samsung Galaxy S24",
+      "status": "ACTIVE",
+      "company_id": "Claro"
+    },
+    {
+      "type": "SERVICE",
+      "description": "Plan Postpago 200Gb",
+      "status": "ACTIVE",
+      "company_id": "Claro"
+    },
+    {
+      "type": "PRODUCT",
+      "description": "Huawei P40",
+      "status": "ACTIVE",
+      "company_id": "Tigo"
+    },
+    {
+      "type": "SERVICE",
+      "description": "Plan Postpago 300Gb",
+      "status": "ACTIVE",
+      "company_id": "Tigo"
+    }
+  ],
+  "product_user": [
+    {
+      "id_user": "11111111",
+      "product_id": 1
+    },
+    {
+      "id_user": "11111111",
+      "product_id": 2
+    },
+    {
+      "id_user": "5555555",
+      "product_id": 3
+    },
+    {
+      "id_user": "5555555",
+      "product_id": 4
     }
   ]
 }

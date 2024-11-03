@@ -27,10 +27,13 @@ class BaseRepository(ABC):
             result = func(*args, **kwargs)
             if write:
                 self.session.commit()
+                if result:
+                    self.session.refresh(result)
             return self.get_serializer().dump(result) if self.serializer else result
         except exc.SQLAlchemyError as e:
             exception_cause = format_exception_message(e)
             logger.error(f"Error during transaction: {exception_cause}")
+            raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
         except Exception as e:
             logger.error(f"Error during transaction: {e}")
             raise
@@ -45,7 +48,10 @@ class BaseRepository(ABC):
     def _get_by_field(self, field_name, value):
         if not hasattr(self.model, field_name):
             raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
-        return self.session.query(self.model).filter(getattr(self.model, field_name) == value).first()
+        instance = self.session.query(self.model).filter(getattr(self.model, field_name) == value).first()
+        if not instance:
+            raise ResourceNotFoundException(ExceptionsMessages.RESOURCE_NOT_FOUND.value)
+        return instance
 
     def update(self, instance_id, data):
         return self._transaction(self._update, instance_id, data, write=True)

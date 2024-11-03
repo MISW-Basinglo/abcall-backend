@@ -1,10 +1,12 @@
 from abc import ABC
 
+from flask_jwt_extended import get_jwt_identity
 from sqlalchemy import and_
 from sqlalchemy import exc
 from src.common.enums import ExceptionsMessages
 from src.common.exceptions import InvalidParameterException
 from src.common.exceptions import ResourceNotFoundException
+from src.common.exceptions import UserNotAuthorizedException
 from src.common.logger import logger
 from src.common.utils import format_exception_message
 from src.db import SessionLocal
@@ -51,7 +53,7 @@ class BaseRepository(ABC):
         except exc.SQLAlchemyError as e:
             exception_cause = format_exception_message(e)
             logger.error(f"Error during transaction: {exception_cause}")
-            raise
+            raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
         except Exception as e:
             logger.error(f"Error during transaction: {e}")
             raise
@@ -77,14 +79,19 @@ class BaseRepository(ABC):
     def _get_all(self):
         return self.session.query(self.model).all()
 
-    def update(self, instance_id, data):
-        return self._transaction(self._update, instance_id, data, write=True)
+    def update(self, instance_id, data, validate_self=False):
+        return self._transaction(self._update, instance_id, data, write=True, validate_self=validate_self)
 
-    def _update(self, instance_id, data):
+    def _update(self, instance_id, data, validate_self=False):
         instance = self._get_by_field("id", instance_id)
         if not instance:
             logger.error(f"{self.model.__name__} not found")
             raise ResourceNotFoundException(ExceptionsMessages.RESOURCE_NOT_FOUND.value)
+        if validate_self:
+            auth_id = get_jwt_identity()
+            if getattr(instance, "auth_id", None) != auth_id:
+                logger.error(f"User {auth_id} is not authorized to update this {self.model.__name__}")
+                raise UserNotAuthorizedException(ExceptionsMessages.USER_NOT_AUTHORIZED.value)
         for key, value in data.items():
             setattr(instance, key, value)
         return instance

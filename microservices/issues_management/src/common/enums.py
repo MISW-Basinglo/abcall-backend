@@ -63,3 +63,10 @@ class Permissions(BaseEnum):
     VIEW_ISSUE = "view_issue"
     EDIT_ISSUE = "edit_issue"
     DELETE_ISSUE = "delete_issue"
+
+
+class BasicRoles(BaseEnum):
+    ADMIN = "admin"
+    USER = "user"
+    AGENT = "agent"
+    CLIENT = "client"

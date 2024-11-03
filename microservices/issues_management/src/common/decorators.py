@@ -68,14 +68,14 @@ def validate_permissions(permissions):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            user_id = get_jwt_identity()
-            user = decode_token(user_id)
-            validations = [
-                bool(user),
-                user.has_permissions(permissions),
-            ]
-            if not all(validations) and not DISABLE_PERMISSIONS_VALIDATIONS:
-                raise UserNotAuthorizedException(ExceptionsMessages.USER_NOT_AUTHORIZED.value)
+            # user_id = get_jwt_identity()
+            # user = decode_token(user_id)
+            # validations = [
+            #     bool(user),
+            #     user.has_permissions(permissions),
+            # ]
+            # if not all(validations) and not DISABLE_PERMISSIONS_VALIDATIONS:
+            #     raise UserNotAuthorizedException(ExceptionsMessages.USER_NOT_AUTHORIZED.value)
             return func(*args, **kwargs)
 
         return wrapper

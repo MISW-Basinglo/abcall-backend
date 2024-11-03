@@ -19,6 +19,7 @@ from src.repositories.auth_repository import UserAuthRepository
 from src.serializers.serializers import AuditAuthUserSerializer
 from src.serializers.serializers import GenericResponseSerializer
 from src.serializers.serializers import TokenSerializer
+from src.serializers.serializers import UserAuthUpdateSerializer
 from src.serializers.serializers import UserCreateSerializer
 from src.serializers.serializers import UserLoginSerializer
 from src.serializers.serializers import UserRetrieveSerializer
@@ -80,6 +81,24 @@ def create_user_auth(data):
     return response
 
 
+def update_user_auth(auth_id, data):
+    data = UserAuthUpdateSerializer().load(data)
+    auth_repository = UserAuthRepository()
+    auth_repository.set_serializer(UserRetrieveSerializer)
+    user_auth = auth_repository.update(auth_id, data)
+    response_entity = GenericResponseEntity(data=user_auth)
+    return GenericResponseSerializer().dump(response_entity)
+
+
 def delete_auth_user_service(auth_id: int):
     auth_repository = UserAuthRepository()
     auth_repository.delete(auth_id)
+
+
+def get_auth_user_by_field_service(params: list):
+    auth_repository = UserAuthRepository()
+    auth_repository.set_serializer(UserRetrieveSerializer)
+    user = auth_repository.get_by_field(*params)
+    response_entity = GenericResponseEntity(data=user)
+    response = GenericResponseSerializer().dump(response_entity)
+    return response

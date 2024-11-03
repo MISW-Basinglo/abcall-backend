@@ -1,5 +1,4 @@
 from marshmallow import fields
-from src.common.enums import UserAuthStatus
 from src.serializers.base import BaseSerializer
 
 
@@ -12,12 +11,22 @@ class UserRetrieveSerializer(BaseSerializer):
     id = fields.Integer()
     email = fields.Email(required=True)
     status = fields.String(required=True)
+    role = fields.Method("get_role")
+
+    def get_role(self, obj):
+        return obj.role.name if obj.role else None
 
 
 class UserCreateSerializer(BaseSerializer):
     email = fields.Email(required=True)
     password = fields.String(required=False, allow_none=True)
     status = fields.String(required=True)
+    role = fields.String(required=False, allow_none=True)
+
+
+class UserAuthUpdateSerializer(BaseSerializer):
+    email = fields.Email(required=False)
+    status = fields.String(required=False)
 
 
 class TokenSerializer(BaseSerializer):

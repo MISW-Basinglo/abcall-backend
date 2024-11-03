@@ -25,5 +25,5 @@ class AuthUser:
     def has_permissions(self, permissions: list[str]) -> bool:
         return any(self.has_permission(permission) for permission in permissions)
 
-    def has_role(self, role: str) -> bool:
-        return role == self.role
+    def has_role(self, role: list) -> bool:
+        return self.role in role

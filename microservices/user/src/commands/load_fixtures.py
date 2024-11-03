@@ -5,6 +5,8 @@ from src.common.logger import logger
 from src.db import SessionLocal
 from src.models.company import Company
 from src.models.user import User
+from src.models.product import Product
+from src.models.product_user import ProductUser
 
 FIXTURES_FILE_PATH = "src/fixtures/fixtures.json"  # Ruta de tu archivo JSON
 
@@ -47,6 +49,37 @@ def register_commands(app):
                 )
                 session.add(user)
                 logger.info(f"Added user: {user_data['name']}")
+
+        session.flush()
+
+        # Cargar Productos
+        for product_data in data["products"]:
+            product = session.query(Product).filter_by(description=product_data["description"]).first()
+            company = session.query(Company).filter_by(name=product_data["company_id"]).first()
+            if not product:
+                product = Product(
+                    type=product_data["type"],
+                    description=product_data["description"],
+                    status=product_data["status"],
+                    company_id=company.id if company else None,
+                )
+                session.add(product)
+                logger.info(f"Added product: {product_data['description']}")
+        
+        session.flush()
+
+        # Cargar Relacion Producto Usuario
+        for product_users in data["product_user"]:
+            product_id = product_users['product_id']
+            product = session.query(Product).filter_by(id=product_id).first()
+            user = session.query(User).filter_by(dni=product_users["id_user"]).first()
+        
+            product_user = ProductUser(
+                id_user=user.id if user else None,
+                product_id=product.id if product else None,
+            )
+            session.add(product_user)
+            logger.info(f"Added product_user: {product_users['id_user']}")
 
         # Confirmar los cambios
         session.commit()

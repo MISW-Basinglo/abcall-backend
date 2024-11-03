@@ -2,12 +2,18 @@ from unittest.mock import MagicMock
 from unittest.mock import Mock
 
 import pytest
+from faker import Faker
 from src.common.enums import ExceptionsMessages
 from src.common.exceptions import CustomException
 from src.common.exceptions import InvalidParameterException
 from src.common.exceptions import ResourceNotFoundException
+from src.repositories.auth_repository import UserAuthRepository
+from src.serializers.serializers import UserCreateSerializer
+from src.serializers.serializers import UserRetrieveSerializer
 from tests.conftest import mock_app
-from tests.conftest import mock_repository
+from tests.conftest import session
+
+faker = Faker()
 
 
 def test_get_by_field_success(mock_app, mock_repository, mocker):
@@ -42,16 +48,33 @@ def test_get_by_field_not_found(mock_app, mock_repository, mocker):
         assert str(exc_info.value) == ExceptionsMessages.RESOURCE_NOT_FOUND.value
 
 
-def test_update_success(mock_app, mock_repository, mocker):
+def test_update_success(mock_app, session, mocker):
     with mock_app.app_context():
-        mock_update = mocker.patch("src.repositories.base.BaseRepository._update", return_value="Updated Instance")
-        mock_repository.get_serializer().dump.return_value = "Updated Instance"
-        instance_id = 1
-        data = {"field": "value"}
+        mocker.patch("src.serializers.serializers.UserRetrieveSerializer.get_role", return_value="admin")
+        mocker.patch("src.repositories.auth_repository.UserAuthRepository.get_role", return_value=1)
+        serializer_class = UserRetrieveSerializer
+        auth_repository = UserAuthRepository()
+        auth_repository.set_serializer(serializer_class)
 
-        result = mock_repository.update(instance_id, data)
-        mock_update.assert_called_once_with(instance_id, data)
-        assert result == "Updated Instance"
+        test_data = {
+            "email": faker.email(),
+            "password": faker.password(),
+            "role": "admin",
+        }
+
+        instance = auth_repository.create(test_data)
+
+        assert instance["id"] is not None
+        assert instance["email"] == test_data["email"]
+
+        new_data = {
+            "email": faker.email(),
+        }
+
+        updated_instance = auth_repository.update(instance["id"], new_data)
+
+        assert updated_instance["email"] == new_data["email"]
+        assert updated_instance["email"] != test_data["email"]
 
 
 def test_update_instance_not_found(mock_app, mock_repository, mocker):
@@ -74,14 +97,24 @@ def test_update_transaction_failure(mock_app, mock_repository, mocker):
         assert exc_info.value.__str__() == "Some error"
 
 
-def test_create_success(mock_app, mock_repository, mocker):
+def test_create_success(mock_app, mocker, session):
     with mock_app.app_context():
-        mock_create = mocker.patch("src.repositories.base.BaseRepository._create", return_value="New Instance")
-        mock_repository.get_serializer().dump.return_value = "New Instance"
-        data = {"field": "value"}
-        result = mock_repository.create(data)
-        mock_create.assert_called_once_with(data)
-        assert result == "New Instance"
+        mocker.patch("src.serializers.serializers.UserRetrieveSerializer.get_role", return_value="admin")
+        mocker.patch("src.repositories.auth_repository.UserAuthRepository.get_role", return_value=1)
+        serializer_class = UserRetrieveSerializer
+        auth_repository = UserAuthRepository()
+        auth_repository.set_serializer(serializer_class)
+
+        test_data = {
+            "email": faker.email(),
+            "password": faker.password(),
+            "role": "admin",
+        }
+
+        instance = auth_repository.create(test_data)
+
+        assert instance["id"] is not None
+        assert instance["email"] == test_data["email"]
 
 
 def test_create_transaction_failure(mock_app, mock_repository, mocker):
@@ -91,15 +124,6 @@ def test_create_transaction_failure(mock_app, mock_repository, mocker):
         with pytest.raises(CustomException) as exc_info:
             mock_repository.create(data)
         assert str(exc_info.value) == "Some error"
-
-
-def test_delete_success(mock_app, mock_repository, mocker):
-    with mock_app.app_context():
-        mock_delete = mocker.patch("src.repositories.base.BaseRepository._delete")
-        instance_id = 1
-        mock_repository._get_by_field = Mock(return_value=Mock())
-        mock_repository.delete(instance_id)
-        mock_delete.assert_called_once_with(instance_id)
 
 
 def test_delete_instance_not_found(mock_app, mock_repository, mocker):

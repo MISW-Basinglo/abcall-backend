@@ -8,7 +8,7 @@
       "source": "WEB",
       "created_at": "2024-10-15T08:15:00",
       "updated_at": null,
-      "user_id": 1,
+      "user_id": 2,
       "company_id": 3,
       "solution": null
     },
@@ -32,7 +32,7 @@
       "source": "CHATBOT",
       "created_at": "2024-09-25T10:20:00",
       "updated_at": "2024-09-25T11:05:00",
-      "user_id": 4,
+      "user_id": 6,
       "company_id": 2,
       "solution": "Password reset instructions were provided, and the account was successfully recovered."
     },
@@ -44,8 +44,8 @@
       "source": "APP_MOBILE",
       "created_at": "2024-10-05T13:45:00",
       "updated_at": "2024-10-06T16:00:00",
-      "user_id": 3,
-      "company_id": 5,
+      "user_id": 2,
+      "company_id": 3,
       "solution": null
     },
     {
@@ -56,7 +56,7 @@
       "source": "EMAIL",
       "created_at": "2024-08-20T09:30:00",
       "updated_at": "2024-09-15T14:00:00",
-      "user_id": 5,
+      "user_id": 6,
       "company_id": 1,
       "solution": "Acknowledged praise. Minor glitches have been noted for review."
     },
@@ -80,8 +80,8 @@
       "source": "APP_MOBILE",
       "created_at": "2024-10-16T10:45:00",
       "updated_at": null,
-      "user_id": 4,
-      "company_id": 4,
+      "user_id": 6,
+      "company_id": 3,
       "solution": null
     },
     {
@@ -92,7 +92,7 @@
       "source": "APP_MOBILE",
       "created_at": "2024-09-20T14:10:00",
       "updated_at": "2024-09-22T09:35:00",
-      "user_id": 3,
+      "user_id": 2,
       "company_id": 2,
       "solution": "Push notification service was restarted, and issue was resolved."
     },
@@ -104,7 +104,7 @@
       "source": "CHATBOT",
       "created_at": "2024-10-03T17:30:00",
       "updated_at": "2024-10-04T09:00:00",
-      "user_id": 1,
+      "user_id": 2,
       "company_id": 1,
       "solution": "Provided user with a step-by-step guide to update profile picture."
     },
@@ -116,8 +116,8 @@
       "source": "EMAIL",
       "created_at": "2024-10-16T09:25:00",
       "updated_at": null,
-      "user_id": 5,
-      "company_id": 4,
+      "user_id": 6,
+      "company_id": 2,
       "solution": null
     },
     {
@@ -128,7 +128,7 @@
       "source": "EMAIL",
       "created_at": "2024-10-17T10:00:00",
       "updated_at": null,
-      "user_id": 3,
+      "user_id": 2,
       "company_id": 1,
       "solution": null
     },
@@ -140,7 +140,7 @@
       "source": "CALL",
       "created_at": "2024-10-16T12:15:00",
       "updated_at": "2024-10-17T09:00:00",
-      "user_id": 4,
+      "user_id": 6,
       "company_id": 2,
       "solution": null
     },
@@ -152,7 +152,7 @@
       "source": "CHATBOT",
       "created_at": "2024-09-18T15:30:00",
       "updated_at": "2024-09-19T11:00:00",
-      "user_id": 5,
+      "user_id": 6,
       "company_id": 3,
       "solution": "Suggestion forwarded to the product team for review."
     },
@@ -165,7 +165,7 @@
       "created_at": "2024-10-15T14:00:00",
       "updated_at": null,
       "user_id": 2,
-      "company_id": 4,
+      "company_id": 3,
       "solution": null
     },
     {
@@ -176,7 +176,7 @@
       "source": "EMAIL",
       "created_at": "2024-10-10T10:05:00",
       "updated_at": "2024-10-11T08:30:00",
-      "user_id": 1,
+      "user_id": 2,
       "company_id": 2,
       "solution": "Acknowledged positive feedback and forwarded to the product team."
     },
@@ -188,8 +188,8 @@
       "source": "CALL",
       "created_at": "2024-10-14T09:00:00",
       "updated_at": "2024-10-15T12:45:00",
-      "user_id": 3,
-      "company_id": 5,
+      "user_id": 2,
+      "company_id": 1,
       "solution": null
     },
     {
@@ -200,7 +200,7 @@
       "source": "APP_MOBILE",
       "created_at": "2024-10-12T16:20:00",
       "updated_at": null,
-      "user_id": 4,
+      "user_id": 6,
       "company_id": 1,
       "solution": null
     },
@@ -212,7 +212,7 @@
       "source": "CHATBOT",
       "created_at": "2024-09-22T11:15:00",
       "updated_at": "2024-09-23T13:45:00",
-      "user_id": 5,
+      "user_id": 6,
       "company_id": 3,
       "solution": "Request forwarded to the development team for review."
     },
@@ -225,7 +225,7 @@
       "created_at": "2024-10-15T10:25:00",
       "updated_at": null,
       "user_id": 2,
-      "company_id": 5,
+      "company_id": 2,
       "solution": null
     },
     {
@@ -236,7 +236,7 @@
       "source": "CALL",
       "created_at": "2024-09-28T13:00:00",
       "updated_at": "2024-09-29T10:30:00",
-      "user_id": 1,
+      "user_id": 2,
       "company_id": 2,
       "solution": "Positive feedback shared with the customer service team."
     }

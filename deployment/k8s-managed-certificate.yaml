@@ -1,0 +1,9 @@
+# managed-certificate.yaml
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: abcall-cert
+spec:
+  domains:
+    - api.abcall.lat
+    - abcall.lat

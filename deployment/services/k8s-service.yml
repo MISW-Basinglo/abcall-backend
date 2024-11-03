@@ -44,8 +44,6 @@ spec:
               value: "postgres"
             - name: DATABASE_NAME
               value: "abcall_db"
-            - name: FLASK_DEBUG
-              value: "true"
             - name: JWT_SECRET_KEY
               value: "jwt-secret-key"
             - name: DAEMON_REQUEST_HEADER_VALUE
@@ -109,12 +107,10 @@ spec:
               value: "postgres"
             - name: DATABASE_NAME
               value: "abcall_db"
-            - name: FLASK_DEBUG
-              value: "true"
             - name: JWT_SECRET_KEY
               value: "jwt-secret-key"
             - name: BACKEND_HOST
-              value: "http://api.abcall.lat"
+              value: "https://api.abcall.lat"
             - name: USER_SERVICE_PATH
               value: "/auth"
             - name: DAEMON_REQUEST_HEADER_VALUE
@@ -178,10 +174,8 @@ spec:
               value: "postgres"
             - name: DATABASE_NAME
               value: "abcall_db"
-            - name: FLASK_DEBUG
-              value: "true"
             - name: BACKEND_HOST
-              value: "http://api.abcall.lat"
+              value: "https://api.abcall.lat"
             - name: USER_SERVICE_PATH
               value: "/user"
             - name: JWT_SECRET_KEY

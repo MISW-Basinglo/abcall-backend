@@ -7,6 +7,11 @@ on:
       - main
     paths-ignore:
       - 'README.md'
+  push:
+    branches:
+      - release/*
+    paths-ignore:
+      - 'README.md'
 
 jobs:
   build-auth:
@@ -232,9 +237,9 @@ jobs:
           gcloud container clusters get-credentials basinglo-abcall-k8s --zone us-central1
 
       # Eliminar el despliegue anterior
-      - name: Delete previous deployment
-        run: |
-          kubectl delete -f deployment/services --ignore-not-found=true
+      #- name: Delete previous deployment
+      #  run: |
+      #    kubectl delete -f deployment/services --ignore-not-found=true
 
       # Aplicar el archivo de configuración de Kubernetes
       - name: Apply Kubernetes configuration

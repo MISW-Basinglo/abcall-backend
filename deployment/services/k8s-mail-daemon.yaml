@@ -39,7 +39,7 @@ spec:
           - name: DAEMON_REQUEST_HEADER_VALUE
             value: "email-daemon"
           - name: BACKEND_HOST
-            value: "http://api.abcall.lat"
+            value: "https://api.abcall.lat"
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /etc/gcp-key/key.json
       volumes:

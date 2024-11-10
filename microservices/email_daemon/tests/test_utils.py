@@ -1,10 +1,14 @@
+from datetime import datetime
 from unittest.mock import Mock
+from unittest.mock import patch
 
 from pytest_mock import mocker  # noqa
 from src.common.constants import BACKEND_HOST
+from src.common.utils import add_email_to_sent_list
 from src.common.utils import get_auth_user_data
 from src.common.utils import get_url
 from src.common.utils import get_user_data
+from src.common.utils import is_message_sent
 from src.common.utils import send_request
 from src.models.entities import AuthUser
 from src.models.entities import User
@@ -60,3 +64,14 @@ def test_get_auth_user_data(mocker):
     assert result.id == 1
     assert result.role == "admin"
     assert result.status == "ACTIVE"
+
+
+def test_is_message_sent():
+    for i in range(1, 4):
+        add_email_to_sent_list(i)
+
+    assert is_message_sent(0) is False
+    assert is_message_sent(1) is True
+    assert is_message_sent(2) is True
+    assert is_message_sent(3) is True
+    assert is_message_sent(4) is False

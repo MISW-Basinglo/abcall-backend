@@ -12,6 +12,7 @@ from src.services import get_all_issues_service
 from src.services import get_issue_call_service
 from src.services import get_issue_open_service
 from src.services import get_issue_service
+from src.services import get_issues_by_user_service
 from src.services import get_user_info
 from tests.conftest import mock_app
 from tests.conftest import session
@@ -138,6 +139,37 @@ def test_get_issue_open_service(mock_app, mocker):
         mock_repo.assert_called_once_with({"user_id": ("eq", user_id), "status": ("eq", "OPEN")})
 
         for expected, fetched in zip(open_issues, response):
+            assert expected["description"] == fetched["description"]
+            assert expected["source"] == fetched["source"]
+            assert expected["type"] == fetched["type"]
+
+
+def test_get_issues_by_user_service(mock_app, mocker):
+    with mock_app.app_context(), mock_app.test_request_context():
+        user_id = 1
+        issues = [
+            {
+                "id": i,
+                "description": fake.text(),
+                "source": choice([enum.value for enum in IssueSource]),
+                "type": choice([enum.value for enum in IssueType]),
+                "user_id": user_id,
+                "company_id": randint(1, 100),
+                "status": "OPEN",
+                "created_at": fake.date_time(),
+                "updated_at": fake.date_time(),
+                "solution": None,
+            }
+            for i in range(3)
+        ]
+        mock_repo = mocker.patch("src.repositories.issues_repository.IssuesManagementRepository.get_by_query", return_value=issues)
+
+        response = get_issues_by_user_service(user_id)["data"]
+
+        assert len(response) == len(issues)
+        mock_repo.assert_called_once_with({"user_id": ("eq", user_id)})
+
+        for expected, fetched in zip(issues, response):
             assert expected["description"] == fetched["description"]
             assert expected["source"] == fetched["source"]
             assert expected["type"] == fetched["type"]

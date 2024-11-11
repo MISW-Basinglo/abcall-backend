@@ -6,8 +6,11 @@ from src.common.enums import ExceptionsMessages
 from src.common.exceptions import CustomException
 from src.common.exceptions import InvalidParameterException
 from src.common.exceptions import ResourceNotFoundException
+from src.repositories.issues_repository import IssuesManagementRepository
+from src.serializers.serializers import IssueListSerializer
 from tests.conftest import mock_app
 from tests.conftest import mock_repository
+from tests.conftest import session
 
 
 def test_get_by_field_success(mock_app, mock_repository, mocker):
@@ -123,10 +126,20 @@ def test_get_serializer(mock_app, mock_repository):
         assert mock_repository.get_serializer() is not None
 
 
-def test_get_by_query(mock_app, mock_repository, mocker):
+def test_get_by_query(mock_app, session):
     with mock_app.app_context():
-        mock_get_by_query = mocker.patch("src.repositories.base.BaseRepository._build_dynamic_query", return_value=MagicMock())
-        filter_dict = {"field": ("eq", "value")}
-        result = mock_repository.get_by_query(filter_dict)
-        mock_get_by_query.assert_called_once_with(filter_dict)
-        assert result is not None
+        issue_repository = IssuesManagementRepository(session=session)
+        issue_repository.create({"description": "test", "source": "CHATBOT", "type": "REQUEST", "user_id": 1})
+        issue_repository.create({"description": "test 2", "source": "CALL", "type": "REQUEST", "user_id": 1})
+        issue_repository.create({"description": "test 3", "source": "EMAIL", "type": "REQUEST", "user_id": 2})
+        issue_repository.session.close()
+
+        issue_repository = IssuesManagementRepository(session=session)
+        issue_repository.set_serializer(IssueListSerializer)
+        filter_dict = {"user_id": ("eq", 1)}
+        issues = issue_repository.get_by_query(filter_dict)
+        assert len(issues) == 2
+
+        filter_dict = {"user_id": ("eq", 2)}
+        issues = issue_repository.get_by_query(filter_dict)
+        assert len(issues) == 1

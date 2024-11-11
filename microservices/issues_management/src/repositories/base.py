@@ -14,8 +14,8 @@ class BaseRepository(ABC):
     model = None
     serializer = None
 
-    def __init__(self):
-        self.session = SessionLocal()
+    def __init__(self, session=None):
+        self.session = session or SessionLocal()
 
         self.operator_map = {
             "eq": lambda field, value: field == value,

@@ -15,6 +15,7 @@ from src.services import get_all_issues_service
 from src.services import get_issue_call_service
 from src.services import get_issue_open_service
 from src.services import get_issue_service
+from src.services import get_issues_by_user_service
 
 blueprint = Blueprint("issues_management_api", __name__, url_prefix="/issues_management")
 
@@ -24,6 +25,9 @@ blueprint = Blueprint("issues_management_api", __name__, url_prefix="/issues_man
 @jwt_required()
 # @validate_permissions([Permissions.VIEW_ISSUE.value])
 def get_issues():
+    query_params = request.args.to_dict()
+    if "user_id" in query_params:
+        return get_issues_by_user_service(query_params["user_id"]), HTTPStatus.OK
     return get_all_issues_service(), HTTPStatus.OK
 
 

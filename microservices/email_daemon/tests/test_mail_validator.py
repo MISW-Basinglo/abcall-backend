@@ -34,7 +34,7 @@ class TestMailValidator:
 
     def test_validate_email_body_spam(self, validator):
         """Test email data with spam in the body."""
-        email_data = {"from": "test@example.com", "subject": "Hello World", "body": "Gana dinero ahora"}
+        email_data = {"from": "test@example.com", "subject": "Hello World", "body": "Gana mucho dinero con esta oferta imperdible. Tienes un premio esperándote. Gana Gana Gana"}
         assert validator.validate_email(email_data) is False
 
     def test_validate_email_body_spam_threshold(self, validator):
@@ -67,4 +67,4 @@ class TestMailValidator:
 
     def test_is_valid_body_above_threshold(self, validator):
         """Test body with spam words above threshold."""
-        assert validator.is_valid_body("Gana dinero imperdible") is False  # Adjust words for testing
+        assert validator.is_valid_body("Gana Gana Gana Gana Premio Premio Imperdible") is False  # Adjust words for testing

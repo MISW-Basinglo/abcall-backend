@@ -75,6 +75,7 @@ class TestEmailDaemon:
     def test_is_valid_email(self, setup_email_daemon, auth_user):
         with patch("src.daemon.get_auth_user_data", return_value=auth_user):
             email_data = {"from": auth_user.email, "subject": "Fake test subject", "body": "Fake body text"}
+            auth_user.status = "ACTIVE"
             is_valid, output_user = setup_email_daemon.is_valid_email(email_data)
             assert is_valid
             assert output_user == auth_user

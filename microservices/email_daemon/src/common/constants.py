@@ -9,3 +9,4 @@ GMAIL_CREDENTIALS = os.getenv("GMAIL_CREDENTIALS")
 POLL_TIMEOUT = os.getenv("POLL_TIMEOUT", 5)
 DAEMON_REQUEST_HEADER_VALUE = os.getenv("DAEMON_REQUEST_HEADER_VALUE", "email-daemon")
 BACKEND_HOST = os.getenv("BACKEND_HOST", "http://localhost")
+MAIL_GAP = os.getenv("MAIL_GAP", 60 * 5)  # 5 minutes

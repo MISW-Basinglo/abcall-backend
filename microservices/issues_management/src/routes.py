@@ -11,9 +11,11 @@ from src.common.exceptions import InvalidParameterException
 from src.common.logger import logger
 from src.services import create_issue_service
 from src.services import create_issue_webhook_service
+from src.services import get_aggregated_issue_data
 from src.services import get_all_issues_service
 from src.services import get_issue_call_service
 from src.services import get_issue_open_service
+from src.services import get_issue_response_time_service
 from src.services import get_issue_service
 from src.services import get_issues_by_user_service
 
@@ -88,6 +90,20 @@ def create_issue_webhook():
         raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
 
     return create_issue_webhook_service(issue_data), HTTPStatus.CREATED
+
+
+@blueprint.route("/<int:company_id>/times", methods=["GET"])
+@handle_exceptions
+@jwt_required()
+def get_issue_response_time(company_id):
+    return get_issue_response_time_service(company_id=company_id), HTTPStatus.OK
+
+
+@blueprint.route("/<int:company_id>/<string:aggregation_field>", methods=["GET"])
+@handle_exceptions
+@jwt_required()
+def get_field_stats(company_id, aggregation_field):
+    return get_aggregated_issue_data(company_id, aggregation_field), HTTPStatus.OK
 
 
 @blueprint.route("/health", methods=["GET"])

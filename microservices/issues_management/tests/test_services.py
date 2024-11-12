@@ -8,6 +8,7 @@ from src.common.enums import IssueSource
 from src.common.enums import IssueType
 from src.services import create_issue_service
 from src.services import create_issue_webhook_service
+from src.services import get_aggregated_issue_data
 from src.services import get_all_issues_service
 from src.services import get_issue_call_service
 from src.services import get_issue_open_service
@@ -229,3 +230,63 @@ def test_get_issue_call_service(mock_app, mocker):
             assert expected["description"] == fetched["description"]
             assert expected["source"] == fetched["source"]
             assert expected["type"] == fetched["type"]
+
+
+def test_get_aggregated_issue_data(mock_app, mocker):
+    with mock_app.app_context(), mock_app.test_request_context():
+        user_id = 1
+        company_id = 1
+        issues = [
+            {
+                "id": i,
+                "description": fake.text(),
+                "source": choice([enum.value for enum in IssueSource]),
+                "type": choice([enum.value for enum in IssueType]),
+                "user_id": user_id,
+                "company_id": 1,
+                "status": "OPEN",
+                "created_at": fake.date_time(),
+                "updated_at": fake.date_time(),
+                "solution": None,
+            }
+            for i in range(3)
+        ]
+
+        issues += [
+            {
+                "id": i,
+                "description": fake.text(),
+                "source": choice([enum.value for enum in IssueSource]),
+                "type": choice([enum.value for enum in IssueType]),
+                "user_id": user_id,
+                "company_id": 1,
+                "status": "CLOSED",
+                "created_at": fake.date_time(),
+                "updated_at": fake.date_time(),
+                "solution": None,
+            }
+            for i in range(2)
+        ]
+
+        issues += [
+            {
+                "id": i,
+                "description": fake.text(),
+                "source": choice([enum.value for enum in IssueSource]),
+                "type": choice([enum.value for enum in IssueType]),
+                "user_id": user_id,
+                "company_id": 1,
+                "status": "SCALED",
+                "created_at": fake.date_time(),
+                "updated_at": fake.date_time(),
+                "solution": None,
+            }
+            for i in range(5)
+        ]
+
+        mock_repo = mocker.patch("src.repositories.issues_repository.IssuesManagementRepository.get_by_query", return_value=issues)
+
+        response = get_aggregated_issue_data(company_id, "status")["data"]
+
+        assert response == {"OPEN": 3, "CLOSED": 2, "SCALED": 5}
+        mock_repo.assert_called_once_with({"company_id": ("eq", company_id)})

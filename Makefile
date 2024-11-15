@@ -57,6 +57,10 @@ run_issues:
 run_email_daemon:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up email_daemon
 
+.PHONY: run_ai
+run_ai:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up ai
+
 # ====================================================================================
 # T E S T I N G  C O M M A N D S
 

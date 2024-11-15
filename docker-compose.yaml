@@ -110,3 +110,21 @@ services:
         condition: service_started
       issues_management:
         condition: service_started
+
+  ai:
+    build:
+      context: ./microservices/ai
+      dockerfile: Dockerfile
+    container_name: ai_abcall
+    networks:
+      - app-network
+    env_file:
+      - "microservices/ai/.env"
+    labels:
+      - "traefik.http.routers.ai.rule=PathPrefix(`/ai`)"
+      - "traefik.http.services.ai.loadbalancer.server.port=8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      issues_management:
+        condition: service_started

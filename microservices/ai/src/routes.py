@@ -18,12 +18,11 @@ def generative():
     return get_generative_data(data), HTTPStatus.OK
 
 
-@blueprint.route("/predictive", methods=["POST"])
+@blueprint.route("/predictive/<int:company_id>", methods=["GET"])
 @handle_exceptions
 @jwt_required()
-def predictive():
-    data = request.get_json()
-    return get_predictive_data(data), HTTPStatus.OK
+def predictive(company_id: int):
+    return get_predictive_data(company_id), HTTPStatus.OK
 
 
 @blueprint.route("/health", methods=["GET"])

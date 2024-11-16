@@ -20,11 +20,11 @@ def get_generative_data(data):
     return GenericResponseSerializer().dump(response_entity)
 
 
-def get_predictive_data(data):
-    incident_id = data.pop("incident_id")
+def get_predictive_data(company_id: int):
+    data = {}
+    data["company_id"] = company_id
     url = get_url(path_name="issues", params=data)
     data = send_request("GET", url)
-    data["incident_id"] = incident_id
     response = predictive_chat_session.send_message(json.dumps(data))
     response_entity = AIResponse(text=response.text)
     return GenericResponseSerializer().dump(response_entity)

@@ -17,10 +17,11 @@ class GeminiAI(BaseAI):
     """
 
     BASE_PREDICTIVE_INSTRUCTION = """
-        Eres un experto en análisis de datos y predicción de tendencias.
-        Tu tarea es con base a una entrada de todos los incidentes registrados en el sistema, y con un identificador único llamado "incident_id",
-        revisas incidentes similares y sugieres tres alternativas de solución al id del incidente enviado.
-        Si el id del incidente no se encuentra en el sistema, debes indicar que no se encontró información.
+        Actúa como un experto en análisis de incidentes y predicción de problemas. 
+        Con base en una lista de descripciones de incidencias y sus respectivas fechas, identifica patrones y genera 3 posibles predicciones de futuras incidencias. 
+        Para cada predicción, incluye una breve descripción del posible incidente, la razón por la que podría ocurrir basándote en las tendencias observadas, y un análisis de su impacto potencial. 
+        La respuesta debe ser clara, precisa y profesional, enfocándose en las causas más probables.
+        No hace falta especificar usuario por usuario. La idea es que sea a nivel general la predicción. Dando detalles de la cantidad de usuarios han reportado x incidencia por ejemplo.
     """
 
     def __init__(self, model_name="gemini-1.5-pro", kind="generative", **kwargs):

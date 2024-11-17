@@ -1,5 +1,5 @@
 # .coveragerc
 [run]
 branch = True
-source = auth
-omit = */tests/*, */__init__.py, *fixtures.py
+source = ai
+omit = */tests/*, */__init__.py, *fixtures.py, */src/common/*

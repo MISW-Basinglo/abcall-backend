@@ -18,6 +18,7 @@ from src.services import get_issue_open_service
 from src.services import get_issue_response_time_service
 from src.services import get_issue_service
 from src.services import get_issues_by_user_service
+from src.services import update_issue_service
 
 blueprint = Blueprint("issues_management_api", __name__, url_prefix="/issues_management")
 
@@ -38,6 +39,14 @@ def get_issues():
 @jwt_required()
 def get_issue(issue_id: int):
     return get_issue_service(issue_id), HTTPStatus.OK
+
+
+@blueprint.route("/<int:issue_id>", methods=["PUT", "PATCH"])
+@handle_exceptions
+@jwt_required()
+def update_issue(issue_id: int):
+    update_issue_data = request.get_json()
+    return update_issue_service(issue_id, update_issue_data), HTTPStatus.OK
 
 
 @blueprint.route("/open/<int:user_id>", methods=["GET"])

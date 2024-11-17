@@ -14,6 +14,7 @@ from src.serializers.serializers import GenericResponseListSerializer
 from src.serializers.serializers import GenericResponseSerializer
 from src.serializers.serializers import IssueCreateSerializer
 from src.serializers.serializers import IssueListSerializer
+from src.serializers.serializers import IssueUpdateSerializer
 from src.serializers.serializers import IssueWebhookCreateSerializer
 from src.serializers.serializers import UserEntitySerializer
 from src.serializers.statistics_serializers import IssueTimeStatisticsSerializer
@@ -140,4 +141,14 @@ def get_aggregated_issue_data(company_id, aggregation_field):
     response_entity = GenericResponseEntity(data=aggregation_count)
     response = GenericResponseSerializer().dump(response_entity)
 
+    return response
+
+
+def update_issue_service(issue_id, data):
+    data = IssueUpdateSerializer().load(data)
+    issue_repository = IssuesManagementRepository()
+    issue_repository.set_serializer(serializer_class)
+    issue = issue_repository.update(issue_id, data)
+    response_entity = GenericResponseEntity(data=issue)
+    response = GenericResponseSerializer().dump(response_entity)
     return response

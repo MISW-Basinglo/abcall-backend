@@ -6,6 +6,8 @@ from faker import Faker
 from pytest_mock import mocker  # noqa
 from src.common.enums import IssueSource
 from src.common.enums import IssueType
+from src.repositories.issues_repository import IssuesManagementRepository
+from src.serializers.serializers import IssueListSerializer
 from src.services import create_issue_service
 from src.services import create_issue_webhook_service
 from src.services import get_aggregated_issue_data
@@ -15,6 +17,7 @@ from src.services import get_issue_open_service
 from src.services import get_issue_service
 from src.services import get_issues_by_user_service
 from src.services import get_user_info
+from src.services import update_issue_service
 from tests.conftest import mock_app
 from tests.conftest import session
 
@@ -199,6 +202,30 @@ def test_get_issue_service(mock_app, mocker):
         assert response["source"] == issue["source"]
         assert response["type"] == issue["type"]
         mock_repo.assert_called_once_with("id", issue_id)
+
+
+def test_update_issue_service(mock_app, mocker, session):
+    with mock_app.app_context(), mock_app.test_request_context():
+        issue_repository = IssuesManagementRepository(session=session)
+        issue_repository.set_serializer(IssueListSerializer)
+
+        sample_issue = {
+            "type": choice([issue_type.value for issue_type in IssueType]),
+            "description": fake.text(),
+            "source": choice([issue_source.value for issue_source in IssueSource]),
+        }
+
+        issue_data = issue_repository.create(sample_issue)
+
+        assert issue_data["id"] is not None
+        assert issue_data["status"] == "OPEN"
+
+        sample_issue_update = {"status": "CLOSED", "solution": fake.text()}
+
+        updated_issue = update_issue_service(issue_data["id"], sample_issue_update)["data"]
+        assert updated_issue["status"] == "CLOSED"
+        assert updated_issue["solution"] == sample_issue_update["solution"]
+        assert updated_issue["id"] == issue_data["id"]
 
 
 def test_get_issue_call_service(mock_app, mocker):

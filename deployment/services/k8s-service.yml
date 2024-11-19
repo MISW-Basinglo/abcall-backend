@@ -251,11 +251,7 @@ spec:
             - name: DAEMON_REQUEST_HEADER_VALUE
               value: "email-daemon"
             - name: GOOGLE_APPLICATION_CREDENTIALS
-            value: /etc/gcp-key/key.json
-        volumes:
-          - name: gcp-key
-            secret:
-              secretName: gcp-key
+              value: /etc/gcp-key/key.json
           livenessProbe:
             httpGet:
               path: /ai/health
@@ -268,6 +264,10 @@ spec:
               port: 8000
             initialDelaySeconds: 5
             periodSeconds: 10
+        volumes:
+          - name: gcp-key
+            secret:
+              secretName: gcp-key
 
 ---
 # Servicio para la aplicación Auth

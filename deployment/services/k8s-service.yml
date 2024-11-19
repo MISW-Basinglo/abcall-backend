@@ -230,6 +230,10 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
+          volumeMounts:
+            - name: gcp-key
+              mountPath: /etc/gcp-key
+              readOnly: true
           imagePullPolicy: Always
           env:
             - name: DATABASE_HOST

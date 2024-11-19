@@ -7,7 +7,7 @@ from src.common.decorators import handle_exceptions
 from src.services.services import get_generative_data
 from src.services.services import get_predictive_data
 
-blueprint = Blueprint("auth_api", __name__, url_prefix="/ai")
+blueprint = Blueprint("ai_api", __name__, url_prefix="/ai")
 
 
 @blueprint.route("/generative", methods=["POST"])

@@ -234,7 +234,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd microservices/email_daemon
+          cd microservices/ai
           docker build -t us-central1-docker.pkg.dev/basingo-abcall/basinglo-abcall-misw/ai:latest .
 
       - name: Push Docker image to Artifact Registry
@@ -245,7 +245,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-    needs: [build-user, build-auth, build-issues-management, build-email-daemon]
+    needs: [build-user, build-auth, build-issues-management, build-email-daemon, build-ai]
     steps:
 
       - uses: actions/checkout@v4

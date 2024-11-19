@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - release/*
+      - feat/ai-support
     paths-ignore:
       - 'README.md'
 

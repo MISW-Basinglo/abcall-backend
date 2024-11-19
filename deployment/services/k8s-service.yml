@@ -250,6 +250,12 @@ spec:
               value: "jwt-secret-key"
             - name: DAEMON_REQUEST_HEADER_VALUE
               value: "email-daemon"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/gcp-key/key.json
+        volumes:
+          - name: gcp-key
+            secret:
+              secretName: gcp-key
           livenessProbe:
             httpGet:
               path: /ai/health

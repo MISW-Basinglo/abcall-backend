@@ -17,6 +17,7 @@ from src.services import get_issue_call_service
 from src.services import get_issue_open_service
 from src.services import get_issue_response_time_service
 from src.services import get_issue_service
+from src.services import get_issues_by_company_service
 from src.services import get_issues_by_user_service
 from src.services import update_issue_service
 
@@ -31,6 +32,8 @@ def get_issues():
     query_params = request.args.to_dict()
     if "user_id" in query_params:
         return get_issues_by_user_service(query_params["user_id"]), HTTPStatus.OK
+    elif "company_id" in query_params:
+        return get_issues_by_company_service(query_params["company_id"]), HTTPStatus.OK
     return get_all_issues_service(), HTTPStatus.OK
 
 

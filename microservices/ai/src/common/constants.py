@@ -1,0 +1,11 @@
+import os
+
+JWT_ACCESS_TOKEN_EXPIRES = os.getenv("JWT_ACCESS_TOKEN_EXPIRES", 200)
+JWT_REFRESH_TOKEN_EXPIRES = os.getenv("JWT_REFRESH_TOKEN_EXPIRES", 2592000)
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+FLASK_APP = os.getenv("FLASK_APP", "app.py")
+FLASK_DEBUG = os.getenv("FLASK_DEBUG", "true")
+LOGGER_NAME = os.getenv("LOGGER_NAME", "ai_logger")
+DAEMON_REQUEST_HEADER_VALUE = os.getenv("DAEMON_REQUEST_HEADER_VALUE", "email-daemon")
+GOOGLE_CLOUD_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT")
+BACKEND_HOST = os.getenv("BACKEND_HOST", "http://traefik")

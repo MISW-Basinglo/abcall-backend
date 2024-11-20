@@ -57,6 +57,10 @@ run_issues:
 run_email_daemon:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up email_daemon
 
+.PHONY: run_ai
+run_ai:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) up ai
+
 # ====================================================================================
 # T E S T I N G  C O M M A N D S
 
@@ -76,8 +80,12 @@ test_issues:
 test_email_daemon:
 	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm email_daemon pytest --cov-report=term-missing --cov=src tests/ -c pytest.ini --cov-fail-under=80
 
+.PHONY: test_ai
+test_ai:
+	docker-compose -f $(DOCKER_COMPOSE_LOCAL) run --rm ai pytest --cov-report=term-missing --cov=src tests/ -c pytest.ini --cov-fail-under=80
+
 .PHONY: test_all
-test_all: build test_auth test_user test_issues test_email_daemon
+test_all: build test_auth test_user test_issues test_email_daemon test_ai
 
 .PHONY: load_fixtures
 load_fixtures:

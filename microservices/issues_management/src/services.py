@@ -50,6 +50,16 @@ def get_issues_by_user_service(user_id):
     return response
 
 
+def get_issues_by_company_service(company_id):
+    issue_repository = IssuesManagementRepository()
+    issue_repository.set_serializer(serializer_class)
+    filter_dict = {"company_id": ("eq", company_id)}
+    issues = issue_repository.get_by_query(filter_dict)
+    response_entity = GenericResponseListEntity(data=issues, count=len(issues))
+    response = GenericResponseListSerializer().dump(response_entity)
+    return response
+
+
 def get_issue_open_service(user_id):
     issue_repository = IssuesManagementRepository()
     issue_repository.set_serializer(serializer_class)

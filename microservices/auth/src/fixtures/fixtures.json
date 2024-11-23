@@ -83,6 +83,11 @@
       "email": "andrescercal@hotmail.com",
       "password": "andrescercalpass",
       "role": "user"
+    },
+    {
+      "email": "gestor-incidentes@abcall.lat",
+      "password": "gestor-incidentes-pass",
+      "role": "agent"
     }
   ]
 }

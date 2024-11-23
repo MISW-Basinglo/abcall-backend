@@ -12,6 +12,7 @@ metadata:
     networking.gke.io/managed-certificates: "abcall-cert"
     networking.gke.io/https-forwarding-rule: "true"
     networking.gke.io/redirect-http-to-https: "true"
+    http://nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: api.abcall.lat

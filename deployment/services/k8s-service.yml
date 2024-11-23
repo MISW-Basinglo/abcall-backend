@@ -35,7 +35,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: DATABASE_HOST
-              value: "abcall-db"
+              value: "34.171.202.170"
             - name: DATABASE_PORT
               value: "5432"
             - name: DATABASE_USER
@@ -98,7 +98,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: DATABASE_HOST
-              value: "abcall-db"
+              value: "34.171.202.170"
             - name: DATABASE_PORT
               value: "5432"
             - name: DATABASE_USER
@@ -165,7 +165,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: DATABASE_HOST
-              value: "abcall-db"
+              value: "34.171.202.170"
             - name: DATABASE_PORT
               value: "5432"
             - name: DATABASE_USER
@@ -237,7 +237,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: DATABASE_HOST
-              value: "abcall-db"
+              value: "34.171.202.170"
             - name: DATABASE_PORT
               value: "5432"
             - name: DATABASE_USER

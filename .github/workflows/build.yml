@@ -54,3 +54,10 @@ jobs:
           compose-file: "docker-compose.yaml"
           test-container: "email_daemon"
           test-command: "pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80"
+      
+      - uses: adambirds/docker-compose-action@v1.5.0
+        name: Testing ai
+        with:
+          compose-file: "docker-compose.yaml"
+          test-container: "ai"
+          test-command: "pytest --cov-report term --cov=src tests/ -c pytest.ini --cov-fail-under=80"

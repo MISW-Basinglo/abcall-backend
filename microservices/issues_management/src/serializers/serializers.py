@@ -29,6 +29,11 @@ class IssueListSerializer(IssueCreateSerializer):
     updated_at = fields.DateTime(format="%Y-%m-%dT%H:%M:%SZ")
 
 
+class IssueUpdateSerializer(BaseSerializer):
+    status = fields.String()
+    solution = fields.String()
+
+
 class GenericResponseListSerializer(BaseSerializer):
     count = fields.Integer()
     data = fields.List(fields.Dict())

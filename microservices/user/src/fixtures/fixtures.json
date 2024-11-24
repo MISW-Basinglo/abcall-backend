@@ -73,6 +73,15 @@
       "auth_id": 6,
       "importance": 5,
       "company_id": "Movistar"
+    },
+    {
+      "name": "Gestor Incidentes",
+      "dni": "7777777",
+      "phone": "3000000000",
+      "channel": "EMAIL",
+      "auth_id": 7,
+      "importance": null,
+      "company_id": ""
     }
   ],
   "products": [

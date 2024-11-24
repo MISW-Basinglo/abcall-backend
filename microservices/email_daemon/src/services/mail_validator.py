@@ -5,8 +5,8 @@ from typing import Dict
 
 
 class MailValidator:
-    DEFAULT_SPAM_WORDS = ["gana", "gratis", "dinero", "premio", "oferta", "imperdible", "bono"]
-    DEFAULT_BODY_SPAM_THRESHOLD = 2
+    DEFAULT_SPAM_WORDS = ["gana", "gratis", "premio", "oferta", "imperdible", "bono"]
+    DEFAULT_BODY_SPAM_THRESHOLD = 5
 
     def validate_email(self, email_data: Dict[str, Any]) -> bool:
         """Validates the structure of the email to decide whether it should be processed or rejected."""

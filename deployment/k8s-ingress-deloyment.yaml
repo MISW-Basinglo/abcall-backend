@@ -12,6 +12,7 @@ metadata:
     networking.gke.io/managed-certificates: "abcall-cert"
     networking.gke.io/https-forwarding-rule: "true"
     networking.gke.io/redirect-http-to-https: "true"
+    http://nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: api.abcall.lat
@@ -43,6 +44,13 @@ spec:
         backend:
           service:
             name: issues-management-service
+            port:
+              number: 80
+      - pathType: Prefix
+        path: /ai
+        backend:
+          service:
+            name: ai-service
             port:
               number: 80
     # Nueva regla para el frontend en abcall.lat

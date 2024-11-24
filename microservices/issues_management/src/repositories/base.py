@@ -14,8 +14,8 @@ class BaseRepository(ABC):
     model = None
     serializer = None
 
-    def __init__(self):
-        self.session = SessionLocal()
+    def __init__(self, session=None):
+        self.session = session or SessionLocal()
 
         self.operator_map = {
             "eq": lambda field, value: field == value,
@@ -43,20 +43,23 @@ class BaseRepository(ABC):
         return data
 
     def _transaction(self, func, *args, write=False, **kwargs):
+        exception = False
         try:
             result = func(*args, **kwargs)
             if write:
                 self.session.commit()
             return self._serialize(result)
         except exc.SQLAlchemyError as e:
+            exception = True
             exception_cause = format_exception_message(e)
             logger.error(f"Error during transaction: {exception_cause}")
             raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
         except Exception as e:
+            exception = True
             logger.error(f"Error during transaction: {e}")
             raise
         finally:
-            if write:
+            if write and exception:
                 self.session.rollback()
             self.session.close()
 

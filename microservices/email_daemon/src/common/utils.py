@@ -1,8 +1,15 @@
+from datetime import datetime
+from datetime import timedelta
+
 import requests
 from src.common.constants import BACKEND_HOST
 from src.common.constants import DAEMON_REQUEST_HEADER_VALUE
+from src.common.constants import MAIL_GAP
 from src.models.entities import AuthUser
 from src.models.entities import User
+
+
+read_emails = set()
 
 
 def get_auth_user_data(from_address) -> AuthUser:
@@ -36,3 +43,17 @@ def get_url(path_name, params=None, identifier=None) -> str:
     if identifier:
         url += f"/{identifier}"
     return url
+
+
+def is_message_sent(mail_id):
+    is_sent = any(msg_id == mail_id for msg_id, _ in read_emails)
+    return is_sent
+
+
+def add_email_to_sent_list(mail_id):
+    current_time = datetime.now()
+    expiration_time = timedelta(seconds=MAIL_GAP)
+    # Remove expired emails
+    read_emails.difference_update({(msg_id, timestamp) for msg_id, timestamp in read_emails if current_time - timestamp > expiration_time})
+    # Add new email
+    read_emails.add((mail_id, current_time))

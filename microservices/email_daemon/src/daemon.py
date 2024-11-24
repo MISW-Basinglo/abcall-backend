@@ -1,3 +1,4 @@
+import json
 import re
 import time
 from email.utils import parseaddr
@@ -5,8 +6,10 @@ from email.utils import parseaddr
 from bs4 import BeautifulSoup
 from src.common.enums import IssueType
 from src.common.logger import logger
+from src.common.utils import add_email_to_sent_list
 from src.common.utils import get_auth_user_data
 from src.common.utils import get_user_data
+from src.common.utils import is_message_sent
 from src.models.entities import AuthUser
 from src.models.entities import IssueEntity
 from src.serializers import IssueCreateSerializer
@@ -78,6 +81,10 @@ class EmailDaemon:
         issue_entity = IssueEntity(type=issue_type, description=description, source=source, user_id=user_data.id, company_id=user_data.company_id, email=user.email)
         return IssueCreateSerializer().dump(issue_entity)
 
+    def is_email_sent(self, body):
+        mail_id = json.dumps(body).encode("utf-8").hex()
+        return is_message_sent(mail_id), mail_id
+
     def run(self):
         logger.info("Email daemon started.")
         while True:
@@ -88,8 +95,11 @@ class EmailDaemon:
                     is_valid, user = self.is_valid_email(email)
                     if is_valid:
                         issue_body = self.format_issue(user, email)
-                        message_id = self.pubsub_service.publish_message(issue_body)
-                        logger.info("Email published into Google Pub/Sub:" + message_id)
+                        is_email_sent, body_id = self.is_email_sent(issue_body)
+                        if not is_email_sent:
+                            message_id = self.pubsub_service.publish_message(issue_body)
+                            add_email_to_sent_list(body_id)
+                            logger.info("Email published into Google Pub/Sub:" + message_id)
                     else:
                         logger.info(f"Email discarded: {email.get('subject')}")
                 except Exception as e:

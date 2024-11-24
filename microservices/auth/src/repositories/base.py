@@ -23,6 +23,7 @@ class BaseRepository(ABC):
         self.serializer = serializer
 
     def _transaction(self, func, *args, write=False, **kwargs):
+        exception = False
         try:
             result = func(*args, **kwargs)
             if write:
@@ -31,14 +32,16 @@ class BaseRepository(ABC):
                     self.session.refresh(result)
             return self.get_serializer().dump(result) if self.serializer else result
         except exc.SQLAlchemyError as e:
+            exception = True
             exception_cause = format_exception_message(e)
             logger.error(f"Error during transaction: {exception_cause}")
             raise InvalidParameterException(ExceptionsMessages.INVALID_PARAMETER.value)
         except Exception as e:
+            exception = True
             logger.error(f"Error during transaction: {e}")
             raise
         finally:
-            if write:
+            if write and exception:
                 self.session.rollback()
             self.session.close()
 
